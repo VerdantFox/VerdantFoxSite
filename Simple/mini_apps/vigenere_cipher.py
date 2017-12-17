@@ -6,6 +6,9 @@ def vigenere_cipher(cipher_key, plain_text):
     # Define uppercase unicode conversion
     MOD_A = (ord("A") % ALPHABETLENGTH)
 
+    encypted_character_list = []
+    encrypted_text = ""
+
     # cipher_key_counter for separate iterating from plain_text
     cipher_key_counter = 0
     for PlainTextLetter in range(len(plain_text)):
@@ -20,12 +23,12 @@ def vigenere_cipher(cipher_key, plain_text):
                     # add the two together. Mod by alphabet length,
                     # index back up
                     # to lower case plaintext character.
-                    print(
+                    encypted_character_list.append(
                         chr((
                             ((ord(plain_text[PlainTextLetter]) - MOD_a) +
                               (ord(cipher_key[cipher_key_counter % len(cipher_key)])
                                - MOD_a)) % ALPHABETLENGTH
-                            ) + ord('a')), end=""
+                            ) + ord('a'))
                     )
                     # Move to next letter of Cipher Key.
                     cipher_key_counter += 1
@@ -34,10 +37,10 @@ def vigenere_cipher(cipher_key, plain_text):
                     # Index plain text character to 0, index key character to 0,
                     # add the two together. Mod by alphabet length,
                     # index back up to upper case plaintext character.
-                    print(chr((((ord(plain_text[PlainTextLetter]) - MOD_A)
+                    encypted_character_list.append(chr((((ord(plain_text[PlainTextLetter]) - MOD_A)
                                 + (ord(cipher_key[cipher_key_counter
                                                   % len(cipher_key)]) - MOD_a))
-                              % ALPHABETLENGTH) + ord('A')), end="")
+                              % ALPHABETLENGTH) + ord('A')))
                     # Move to next letter of Cipher Key.
                     cipher_key_counter += 1
             # 2nd layer else branch ciphers upper case key character.
@@ -47,10 +50,11 @@ def vigenere_cipher(cipher_key, plain_text):
                     # Index plain text character to 0, index key character to 0,
                     # add the two together. Mod by alphabet length,
                     # index back up to lower case plaintext character.
-                    print(chr((((ord(plain_text[PlainTextLetter]) - MOD_a)
+                    encypted_character_list.append(chr((((ord(plain_text[
+                                                            PlainTextLetter]) - MOD_a)
                                 + (ord(cipher_key[cipher_key_counter
                                                   % len(cipher_key)]) - MOD_A))
-                          % ALPHABETLENGTH) + ord('a')), end="")
+                          % ALPHABETLENGTH) + ord('a')))
                     # Move to next letter of Cipher Key.
                     cipher_key_counter += 1
                 # 3rd layer if statement ciphers upper case plain text letters.
@@ -58,18 +62,20 @@ def vigenere_cipher(cipher_key, plain_text):
                     # Index plain text character to 0, index key character to 0,
                     # add the two together. Mod by alphabet length, index
                     # back up to upper case plaintext character.
-                    print(chr((((ord(plain_text[PlainTextLetter]) - MOD_A)
+                    encypted_character_list.append(chr((((ord(plain_text[
+                                                            PlainTextLetter]) - MOD_A)
                                 + (ord(cipher_key[cipher_key_counter
                                                   % len(cipher_key)]) - MOD_A))
-                          % ALPHABETLENGTH) + ord('A')), end="")
+                          % ALPHABETLENGTH) + ord('A')))
                     # Move to next letter of Cipher Key.
                     cipher_key_counter += 1
         # If plain text character is not a letter.
         else:
             # Print it without advancing the Cipher Key.
-            print(plain_text[PlainTextLetter], end="")
+            encypted_character_list.append(plain_text[PlainTextLetter])
     # Line break at end of Cipher text
-    print()
+    encrypted_text = encrypted_text.join(encypted_character_list)
+    return encrypted_text
 
 
 if __name__ == "__main__":

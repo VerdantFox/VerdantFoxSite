@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import Encryption, Decryption
 
-# Register your models here.
+
+admin.site.register(Encryption)
+admin.site.register(Decryption)
+

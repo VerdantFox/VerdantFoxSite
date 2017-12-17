@@ -4,22 +4,17 @@
 {% endblock %}
 {% block body_block %}
 
-  <h1>Let's Encrypt a message!</h1>
-  <br>
+  <br><h1>Let's Encrypt a message!</h1><br>
 
   {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
   <form method="POST" action="{% url 'Simple:vigenere' %}">
     {% csrf_token %}
     <div class="form-group">
-      {{ form }}
+      {{ encrypt_form.as_p }}
       <br>
       <input type="submit" value="Encrypt" />
     </div>
   </form>
-
-
-
-
 
 {% endblock %}
