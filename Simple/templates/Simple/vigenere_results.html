@@ -6,6 +6,9 @@
   {% if encryption %}
     <h1>Encrypted text:</h1>
     <h2>{{ encryption.encrypted_text }}</h2>
+  {% elif decryption %}
+    <h1>Decrypted text:</h1>
+    <h2>{{ decryption.decrypted_text }}</h2>
   {% else %}
     <h1>No encryption!</h1>
   {% endif %}

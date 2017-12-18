@@ -17,4 +17,3 @@ class Decryption(models.Model):
 
     def __str__(self):
         return "text: " + self.decrypted_text
-

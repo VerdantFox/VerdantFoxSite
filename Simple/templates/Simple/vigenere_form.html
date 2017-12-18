@@ -3,17 +3,26 @@
   Vigenere
 {% endblock %}
 {% block body_block %}
+    {% if encryption %}
+    <br><h1>Encrypted text:</h1>
+    <h2>{{ encrypted_text }}</h2><br>
+  {% elif decryption %}
+    <br><h1>Decrypted text:</h1>
+    <h2>{{ decrypted_text }}</h2><br>
+  {% else %}
+    <br><h1>Let's Encrypt a message!</h1><br>
+  {% endif %}
 
-  <br><h1>Let's Encrypt a message!</h1><br>
 
   {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
   <form method="POST" action="{% url 'Simple:vigenere' %}">
     {% csrf_token %}
     <div class="form-group">
-      {{ encrypt_form.as_p }}
+      {{ vigenere_form.as_p }}
       <br>
-      <input type="submit" value="Encrypt" />
+      <input type="submit" name="encrypt" value="Encrypt" />
+      <input type="submit" name="decrypt" value="Decrypt" />
     </div>
   </form>
 
