@@ -3,16 +3,29 @@
   Vigenere
 {% endblock %}
 {% block body_block %}
-    {% if encryption %}
-    <br><h1>Encrypted text:</h1>
-    <h2>{{ encrypted_text }}</h2><br>
-  {% elif decryption %}
-    <br><h1>Decrypted text:</h1>
-    <h2>{{ decrypted_text }}</h2><br>
+  <h1>Welcome to the Vigenere Cipher!</h1>
+    <p>
+      This mini-app uses the
+      <a class="link-target" href="https://en.wikipedia.org/wiki/Vigenère_cipher"
+         target="_blank">Vigenère cipher</a>, a simple, fun cipher invented in
+      the 16th century, to encrypt your message based off of a key word
+      or phrase. It can then decrypt your word given the same key.
+    </p>
+  {% if cipher_key and encrypted_text %}
+    <h3>Cipher key used:</h3>
+    <h6 class="vigenere-key">{{ cipher_key }}</h6><br>
+    <h3>Encrypted text:</h3>
+    <p class="vigenere-text">{{ encrypted_text }}</p><br>
+    <h3>Try decrypting this message, or encrypt a new message!</h3>
+  {% elif cipher_key and decrypted_text %}
+    <h3>Cipher key used:</h3>
+    <h6 class="vigenere-key">{{ cipher_key }}</h6><br>
+    <h3>Encrypted text:</h3>
+    <p class="vigenere-text">{{ decrypted_text }}</p><br>
+    <h5>Try decrypting this message, or encrypt a new message!</h5><br>
   {% else %}
-    <br><h1>Let's Encrypt a message!</h1><br>
+    <br><h5>Let's play with ciphers!</h5><br>
   {% endif %}
-
 
   {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
