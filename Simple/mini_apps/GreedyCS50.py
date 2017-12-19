@@ -1,63 +1,60 @@
-def greedy(money):
+def greedy(cost, paid):
     # Round money (for computer error with long strings of decimal).
-    round(money)
-    money *= 100
+    change = int(paid * 100) - int(cost * 100)
+    round(change)
 
-    hundred = money // 10000
-    money %= 10000
-    fifty = money // 5000
-    money %= 5000
-    twenty = money // 2000
-    money %= 2000
-    ten = money // 2000
-    money %= 1000
-    five = money // 500
-    money %= 500
-    one = money // 100
-    money %= 100
-    quarters = money // 25
-    money %= 25
-    dimes = money // 10
-    money %= 10
-    nickels = money // 5
-    money %= 5
-    pennies = money // 1
+    hundred = change // 10000
+    change %= 10000
+    fifty = change // 5000
+    change %= 5000
+    twenty = change // 2000
+    change %= 2000
+    ten = change // 1000
+    change %= 1000
+    five = change // 500
+    change %= 500
+    one = change // 100
+    change %= 100
+    quarters = change // 25
+    change %= 25
+    dimes = change // 10
+    change %= 10
+    nickels = change // 5
+    change %= 5
+    pennies = change // 1
 
+    print(str(int(quarters + dimes + nickels + pennies)))
     # Add all stored coin amounts together and print as an integer
-    print('\n' + str(int(hundred + fifty + twenty + five + one)) + " bills and " +
-          str(int(quarters + dimes + nickels + pennies)) + " coins needed",
-          end='\n\n')
+    statement = str(str(int(hundred + fifty + twenty + ten + five + one))
+                    + " bills and " + str(int(quarters + dimes + nickels + pennies))
+                    + " coins needed")
+    change_list = ["bills and coins to give: "]
 
-    print("bills and coins to give: ")
     if hundred != 0:
-        print("{} hundred dollar bills".format(int(hundred)))
+        change_list.append("{} hundred dollar bill".format(int(hundred)))
     if fifty != 0:
-        print("{} fifty dollar bills".format(int(fifty)))
+        change_list.append("{} fifty dollar bill".format(int(fifty)))
     if twenty != 0:
-        print("{} twenty dollar bills".format(int(twenty)))
+        change_list.append("{} twenty dollar bill".format(int(twenty)))
     if ten != 0:
-        print("{} ten dollar bills".format(int(ten)))
+        change_list.append("{} ten dollar bill".format(int(ten)))
     if five != 0:
-        print("{} five dollar bills".format(int(five)))
+        change_list.append("{} five dollar bill".format(int(five)))
     if one != 0:
-        print("{} one dollar bills".format(int(one)))
+        change_list.append("{} one dollar bill".format(int(one)))
     if quarters != 0:
-        print("{} quarters".format(int(quarters)))
+        change_list.append("{} quarter".format(int(quarters)))
     if dimes != 0:
-        print("{} dimes".format(int(dimes)))
+        change_list.append("{} dime".format(int(dimes)))
     if nickels != 0:
-        print("{} nickels".format(int(nickels)))
+        change_list.append("{} nickel".format(int(nickels)))
     if pennies != 0:
-        print("{} pennies".format(int(pennies)))
+        change_list.append("{} penny".format(int(pennies)))
+
+    return statement, change_list
 
 
 if __name__ == "__main__":
-    while True:
-        try:
-            Money = float(input("Change: "))
-            if Money >= 0:
-                break
-        except ValueError:
-            print("Oops, need an int or float.")
-
-    greedy(Money)
+    Cost = float(input("item cost? "))
+    Paid = float(input("Amount paid? "))
+    print(greedy(Cost, Paid))

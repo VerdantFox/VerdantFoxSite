@@ -9,4 +9,5 @@ urlpatterns = [
     # path('vigenere/<int:pk>/encrypt/results/',
     #      views.EncryptionResultsView.as_view(),
     #      name='vigenere_encrypt_results'),
+    path('fizzbuzz/', views.fizzbuzz, name='fizzbuzz')
 ]

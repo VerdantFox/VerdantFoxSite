@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from .forms import VigenereForm
+from .forms import VigenereForm, ChangeForm
 from .mini_apps.vigenere_cipher import vigenere_cipher
 from .mini_apps.vigenere_decipher import vigenere_decipher
+from .mini_apps.FizzBuzz import create_variables, fizz_buzz
 from django.views import generic
 
 
@@ -11,7 +12,7 @@ def home(request):
     return render(request, 'Simple/Simple_index.html')
 
 
-def vigenere(request, pk=None):
+def vigenere(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
@@ -43,10 +44,42 @@ def vigenere(request, pk=None):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        if pk:
-            print(pk)
-            print(type(pk))
         vigenere_form = VigenereForm()
 
     return render(request, 'Simple/vigenere_form.html',
                   {'vigenere_form': vigenere_form})
+
+
+def fizzbuzz(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        fizzbuzz_form = ChangeForm(request.POST)
+        # check whether it's valid:
+        if fizzbuzz_form.is_valid():
+            # process the data in form.cleaned_data as required
+            count_to = fizzbuzz_form.cleaned_data['count_to']
+            multiplier = fizzbuzz_form.cleaned_data['multiplier']
+            var_1 = fizzbuzz_form.cleaned_data['var_1']
+            var_2 = fizzbuzz_form.cleaned_data['var_2']
+            var_3 = fizzbuzz_form.cleaned_data['var_3']
+            var_1_multiple = fizzbuzz_form.cleaned_data['var_1_multiple']
+            var_2_multiple = fizzbuzz_form.cleaned_data['var_2_multiple']
+            var_3_multiple = fizzbuzz_form.cleaned_data['var_3_multiple']
+
+            var_dict = create_variables(
+                var_1, var_1_multiple, var_2, var_2_multiple,
+                var_3, var_3_multiple)
+
+            fizzbuzz_list = fizz_buzz(count_to, multiplier, var_dict)
+
+            return render(request, 'Simple/fizzbuzz_form.html',
+                          {'fizzbuzz_form': fizzbuzz_form,
+                           'fizzbuzz_list': fizzbuzz_list})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        fizzbuzz_form = ChangeForm()
+
+    return render(request, 'Simple/fizzbuzz_form.html',
+                  {'fizzbuzz_form': fizzbuzz_form})
