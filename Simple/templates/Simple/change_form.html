@@ -1,0 +1,52 @@
+{% extends 'Simple/Simple_base.html' %}
+{% block title_block %}
+  Vigenere
+{% endblock %}
+{% block body_block %}
+  <h1>Welcome to Change!</h1>
+    <p>
+      This mini-app acts as a virtual grocery-store cash register, instructing
+      in the simplest exact change to be returned during a business transaction.
+    </p>
+  <h3>Give Change a try!</h3>
+
+  <form method="POST" action="{% url 'Simple:change_machine' %}">
+    {% for error in change_form.non_field_errors %}
+      <h6 class="form-error">{{ error }}</h6>
+    {% endfor %}
+    {% csrf_token %}
+      <div class="row">
+        <div class="form-group col-md-6">
+          {{ change_form.item_cost.errors }}
+          {{ change_form.item_cost.label }}
+          {{ change_form.item_cost }}
+        </div>
+        <div class="form-group col-md-6">
+          {{ change_form.amount_paid.errors }}
+          {{ change_form.amount_paid.label }}
+          {{ change_form.amount_paid }}
+
+        </div>
+      </div>
+      <input class="btn btn-lg btn-primary green" type="submit" name="count" value="Calculate change" />
+  </form>
+
+  {% if change %}
+    <h2>Excellent purchase!</h2>
+    <h5>Your change will be {{ bills_statement }} bill{{ bills_statement|pluralize }}
+    and {{ coins_statement }} coin{{ coins_statement|pluralize }}.</h5>
+    <h4>Exact change:</h4>
+    <ul class="change-list">
+    {% for item in change %}
+      {% if item.1 == "penn" %}
+        <li>{{ item.0 }} {{ item.1 }}{{ item.0|pluralize:"y,ies" }}</li>
+      {% else %}
+        <li>{{ item.0 }} {{ item.1 }}{{ item.0|pluralize }}</li>
+      {% endif %}
+
+    {% endfor %}
+    </ul>
+
+  {% endif %}
+
+{% endblock %}

@@ -1,10 +1,11 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
-from .forms import VigenereForm, ChangeForm
+from .forms import VigenereForm, FizzBuzzForm, ChangeForm
 from .mini_apps.vigenere_cipher import vigenere_cipher
 from .mini_apps.vigenere_decipher import vigenere_decipher
 from .mini_apps.FizzBuzz import create_variables, fizz_buzz
+from .mini_apps.Change import change_function
 from django.views import generic
 
 
@@ -54,7 +55,7 @@ def fizzbuzz(request):
     # if this is a POST request we need to process the form data
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
-        fizzbuzz_form = ChangeForm(request.POST)
+        fizzbuzz_form = FizzBuzzForm(request.POST)
         # check whether it's valid:
         if fizzbuzz_form.is_valid():
             # process the data in form.cleaned_data as required
@@ -79,12 +80,10 @@ def fizzbuzz(request):
 
     # if a GET (or any other method) we'll create a blank form
     else:
-        fizzbuzz_form = ChangeForm()
+        fizzbuzz_form = FizzBuzzForm()
 
     return render(request, 'Simple/fizzbuzz_form.html',
                   {'fizzbuzz_form': fizzbuzz_form})
-
-
 
 
 def change_machine(request):
@@ -95,9 +94,16 @@ def change_machine(request):
         # check whether it's valid:
         if change_form.is_valid():
             # process the data in form.cleaned_data as required
+            item_cost = change_form.cleaned_data['item_cost']
+            amount_paid = change_form.cleaned_data['amount_paid']
+
+            bills_statement, coins_statement, change = change_function(item_cost, amount_paid)
 
             return render(request, 'Simple/change_form.html',
-                          {'change_form': change_form})
+                          {'change_form': change_form,
+                           'bills_statement': bills_statement,
+                           'coins_statement': coins_statement,
+                           'change': change})
 
     # if a GET (or any other method) we'll create a blank form
     else:

@@ -26,7 +26,7 @@ class VigenereForm(forms.Form):
         return data
 
 
-class ChangeForm(forms.Form):
+class FizzBuzzForm(forms.Form):
 
     count_to = forms.IntegerField(
         label="Count up to: (1000 max)",
@@ -127,3 +127,21 @@ class ChangeForm(forms.Form):
             raise forms.ValidationError("Must enter both third variable and "
                                         "its multiplier or neither.",
                                         code="var_3_error")
+
+
+class ChangeForm(forms.Form):
+
+    item_cost = forms.FloatField(
+        label='Item cost (in dollars):',
+        min_value=.01, max_value=2000,
+        widget=forms.NumberInput(attrs={
+            "class": "form-control", "placeholder": "57.45"})
+    )
+
+    amount_paid = forms.FloatField(
+        min_value=0.1, max_value=2500,
+        label="Amount paid (in dollars):",
+        widget=forms.NumberInput(attrs={
+            "class": "form-control",
+            "placeholder": '60.00'})
+    )
