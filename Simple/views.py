@@ -83,3 +83,25 @@ def fizzbuzz(request):
 
     return render(request, 'Simple/fizzbuzz_form.html',
                   {'fizzbuzz_form': fizzbuzz_form})
+
+
+
+
+def change_machine(request):
+    # if this is a POST request we need to process the form data
+    if request.method == 'POST':
+        # create a form instance and populate it with data from the request:
+        change_form = ChangeForm(request.POST)
+        # check whether it's valid:
+        if change_form.is_valid():
+            # process the data in form.cleaned_data as required
+
+            return render(request, 'Simple/change_form.html',
+                          {'change_form': change_form})
+
+    # if a GET (or any other method) we'll create a blank form
+    else:
+        change_form = ChangeForm()
+
+    return render(request, 'Simple/change_form.html',
+                  {'change_form': change_form})
