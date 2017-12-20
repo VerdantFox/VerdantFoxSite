@@ -1,7 +1,8 @@
 def change_function(cost, paid):
     # Round money (for computer error with long strings of decimal).
     change = int(paid * 100) - int(cost * 100)
-    round(change)
+    change = round(change)
+    change_owed = change / 100
 
     hundred = change // 10000
     change %= 10000
@@ -49,7 +50,7 @@ def change_function(cost, paid):
     if pennies != 0:
         change_list.append((int(pennies), "penn"))
 
-    return bills_statement, coins_statement, change_list
+    return change_owed, bills_statement, coins_statement, change_list,
 
 
 if __name__ == "__main__":

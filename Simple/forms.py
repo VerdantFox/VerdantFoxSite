@@ -145,3 +145,17 @@ class ChangeForm(forms.Form):
             "class": "form-control",
             "placeholder": '60.00'})
     )
+
+    def clean(self):
+        super().clean()
+        amount_paid, item_cost = None, None
+        # Get relevant data if it is entered
+        if 'item_cost' in self.cleaned_data:
+            item_cost = self.cleaned_data['item_cost']
+        if 'amount_paid' in self.cleaned_data:
+            amount_paid = self.cleaned_data['amount_paid']
+        if amount_paid and item_cost:
+            if amount_paid < item_cost:
+                raise forms.ValidationError(
+                    "Amount paid must be greater than or equal to item cost.",
+                    code="Didn't pay enough")

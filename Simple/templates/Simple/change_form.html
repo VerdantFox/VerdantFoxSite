@@ -1,6 +1,6 @@
 {% extends 'Simple/Simple_base.html' %}
 {% block title_block %}
-  Vigenere
+  Change | Simple
 {% endblock %}
 {% block body_block %}
   <h1>Welcome to Change!</h1>
@@ -31,13 +31,14 @@
       <input class="btn btn-lg btn-primary green" type="submit" name="count" value="Calculate change" />
   </form>
 
-  {% if change %}
+  {% if change_list %}
     <h2>Excellent purchase!</h2>
-    <h5>Your change will be {{ bills_statement }} bill{{ bills_statement|pluralize }}
+    <h5>Your change will be ${{ change_amount }}</h5>
+    <h5>in the form of {{ bills_statement }} bill{{ bills_statement|pluralize }}
     and {{ coins_statement }} coin{{ coins_statement|pluralize }}.</h5>
     <h4>Exact change:</h4>
     <ul class="change-list">
-    {% for item in change %}
+    {% for item in change_list %}
       {% if item.1 == "penn" %}
         <li>{{ item.0 }} {{ item.1 }}{{ item.0|pluralize:"y,ies" }}</li>
       {% else %}
@@ -47,6 +48,10 @@
     {% endfor %}
     </ul>
 
+  {% endif %}
+  {% if exact_change %}
+    <h2>Excellent purchase!</h2>
+    <h5>You paid the exact cost of your item, no change to give!</h5>
   {% endif %}
 
 {% endblock %}

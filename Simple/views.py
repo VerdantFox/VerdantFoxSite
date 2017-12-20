@@ -96,14 +96,21 @@ def change_machine(request):
             # process the data in form.cleaned_data as required
             item_cost = change_form.cleaned_data['item_cost']
             amount_paid = change_form.cleaned_data['amount_paid']
+            if item_cost == amount_paid:
+                exact_change = True
+            else:
+                exact_change = False
 
-            bills_statement, coins_statement, change = change_function(item_cost, amount_paid)
+            change_amount, bills_statement, coins_statement, change_list \
+                = change_function(item_cost, amount_paid)
 
             return render(request, 'Simple/change_form.html',
                           {'change_form': change_form,
                            'bills_statement': bills_statement,
                            'coins_statement': coins_statement,
-                           'change': change})
+                           'change_amount': change_amount,
+                           'change_list': change_list,
+                           'exact_change': exact_change})
 
     # if a GET (or any other method) we'll create a blank form
     else:

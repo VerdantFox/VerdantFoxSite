@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
-# from django.views.generic
 
+
+def home(request):
+    return render(request, 'Finance/Finance_index.html')
 

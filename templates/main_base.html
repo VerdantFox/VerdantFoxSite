@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block inner_navbar %}
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-md-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#">News Map</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Twitter Sentiments</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Finance:index' %}">Stock Finance</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'Simple:index' %}">Simple</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Welcome user</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Login</a>
+      </li>
+
+    </ul>
+  </div>
+{% endblock %}
