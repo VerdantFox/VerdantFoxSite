@@ -8,23 +8,73 @@
       {% block title_block %}{% endblock %}
     </title>
     {# Bootstrap 4 CSS #}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
+          integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
+    {# Font Awesome icons #}
+    <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
     {# Custom CSS #}
-    <link rel="stylesheet" href="{% static 'css/master.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'VerdantFox/css/master.css' %}">
     {% block css %}{% endblock %}
   </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-light bg-light">
-      <a class="navbar-brand" href="{% url 'home' %}">
-        <img src="/static/images/VerdantFoxIcon.jpg" width="30" height="30"
-             class="d-inline-block align-top" alt="">
-        Verdant Fox</a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      {% block inner_navbar %}
-      {% endblock inner_navbar %}
-    </nav>
+    <header>
+      <div class="top-row">
+      <div class="container">
+        <div class="row">
+          <div class="col-6">
+            <a class="navbar-brand" href="{% url 'home' %}">
+              <img src="/static/images/VerdantFoxIcon.jpg" width="30"
+                   height="30" class="d-inline-block align-top rounded"
+                   alt="No image found"> Verdant Fox</a>
+          </div>
+      {% if user.is_authenticated %}
+        <div class="col-6 user-info">
+          <div class="user-info">
+        <div class="nav dropdown">
+          <a class="dropdown-toggle dropdown-custom" href="#"
+             role="button" id="dropdownMenuLink" data-toggle="dropdown"
+             aria-haspopup="true" aria-expanded="false">
+            Welcome, {{ request.user.username }}
+          <i class="fas fa-user"></i>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i>
+              Update Profile</a>
+            <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+              <i class="fas fa-sign-out-alt"></i> Logout</a>
+          </div>
+        </div>
+        </div>
+        </div>
+      {% else %}
+        <div class="col-6 user-info">
+          <div class="user-info">
+            <a class="nav login" href="{% url 'accounts:login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
+          </div>
+      {% endif %}
+          </div>
+        </div>
+      </div>
+      </div>
+    <div class="bottom-row">
+      <div class="container">
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          {# <div class="mx-auto" style="width: 420px">#}
+          {% block inner_navbar %}
+          {% endblock inner_navbar %}
+          {# </div>#}
+        </nav>
+      </div>
+    </div>
+    </header>
+
+    <div class="container">
+      {% block navbar_2 %}
+      {% endblock %}
+    </div>
     <div class="container">
       {% block body_block %}
       {% endblock %}
@@ -34,7 +84,7 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
       {# Custom javascript #}
-      <script src="{% static 'js/master.js' %}"></script>
+      <script src="{% static 'VerdantFox/js/master.js' %}"></script>
       {% block javascript %}{% endblock %}
   </body>
 </html>

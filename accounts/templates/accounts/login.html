@@ -1,1 +1,27 @@
 {% extends 'accounts/accounts_base.html' %}
+{% block title_block %}Login | Verdant Fox{% endblock %}
+{% block navbar_2 %}
+  <ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" href="">Login</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'accounts:signup' %}">Sign up</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="">Reset Password</a>
+  </li>
+</ul>
+{% endblock %}
+{% block body_block %}
+  <div class="container">
+    <h1>Login</h1>
+    <div class="form-group">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-primary" value="Log in">
+      </form>
+    </div>
+  </div>
+{% endblock %}

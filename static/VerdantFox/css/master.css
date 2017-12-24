@@ -1,0 +1,15 @@
+h1{
+    color: green;
+}
+
+.user-info{
+    float: right;
+    padding: 10px;
+}
+.border{
+    border: 2px solid black;
+}
+
+.top-row{
+    height: 100px
+}

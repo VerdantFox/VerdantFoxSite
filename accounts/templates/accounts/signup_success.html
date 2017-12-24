@@ -1,4 +1,12 @@
 {% extends 'main_base.html' %}
 {% block body_block %}
-  <h1>Welcome {{ username }}, you have successfully registered!</h1>
+    {% if messages %}
+      <ul class="messages">
+          {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"
+            {% endif %}>{{ message }}</li>
+          {% endfor %}
+      </ul>
+    {% endif %}
+  <h1>OLD:  Welcome {{ username }}, you have successfully registered!</h1>
 {% endblock %}
