@@ -2,6 +2,10 @@
 {% block title_block %}
   Home | Simple
 {% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Simple</li>
+{% endblock %}
 {% block body_block %}
   <div class="title-section">
     <h1>Simple Apps</h1>

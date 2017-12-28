@@ -1,5 +1,9 @@
 {% extends 'accounts/accounts_base.html' %}
 {% block title_block %}Login | Verdant Fox{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Login</li>
+{% endblock %}
 {% block navbar_2 %}
   <ul class="nav nav-tabs">
   <li class="nav-item">
@@ -11,7 +15,8 @@
   <li class="nav-item">
     <a class="nav-link" href="">Reset Password</a>
   </li>
-</ul>
+  </ul>
+  <br>
 {% endblock %}
 {% block body_block %}
   <div class="container">

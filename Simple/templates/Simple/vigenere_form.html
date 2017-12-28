@@ -2,8 +2,13 @@
 {% block title_block %}
   Vigenere | Simple
 {% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'Simple:index' %}">Simple</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Vigenère</li>
+{% endblock %}
 {% block body_block %}
-  <h1>Welcome to the Vigenere Cipher!</h1>
+  <h1>Welcome to the Vigenère Cipher!</h1>
     <p>
       This mini-app uses the
       <a class="link-target" href="https://en.wikipedia.org/wiki/Vigenère_cipher"

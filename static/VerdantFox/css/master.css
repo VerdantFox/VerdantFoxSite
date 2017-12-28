@@ -3,13 +3,24 @@ h1{
 }
 
 .user-info{
-    float: right;
-    padding: 10px;
+    color: black;
 }
 .border{
     border: 2px solid black;
 }
 
-.top-row{
-    height: 100px
+/*.top-row{*/
+    /*height: 100px*/
+/*}*/
+
+.transparent{
+  background: transparent;
+  background-image: none;
+  border-color: transparent;
+  box-shadow: none;
+}
+.pad:before{
+    content:" ";
+    display:inline-block;
+    width:4px;
 }

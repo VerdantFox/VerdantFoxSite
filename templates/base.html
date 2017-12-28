@@ -18,59 +18,67 @@
   </head>
   <body>
     <header>
-      <div class="top-row">
-      <div class="container">
-        <div class="row">
-          <div class="col-6">
-            <a class="navbar-brand" href="{% url 'home' %}">
-              <img src="/static/images/VerdantFoxIcon.jpg" width="30"
-                   height="30" class="d-inline-block align-top rounded"
-                   alt="No image found"> Verdant Fox</a>
-          </div>
-      {% if user.is_authenticated %}
-        <div class="col-6 user-info">
-          <div class="user-info">
-        <div class="nav dropdown">
-          <a class="dropdown-toggle dropdown-custom" href="#"
-             role="button" id="dropdownMenuLink" data-toggle="dropdown"
-             aria-haspopup="true" aria-expanded="false">
-            Welcome, {{ request.user.username }}
-          <i class="fas fa-user"></i>
-          </a>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#"><i class="fas fa-edit"></i>
-              Update Profile</a>
-            <a class="dropdown-item" href="{% url 'accounts:logout' %}">
-              <i class="fas fa-sign-out-alt"></i> Logout</a>
-          </div>
+
+
+      <div class="top-row container">
+        <nav class="navbar navbar-expand-md navbar-light">
+          <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="/static/images/VerdantFoxIcon.jpg" width="30"
+                 height="30" class="d-inline-block align-top rounded"
+                 alt="No image found"> Verdant Fox</a>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+          {% if user.is_authenticated %}
+            <div class="user-info">
+              <div class="nav dropdown">
+                <a class="dropdown-toggle dropdown-custom nav-link" href="#"
+                   role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                  Welcome, {{ request.user.username }}
+                  <i class="fas fa-user"></i>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#"><i class="fas fa-edit"></i>
+                    Update Profile</a>
+                  <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                    <i class="fas fa-sign-out-alt"></i> Logout</a>
+                </div>
+              </div>
+            </div>
+          {% else %}
+            <div class="user-info">
+              <a class="nav-link mr-auto" href="{% url 'accounts:login' %}">
+                  <i class="fas fa-sign-in-alt"></i><span class="pad"></span>Login</a>
+            </div>
+          {% endif %}
+          </li>
+        </ul>
+        </nav>
+
+        <br><br>
+
+        <nav class="" aria-label="breadcrumb" role="navigation">
+          <ol class="breadcrumb transparent">
+            {% block breadcrumb %}{% endblock %}
+          </ol>
+        </nav>
         </div>
-        </div>
-        </div>
-      {% else %}
-        <div class="col-6 user-info">
-          <div class="user-info">
-            <a class="nav login" href="{% url 'accounts:login' %}"><i class="fas fa-sign-in-alt"></i> Login</a>
-          </div>
-      {% endif %}
-          </div>
-        </div>
-      </div>
-      </div>
-    <div class="bottom-row">
-      <div class="container">
+
+      <div class="bottom-row container">
         <nav class="navbar navbar-expand-md navbar-light bg-light">
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navbarNav" aria-controls="navbarNav"
+                aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-          {# <div class="mx-auto" style="width: 420px">#}
+
           {% block inner_navbar %}
           {% endblock inner_navbar %}
-          {# </div>#}
+
         </nav>
       </div>
-    </div>
     </header>
-
+    <br>
     <div class="container">
       {% block navbar_2 %}
       {% endblock %}
