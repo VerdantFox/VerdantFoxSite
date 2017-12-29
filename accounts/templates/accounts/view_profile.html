@@ -1,8 +1,25 @@
 {% extends 'accounts/accounts_base.html' %}
+
 {% block title_block %}Profile | Verdant Fox{% endblock %}
+
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item active" aria-current="page">Profile</li>
+  <li class="breadcrumb-item active" aria-current="page">View Profile</li>
+{% endblock %}
+
+{% block navbar_2 %}
+  <ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link active" href="">View Profile</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'accounts:edit_profile' %}">Edit Profile</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="">Change Password</a>
+  </li>
+  </ul>
+  <br>
 {% endblock %}
 
 {% block body_block %}

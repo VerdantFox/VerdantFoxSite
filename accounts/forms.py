@@ -8,10 +8,10 @@ from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from django.contrib.auth.models import User
 from .models import UserProfile
+from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 UserModel = get_user_model()
-
 
 
 class SignUpForm(UserCreationForm):
@@ -83,18 +83,52 @@ class LoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 
-class EditUserForm(forms.Form):
+class EditUserForm(forms.ModelForm):
     class Meta:
-        model = User
+        model = UserModel
         fields = ('email', 'first_name', 'last_name')
 
     email = forms.EmailField(
-        label=_('Email'), max_length=100, required=False,
-        widget=forms.EmailInput(attrs={'class': 'form-control'})
+        label=_('Email:'), max_length=100, required=False,
+        widget=forms.EmailInput(attrs={
+            'placeholder': 'example@gmail.com',
+            'autofocus': 'autofocus',
+            'class': 'form-control'})
     )
+    first_name = forms.CharField(s
+        label=_('First Name'), max_length=50, required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'First Name'}))
+    last_name = forms.CharField(
+        label=_('Last Name'), max_length=50, required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'Last Name'}))
 
 
-class EditProfileForm(forms.Form):
+class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('profile_picture', 'bio', 'location', 'birth_date')
+
+    profile_picture = forms.ImageField(
+        label=_('Profile Picture:'), required=False,
+        widget=forms.FileInput(attrs={
+            'class': 'form-control'}))
+    bio = forms.CharField(
+        label=_('About me:'), max_length=1000,
+        required=False, widget=forms.Textarea(attrs={
+            'placeholder': "What's your story? What exciting facts would you "
+                           "like to share about yourself?",
+            'class': 'form-control'}))
+    location = forms.CharField(
+        label=_('Location:'), max_length=100, required=False,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': 'San Fransisco, CA'}))
+    birth_date = forms.DateField(
+        label=_('Birth Date:'), required=False,
+        widget=forms.DateInput(attrs={
+            'placeholder': 'mm/dd/yyyy',
+            'class': 'form-control'}))
