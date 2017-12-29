@@ -6,9 +6,12 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.utils import timezone
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
+from django.contrib.auth.models import User
+from .models import UserProfile
 
 
 UserModel = get_user_model()
+
 
 
 class SignUpForm(UserCreationForm):
@@ -51,6 +54,7 @@ class SignUpForm(UserCreationForm):
 
     error_messages = {
         'unique_email': _('Email already in use.'),
+        'password_mismatch': _('Passwords do not match.')
     }
 
     def clean(self):
@@ -69,11 +73,28 @@ class LoginForm(AuthenticationForm):
         fields = ('username', 'password',)
 
     username = forms.CharField(
-        label=_('Username'), max_length=50, required=True,
+        label=_('Username:'), max_length=50, required=True,
         widget=forms.TextInput(attrs={'autofocus': 'autofocus',
                                       'class': 'form-control'}))
 
     password = forms.CharField(
-        label=_('Password confirmation:'), max_length=50, required=True,
+        label=_('Password:'), max_length=50, required=True,
         strip=False,
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+
+
+class EditUserForm(forms.Form):
+    class Meta:
+        model = User
+        fields = ('email', 'first_name', 'last_name')
+
+    email = forms.EmailField(
+        label=_('Email'), max_length=100, required=False,
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+    )
+
+
+class EditProfileForm(forms.Form):
+    class Meta:
+        model = UserProfile
+        fields = ('profile_picture', 'bio', 'location', 'birth_date')

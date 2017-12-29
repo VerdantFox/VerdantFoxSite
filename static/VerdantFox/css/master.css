@@ -1,3 +1,4 @@
+{% load staticfiles %}
 h1{
     color: green;
 }
@@ -24,6 +25,43 @@ h1{
     display:inline-block;
     width:4px;
 }
-.testchange{
-    
+/*.testchange{*/
+
+/*}*/
+
+/*.top-row{*/
+    /*background: white url("../images/verdantfoxbackground.jpg") no-repeat top center;*/
+/*}*/
+
+.errorlist {
+    color: red;
+    padding: 0;
+    list-style-type: none;
+    font-weight: bold;
+}
+
+.success {
+    color: green;
+    padding: 0;
+    list-style-type: none;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.profile-pic-div {
+    max-width: 600px;
+}
+
+#profile-img {
+    max-height: 600px;
+}
+
+.profile-list {
+    padding: 0;
+    list-style-type: none;
+    font-size: 1.4em;
+}
+
+#profile-img {
+
 }

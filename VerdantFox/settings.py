@@ -126,5 +126,11 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     ]
+# Media files (user uploaded files)
+# https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-MEDIA_ROOT
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 ENABLE_USER_ACTIVATION = False
+
+LOGIN_URL = '/accounts/login/'
