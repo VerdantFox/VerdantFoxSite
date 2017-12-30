@@ -17,21 +17,12 @@ UserModel = get_user_model()
 class SignUpForm(UserCreationForm):
     class Meta:
         model = UserModel
-        fields = ('username', 'first_name', 'last_name', 'email',
-                  'password1', 'password2',)
+        fields = ('username', 'email', 'password1', 'password2',)
 
     username = forms.CharField(
         label=_('Username'), max_length=50, required=True,
         help_text=_('Required. 150 characters or fewer. Letters, '
                     'digits and @/./+/-/_ only.'),
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
-    first_name = forms.CharField(
-        label=_('First Name'), max_length=50, required=False,
-        help_text=_('Optional.'), widget=forms.TextInput(
-            attrs={'class': 'form-control'}))
-    last_name = forms.CharField(
-        label=_('Last Name'), max_length=50, required=False,
-        help_text=_('Optional.'),
         widget=forms.TextInput(attrs={'class': 'form-control'}))
     email = forms.EmailField(
         label=_('Email'), max_length=255, required=True,
@@ -83,7 +74,7 @@ class LoginForm(AuthenticationForm):
         widget=forms.PasswordInput(attrs={'class': 'form-control'}))
 
 
-class EditUserForm(forms.ModelForm):
+class EditUserForm(forms.Form):
     class Meta:
         model = UserModel
         fields = ('email', 'first_name', 'last_name')
@@ -95,7 +86,7 @@ class EditUserForm(forms.ModelForm):
             'autofocus': 'autofocus',
             'class': 'form-control'})
     )
-    first_name = forms.CharField(s
+    first_name = forms.CharField(
         label=_('First Name'), max_length=50, required=False,
         widget=forms.TextInput(attrs={
             'class': 'form-control',
@@ -107,7 +98,7 @@ class EditUserForm(forms.ModelForm):
             'placeholder': 'Last Name'}))
 
 
-class EditProfileForm(forms.ModelForm):
+class EditProfileForm(forms.Form):
     class Meta:
         model = UserProfile
         fields = ('profile_picture', 'bio', 'location', 'birth_date')
@@ -120,7 +111,7 @@ class EditProfileForm(forms.ModelForm):
         label=_('About me:'), max_length=1000,
         required=False, widget=forms.Textarea(attrs={
             'placeholder': "What's your story? What exciting facts would you "
-                           "like to share about yourself?",
+                           "",
             'class': 'form-control'}))
     location = forms.CharField(
         label=_('Location:'), max_length=100, required=False,

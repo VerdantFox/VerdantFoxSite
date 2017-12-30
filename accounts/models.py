@@ -8,12 +8,12 @@ from django.dispatch import receiver
 UserModel = get_user_model()
 
 
-class Activation(models.Model):
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE,
-                             primary_key=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    code = models.CharField(max_length=20)
-    email = models.EmailField(blank=True)
+# class Activation(models.Model):
+#     user = models.ForeignKey(UserModel, on_delete=models.CASCADE,
+#                              primary_key=True)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     code = models.CharField(max_length=20)
+#     email = models.EmailField(blank=True)
 
 
 class UserProfile(models.Model):
@@ -22,7 +22,7 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(
         upload_to='profile_pics',
         blank=True)
-    bio = models.CharField(max_length=500, default='')
+    bio = models.CharField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=30, blank=True)
 

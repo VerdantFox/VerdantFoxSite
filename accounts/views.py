@@ -35,10 +35,6 @@ class SignUpView(FormView):
         return super(SignUpView, self).form_valid(form)
 
 
-class SignUpSuccess(TemplateView):
-    template_name = 'accounts/signup_success.html'
-
-
 class LoginView(FormView):
     template_name = 'accounts/login.html'
     form_class = LoginForm
@@ -79,11 +75,10 @@ def edit_profile(request):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request,
-                             _('Your profile was successfully updated!'))
-            return redirect('settings:profile')
+            messages.success(request, 'Your profile was successfully updated!')
+            return redirect('accounts:view_profile')
         else:
-            messages.error(request, _('Please correct the error below.'))
+            messages.error(request, 'Please correct the error below.')
     else:
         user_form = EditUserForm()
         profile_form = EditProfileForm()
