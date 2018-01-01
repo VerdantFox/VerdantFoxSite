@@ -1,0 +1,11 @@
+{% extends 'games/games_base.html' %}
+{% block title_block %}
+  Home | games
+{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active" aria-current="page">games</li>
+{% endblock %}
+{% block body_block %}
+  <h1>This is the games index!</h1>
+{% endblock %}

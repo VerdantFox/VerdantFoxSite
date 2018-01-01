@@ -29,12 +29,12 @@
     <li>
       <div class="profile-pic-div">
         {% if profile.profile_picture %}
-          Profile picture:
+          Profile picture: <br>
           <img src="{{ profile.profile_picture.url }}" alt="Image not found"
                class="img-thumbnail" id="profile-img">
         {% else %}
-          Profile picture:
-          <i id="alt-profile-img" class="fas fa-user fa-10x"></i>
+          Profile picture: <br>
+          <i id="alt-profile-img" class="img-thumbnail fas fa-user fa-10x"></i>
         {% endif %}
       </div>
 

@@ -70,8 +70,9 @@ def view_profile(request,):
 @transaction.atomic
 def edit_profile(request):
     if request.method == 'POST':
-        user_form = EditUserForm(request.POST)
-        profile_form = EditProfileForm(request.POST)
+        user_form = EditUserForm(request.POST, instance=request.user)
+        profile_form = EditProfileForm(request.POST, request.FILES,
+                                       instance=request.user.userprofile)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
@@ -80,8 +81,8 @@ def edit_profile(request):
         else:
             messages.error(request, 'Please correct the error below.')
     else:
-        user_form = EditUserForm()
-        profile_form = EditProfileForm()
+        user_form = EditUserForm(instance=request.user)
+        profile_form = EditProfileForm(instance=request.user.userprofile)
     return render(request, 'accounts/edit_profile.html', {
         'user_form': user_form,
         'profile_form': profile_form

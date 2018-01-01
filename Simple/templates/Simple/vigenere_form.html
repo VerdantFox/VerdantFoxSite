@@ -19,12 +19,16 @@
   {% if cipher_key and encrypted_text %}
     <h3>Cipher key used:</h3>
     <h6 class="vigenere-key">{{ cipher_key }}</h6><br>
+    <h3>Original text:</h3>
+    <p class="vigenere-text">{{ original_text }}</p><br>
     <h3>Encrypted text:</h3>
     <p class="vigenere-text">{{ encrypted_text }}</p><br>
     <h5>Try encrypting or decrypting a new message!</h5><br>
   {% elif cipher_key and decrypted_text %}
     <h3>Cipher key used:</h3>
     <h6 class="vigenere-key">{{ cipher_key }}</h6><br>
+    <h3>Original text:</h3>
+    <p class="vigenere-text">{{ original_text }}</p><br>
     <h3>Decrypted text:</h3>
     <p class="vigenere-text">{{ decrypted_text }}</p><br>
     <h5>Try encrypting or decrypting a new message!</h5><br>

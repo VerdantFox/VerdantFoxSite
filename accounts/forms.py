@@ -23,7 +23,8 @@ class SignUpForm(UserCreationForm):
         label=_('Username'), max_length=50, required=True,
         help_text=_('Required. 150 characters or fewer. Letters, '
                     'digits and @/./+/-/_ only.'),
-        widget=forms.TextInput(attrs={'class': 'form-control'}))
+        widget=forms.TextInput(attrs={'class': 'form-control',
+                                      'placeholder': 'Username'}))
     email = forms.EmailField(
         label=_('Email'), max_length=255, required=True,
         help_text=_('Required. Type a valid email address.'),
@@ -37,11 +38,13 @@ class SignUpForm(UserCreationForm):
                     "<li>Your password must contain at least 8 characters.</li>"
                     "<li>Your password can't be a commonly used password.</li>"
                     "<li>Your password can't be entirely numeric.</li></ul>"),
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+        widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                          'placeholder': 'Password'}))
     password2 = forms.CharField(
         label=_('Password confirmation:'), max_length=50, required=True,
         help_text=_("Enter the same password as before, for verification."),
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+        widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                          'placeholder': 'Confirm password'}))
 
     error_messages = {
         'unique_email': _('Email already in use.'),
@@ -66,18 +69,25 @@ class LoginForm(AuthenticationForm):
     username = forms.CharField(
         label=_('Username:'), max_length=50, required=True,
         widget=forms.TextInput(attrs={'autofocus': 'autofocus',
-                                      'class': 'form-control'}))
+                                      'class': 'form-control',
+                                      'placeholder': 'Username'}))
 
     password = forms.CharField(
         label=_('Password:'), max_length=50, required=True,
         strip=False,
-        widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+        widget=forms.PasswordInput(attrs={'class': 'form-control',
+                                          'placeholder': 'Password'}))
+    error_messages = {
+        'invalid_login': 'Username/password combination not found. '
+                         'Note that both fields may be case-sensitive.'
+    }
 
 
-class EditUserForm(forms.Form):
+class EditUserForm(forms.ModelForm):
     class Meta:
         model = UserModel
         fields = ('email', 'first_name', 'last_name')
+        exclude = ('username',)
 
     email = forms.EmailField(
         label=_('Email:'), max_length=100, required=False,
@@ -98,7 +108,7 @@ class EditUserForm(forms.Form):
             'placeholder': 'Last Name'}))
 
 
-class EditProfileForm(forms.Form):
+class EditProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('profile_picture', 'bio', 'location', 'birth_date')

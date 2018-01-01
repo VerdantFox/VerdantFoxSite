@@ -29,18 +29,26 @@ def vigenere(request):
                 encrypted_text = vigenere_cipher(cipher_key, input_text)
                 # Rather than redirect, return to same page with new information
                 # (cipher_key and encrypted_text)
+                new_vigenere_form = VigenereForm(initial={
+                    'cipher_key': cipher_key,
+                    'input_text': encrypted_text})
                 return render(request, 'Simple/vigenere_form.html',
-                              {'vigenere_form': vigenere_form,
+                              {'vigenere_form': new_vigenere_form,
                                'cipher_key': cipher_key,
+                               'original_text': input_text,
                                'encrypted_text': encrypted_text})
             # Decrypt with vigenere cipher
             elif "decrypt" in request.POST:
                 decrypted_text = vigenere_decipher(cipher_key, input_text)
                 # Rather than redirect, return to same page with new information
                 # (cipher_key and decrypted_text)
+                new_vigenere_form = VigenereForm(initial={
+                    'cipher_key': cipher_key,
+                    'input_text': decrypted_text})
                 return render(request, 'Simple/vigenere_form.html',
-                              {'vigenere_form': vigenere_form,
+                              {'vigenere_form': new_vigenere_form,
                                'cipher_key': cipher_key,
+                               'original_text': input_text,
                                'decrypted_text': decrypted_text})
 
     # if a GET (or any other method) we'll create a blank form
