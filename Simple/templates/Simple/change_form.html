@@ -4,9 +4,10 @@
 {% endblock %}
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'Simple:index' %}">Simple</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'Simple:home' %}">Simple</a></li>
   <li class="breadcrumb-item active" aria-current="page">Change</li>
 {% endblock %}
+{% block active3 %}active{% endblock %}
 {% block body_block %}
   <h1>Welcome to Change!</h1>
     <p>

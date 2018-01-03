@@ -4,5 +4,6 @@ from . import views
 app_name = 'Finance'
 
 urlpatterns = [
-    path('', views.portfolio, name='index'),
+    path('', views.Home.as_view(), name='home'),
+    path('portfolio/', views.portfolio, name='portfolio'),
 ]

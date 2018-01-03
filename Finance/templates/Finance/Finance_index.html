@@ -1,60 +1,29 @@
 {% extends 'Finance/Finance_base.html' %}
 
-{% block title_block %}
-  Home | Finance
-{% endblock %}
-
-{% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
-  <li class="breadcrumb-item active" aria-current="page">Finance</li>
-{% endblock %}
-
 {% block body_block %}
-
-  <div class="title-section">
-    <h1>Fiance!</h1>
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col" class="Symbol">Symbol</th>
-            <th scope="col" class="Name">Name</th>
-            <th scope="col" class="Shares">Shares</th>
-            <th scope="col" class="Price">Price</th>
-            <th scope="col" class="Total">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for stock in stock_list %}
-            <tr>
-              <th scope="row">{{ stock.symbol }}</th>
-              <td>{{ stock.name }}</td>
-              <td>{{ stock.shares }}</td>
-              <td>{{ stock.price }}</td>
-              <td>{{ stock.total }}</td>
-            </tr>
-          {% endfor %}
-          <tr>
-            <th scope="row">CASH</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{ cash }}</td>
-          </tr>
-        </tbody>
-        <tfoot>
-          <tr>
-            <th scope="row">NET WORTH</th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td>{{ net_worth }}</td>
-          </tr>
-        </tfoot>
-      </table>
-
-  </div>
-  <div class="body-section">
-
+  <h1>Welcome to Finance!</h1>
+  <div class="text-justify">
+    <p>
+      In this app, once <a href="{% url 'accounts:login' %}">logged in</a>,
+      you will be given virtual cash with which to "fake buy" stocks. These
+      stocks, however, are representations of real stocks on the actual
+      stock-market, updated in real time.
+    </p>
+    <p>
+      This app can be thought of as a practice round for real world stock market
+      trading. You will be able to look up quotes for stocks, buy and sell
+      stocks, and view graphs of how stocks have performed over time to make
+      informed buying and selling decisions, and you can keep track of how your
+      own stocks have performed since your purchases to get a sense of how good
+      of an investor you would be with real world stock trading. Although you
+      will be given $10,000 initially, you can add virtual money to your
+      account using a credit card (please don't use your actual credit card,
+      fake cards are provided).
+    </p>
+    <p>
+      I hope you like this introduction to stock finance. <strong>Now get out
+      there and invest!</strong>
+    </p>
   </div>
 
 {% endblock %}

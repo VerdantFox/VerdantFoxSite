@@ -2,11 +2,17 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .helpers import stock_index
+from django.views.generic import TemplateView
+
+
+class Home(TemplateView):
+    """Display static page with information about app"""
+    template_name = 'Finance/Finance_index.html'
 
 
 @login_required
 def portfolio(request):
-    """ List users stock portfolio, cash and net worth """
+    """List users stock portfolio, cash and net worth"""
     stock_list = stock_index(request.user)
 
     # Create a variable for finding the combined worth of all owned stocks
@@ -27,7 +33,7 @@ def portfolio(request):
 
     user_cash = f"${user_cash:,.2f}"
     net_worth = f"${net_worth:,.2f}"
-    return render(request, 'Finance/Finance_index.html', context={
+    return render(request, 'Finance/portfolio.html', context={
         "stock_list": stock_list,
         "cash": user_cash,
         "net_worth": net_worth
