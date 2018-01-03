@@ -21,63 +21,68 @@
 
 
       <div class="top-row">
-      <div class="container">
+
         <nav class="navbar navbar-expand-md navbar-light">
-          <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'VerdantFox/images/VerdantFoxIcon.jpg' %}" width="30"
-                 height="30" class="d-inline-block align-top rounded"
-                 alt="No image found"> Verdant Fox</a>
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-          {% if user.is_authenticated %}
-            <div class="user-info">
-              <div class="nav dropdown">
-                <a class="dropdown-toggle dropdown-custom nav-link" href="#"
-                   role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
-                  Welcome, {{ request.user.username }}
-                  <i class="fas fa-user"></i>
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="{% url 'accounts:view_profile' %}"><i class="fas fa-user"></i>
-                    View Profile</a>
-                  <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}"><i class="fas fa-edit"></i>
-                    Update Profile</a>
-                  <a class="dropdown-item" href="{% url 'accounts:logout' %}">
-                    <i class="fas fa-sign-out-alt"></i> Logout</a>
+          <div class="container">
+            <a class="navbar-brand" href="{% url 'home' %}">
+              <img src="{% static 'VerdantFox/images/VerdantFoxIcon.jpg' %}" width="30"
+                   height="30" class="d-inline-block align-top rounded"
+                   alt="No image found"> Verdant Fox</a>
+            <ul class="navbar-nav ml-auto">
+              <li class="nav-item">
+              {% if user.is_authenticated %}
+                <div class="user-info">
+                  <div class="nav dropdown">
+                    <a class="dropdown-toggle dropdown-custom nav-link" href="#"
+                       role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false">
+                      Welcome, {{ request.user.username }}
+                      <i class="fas fa-user"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a class="dropdown-item" href="{% url 'accounts:view_profile' %}"><i class="fas fa-user"></i>
+                        View Profile</a>
+                      <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}"><i class="fas fa-edit"></i>
+                        Update Profile</a>
+                      <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                        <i class="fas fa-sign-out-alt"></i> Logout</a>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          {% else %}
-            <div class="user-info">
-              <a class="nav-link mr-auto" href="{% url 'accounts:login' %}">
-                  <i class="fas fa-sign-in-alt"></i><span class="pad"></span>Login</a>
-            </div>
-          {% endif %}
-          </li>
-        </ul>
+              {% else %}
+                <div class="user-info">
+                  <a class="nav-link mr-auto" href="{% url 'accounts:login' %}">
+                      <i class="fas fa-sign-in-alt"></i><span class="pad"></span>Login</a>
+                </div>
+              {% endif %}
+              </li>
+            </ul>
+          </div>
         </nav>
 
         <br><br>
 
         <nav class="" aria-label="breadcrumb" role="navigation">
-          <ol class="breadcrumb transparent">
-            {% block breadcrumb %}{% endblock %}
-          </ol>
+          <div class="container">
+            <ol class="breadcrumb transparent">
+              {% block breadcrumb %}{% endblock %}
+            </ol>
+          </div>
         </nav>
       </div>
       </div>
 
-      <div class="bottom-row container">
+      <div class="bottom-row">
         <nav class="navbar navbar-expand-md navbar-light bg-light">
           <button class="navbar-toggler" type="button" data-toggle="collapse"
                 data-target="#navbarNav" aria-controls="navbarNav"
                 aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
-
-          {% block inner_navbar %}
-          {% endblock inner_navbar %}
+          <div class="container">
+            {% block inner_navbar %}
+            {% endblock inner_navbar %}
+          </div>
 
         </nav>
       </div>
@@ -96,8 +101,10 @@
             {% endfor %}
         </ul>
       {% endif %}
+
       {% block body_block %}
       {% endblock %}
+
     </div>
       {# Bootstrap 4 Javascript (includes Jquery) #}
       <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

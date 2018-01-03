@@ -1,16 +1,11 @@
-from django.contrib.auth import login, authenticate, REDIRECT_FIELD_NAME
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import FormView
-from django.views.generic import TemplateView, DetailView, ListView
-from django.views.generic.base import ContextMixin
 from .forms import SignUpForm, LoginForm, EditUserForm, EditProfileForm
 from django.contrib import messages
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.db import transaction
 from .models import UserProfile
-from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 
 
@@ -41,8 +36,6 @@ class LoginView(FormView):
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        # form.save()
-
         username = form.cleaned_data.get('username')
         raw_password = form.cleaned_data.get('password')
 
@@ -57,7 +50,7 @@ class LoginView(FormView):
 
 
 @login_required
-def view_profile(request,):
+def view_profile(request):
     user = request.user
     profile = UserProfile.objects.get(user=user)
     return render(request, 'accounts/view_profile.html', {
