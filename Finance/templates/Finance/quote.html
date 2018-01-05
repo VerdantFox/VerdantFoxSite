@@ -1,0 +1,54 @@
+{% extends 'Finance/Finance_base.html' %}
+
+{% block title_block %}
+  Home | Finance
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'Finance:home' %}">Finance</a></li>
+  <li class="breadcrumb-item active" aria-current="page">New Quote</li>
+{% endblock %}
+
+{% block active2 %}active{% endblock %}
+
+{% block body_block %}
+
+  {% if error %}
+    <h6 class="errorlist">{{ error }}</h6>
+  {% endif %}
+
+  {% if price and symbol %}
+    <h5>One share of {{ name }} ({{ symbol }}) is worth {{ price }}.</h5>
+  {% endif %}
+
+  <div class="form-group">
+
+    {% if buy_form %}
+      <form class="form-group" method="post" id="buy-form">
+      {% csrf_token %}
+      {{ buy_form.as_p }}
+{#      <input id="buy-submit" type="submit" class="btn btn-primary" name="buy" value="Buy">#}
+      <button id="buy-submit" type="submit" class="btn btn-primary" form="buy-form"
+        name="buy" value="Buy">Buy stock</button>
+    {% else %}
+      <form class="form-group" method="post" id="quote-form">
+      {% csrf_token %}
+      {{ quote_form.as_p }}
+      <button id="quote-submit" type="submit" class="btn btn-primary" form="quote-form"
+              name="get quote" value="Get Quote">Get Quote</button>
+    {% endif %}
+    </form>
+  </div>
+
+  {% if buy_form %}
+    <h5>Look up new stock quote?</h5>
+    <form class="form-group" method="post" id="quote-form">
+      {% csrf_token %}
+      {{ quote_form.as_p }}
+      <button id="quote-submit" type="submit" class="btn btn-primary" form="quote-form"
+              name="get quote" value="Get Quote">Get Quote</button>
+    </form>
+  {% endif %}
+
+{% endblock %}

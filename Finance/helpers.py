@@ -1,7 +1,15 @@
 import urllib.request
 import json
 import math
-from .models import UserStock
+from .models import StockPurchase, StockSymbolName
+import time
+
+
+def get_stock_name(symbol):
+    stock = StockSymbolName.objects.values('stock_name').get(
+        stock_symbol__exact=symbol)
+    stock_name = stock['stock_name']
+    return stock_name
 
 
 def multiple_lookup(symbols):
@@ -30,21 +38,24 @@ def multiple_lookup(symbols):
     # Query Alpha Vantage for quote
     # https://www.alphavantage.co/documentation/
     try:
+        start_time = time.time()
         # GET JSON webpage
-        webpage = f"https://www.alphavantage.co/query?function=BATCH_STOCK_" \
+        url = f"https://www.alphavantage.co/query?function=BATCH_STOCK_" \
                   f"QUOTES&symbols={query}&apikey=1PSE4E7QME3PUPTU"
 
         # Convert JSON data from webpage into readable format
         # https://stackoverflow.com/questions/12965203/how-to-get-json-from-webpage-into-python-script
-        with urllib.request.urlopen(webpage) as url:
-            data = json.loads(url.read().decode())
-            # Get the stock symbol and it's associated price
-            for stock_info in data['Stock Quotes']:
-                stock_symbol = stock_info['1. symbol']
-                stock_price = f"{float(stock_info['2. price']):.2f}"
-                stock_dict[stock_symbol] = stock_price
+        webpage = urllib.request.urlopen(url)
+        data = json.loads(webpage.read().decode())
+        print(f"Time = {time.time() - start_time}")
+        # Get the stock symbol and it's associated price
+        for stock_info in data['Stock Quotes']:
+            stock_symbol = stock_info['1. symbol']
+            stock_price = f"{float(stock_info['2. price']):.2f}"
+            stock_price = float(stock_price)
+            stock_dict[stock_symbol] = stock_price
 
-            return stock_dict
+        return stock_dict
 
     except:
         return "error getting or reading webpage"
@@ -60,23 +71,27 @@ def single_lookup(symbol):
     # Query Alpha Vantage for quote
     # https://www.alphavantage.co/documentation/
     try:
-
+        start_time = time.time()
         # GET JSON webpage
-        webpage = f"https://www.alphavantage.co/query?function=BATCH_STOCK_" \
+
+        url = f"https://www.alphavantage.co/query?function=BATCH_STOCK_" \
                   f"QUOTES&symbols={symbol}&apikey=1PSE4E7QME3PUPTU"
 
         # Convert JSON data from webpage into readable format
         # https://stackoverflow.com/questions/12965203/how-to-get-json-from-webpage-into-python-script
-        with urllib.request.urlopen(webpage) as url:
-            data = json.loads(url.read().decode())
-            # Get the stock symbol and it's associated price
-            if data['Stock Quotes'] == {}:
-                return "Error, stock not found."
-            else:
-                for stock_info in data['Stock Quotes']:
-                    stock_symbol = stock_info['1. symbol']
-                    stock_price = f"{float(stock_info['2. price']):.2f}"
-                    return stock_symbol, stock_price
+        webpage = urllib.request.urlopen(url)
+
+        print(f"Time = {time.time() - start_time}")
+        data = json.loads(webpage.read().decode())
+        # Get the stock symbol and it's associated price
+
+        if data['Stock Quotes'] == []:
+            return "Error, stock not found."
+        else:
+            for stock_info in data['Stock Quotes']:
+                stock_price = f"{float(stock_info['2. price']):.2f}"
+                stock_price = float(stock_price)
+                return stock_price
 
     except:
         return "Error getting or reading web page."
@@ -86,10 +101,10 @@ def stock_index(user):
     """Given a user, return list of stocks"""
 
     # Query database for unique stock symbols in "portfolio" from current user
-    unique_stocks = UserStock.objects.values('symbol').distinct().filter(user__exact=user)
+    unique_stocks = StockPurchase.objects.values('symbol').distinct().filter(user__exact=user)
 
     # Query database for all info in "portfolio" from current user
-    stock_portfolio = UserStock.objects.filter(user__exact=user)
+    stock_portfolio = StockPurchase.objects.filter(user__exact=user)
 
     # Make a list to sort unique stocks
     presorted_stock_list = []

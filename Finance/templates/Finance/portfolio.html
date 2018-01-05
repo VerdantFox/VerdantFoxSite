@@ -1,0 +1,63 @@
+{% extends 'Finance/Finance_base.html' %}
+
+{% block title_block %}
+  Portfolio | Finance
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'Finance:home' %}">Finance</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Portfolio</li>
+{% endblock %}
+
+{% block active1 %}active{% endblock %}
+
+{% block body_block %}
+
+  <div class="title-section">
+    <h1>Portfolio</h1>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th scope="col" class="Symbol">Symbol</th>
+            <th scope="col" class="Name">Name</th>
+            <th scope="col" class="Shares">Shares</th>
+            <th scope="col" class="Price">Price</th>
+            <th scope="col" class="Total">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for stock in stock_list %}
+            <tr>
+              <th scope="row">{{ stock.symbol }}</th>
+              <td>{{ stock.name }}</td>
+              <td>{{ stock.shares }}</td>
+              <td>{{ stock.price }}</td>
+              <td>{{ stock.total }}</td>
+            </tr>
+          {% endfor %}
+          <tr>
+            <th scope="row">CASH</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ cash }}</td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <th scope="row">NET WORTH</th>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>{{ net_worth }}</td>
+          </tr>
+        </tfoot>
+      </table>
+
+  </div>
+  <div class="body-section">
+
+  </div>
+
+{% endblock %}

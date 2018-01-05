@@ -1,5 +1,14 @@
 {% extends 'Finance/Finance_base.html' %}
 
+{% block title_block %}
+  Portfolio | Finance
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Finance</li>
+{% endblock %}
+
 {% block body_block %}
   <h1>Welcome to Finance!</h1>
   <div class="text-justify">

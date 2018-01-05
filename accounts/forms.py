@@ -1,14 +1,8 @@
-from datetime import timedelta
-
 from django import forms
-from django.contrib.auth import REDIRECT_FIELD_NAME, get_user_model
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.utils import timezone
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
-from django.contrib.auth.models import User
 from .models import UserProfile
-from django.core.files.uploadedfile import SimpleUploadedFile
 
 
 UserModel = get_user_model()
@@ -120,8 +114,7 @@ class EditProfileForm(forms.ModelForm):
     bio = forms.CharField(
         label=_('About me:'), max_length=1000,
         required=False, widget=forms.Textarea(attrs={
-            'placeholder': "What's your story? What exciting facts would you "
-                           "",
+            'placeholder': "What's your story? What exciting facts would you ",
             'class': 'form-control'}))
     location = forms.CharField(
         label=_('Location:'), max_length=100, required=False,
