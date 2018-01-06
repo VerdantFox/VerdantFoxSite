@@ -1,7 +1,7 @@
 {% extends 'Finance/Finance_base.html' %}
 
 {% block title_block %}
-  Home | Finance
+  New Quote | Finance
 {% endblock %}
 
 {% block breadcrumb %}
@@ -28,13 +28,14 @@
       <form class="form-group" method="post" id="buy-form">
       {% csrf_token %}
       {{ buy_form.as_p }}
-{#      <input id="buy-submit" type="submit" class="btn btn-primary" name="buy" value="Buy">#}
+      <input type="hidden" name="buy"/>
       <button id="buy-submit" type="submit" class="btn btn-primary" form="buy-form"
         name="buy" value="Buy">Buy stock</button>
     {% else %}
       <form class="form-group" method="post" id="quote-form">
       {% csrf_token %}
       {{ quote_form.as_p }}
+      <input type="hidden" name="quote"/>
       <button id="quote-submit" type="submit" class="btn btn-primary" form="quote-form"
               name="get quote" value="Get Quote">Get Quote</button>
     {% endif %}
@@ -46,8 +47,9 @@
     <form class="form-group" method="post" id="quote-form">
       {% csrf_token %}
       {{ quote_form.as_p }}
+      <input type="hidden" name="quote"/>
       <button id="quote-submit" type="submit" class="btn btn-primary" form="quote-form"
-              name="get quote" value="Get Quote">Get Quote</button>
+              name="get quote" value="Get Quote" >Get Quote</button>
     </form>
   {% endif %}
 

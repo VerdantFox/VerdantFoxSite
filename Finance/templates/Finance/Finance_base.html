@@ -16,10 +16,10 @@
         <a class="nav-link" href="#">Analysis</a>
       </li>
       <li class="nav-item {% block active4 %}{% endblock %}">
-        <a class="nav-link" href="#">History</a>
+        <a class="nav-link" href="{% url 'Finance:history' %}">History</a>
       </li>
       <li class="nav-item {% block active5 %}{% endblock %}">
-        <a class="nav-link" href="#">Add funds</a>
+        <a class="nav-link" href="{% url 'Finance:add_funds' %}">Add Funds</a>
       </li>
     </ul>
   </div>

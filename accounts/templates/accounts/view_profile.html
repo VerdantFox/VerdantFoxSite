@@ -43,6 +43,7 @@
     <li>First name: {{ user.first_name }}</li>
     <li>Last name: {{ user.last_name }}</li>
     <li>Location: {{ profile.location }}</li>
+    <li>Time Zone: {{ profile.timezone }}</li>
     <li>Birth Date: {{ profile.birth_date }}</li>
   </ul>
   <a href="{% url 'accounts:edit_profile' %}">

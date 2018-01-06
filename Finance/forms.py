@@ -1,5 +1,5 @@
 from django import forms
-from .models import StockPurchase
+from .models import Transaction
 
 
 class QuoteForm(forms.Form):
@@ -25,7 +25,7 @@ class QuoteForm(forms.Form):
 
 class BuyForm(forms.ModelForm):
     class Meta:
-        model = StockPurchase
+        model = Transaction
         fields = ('symbol', 'shares',)
 
     symbol = forms.CharField(

@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import StockPurchase, StockSymbolName, UserCash
+from .models import Transaction, StockSymbolName, UserInfo
 
-admin.site.register(StockPurchase)
+admin.site.register(Transaction)
 admin.site.register(StockSymbolName)
-admin.site.register(UserCash)
+admin.site.register(UserInfo)

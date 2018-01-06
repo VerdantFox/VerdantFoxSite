@@ -24,6 +24,7 @@ class UserProfile(models.Model):
     bio = models.CharField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=30, blank=True)
+    timezone = models.CharField(max_length=50, default='UTC')
 
     def __str__(self):
         return self.user.username

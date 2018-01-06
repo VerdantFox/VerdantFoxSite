@@ -1,0 +1,50 @@
+{% extends 'Finance/Finance_base.html' %}
+{% load humanize %}
+{% load tz %}
+{% load l10n %}
+
+
+{% block title_block %}
+  History | Finance
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'Finance:home' %}">Finance</a></li>
+  <li class="breadcrumb-item active" aria-current="page">History</li>
+{% endblock %}
+
+{% block active4 %}active{% endblock %}
+
+{% block body_block %}
+
+  <h1 class="Table_headers">Transaction History</h1>
+  {% if transaction_list %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Symbol</th>
+          <th scope="col">Name</th>
+          <th scope="col">Shares</th>
+          <th scope="col">Price</th>
+          <th scope="col">Timestamp</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for transaction in transaction_list %}
+          <tr>
+            <th scope="row">{{ transaction.symbol }}</th>
+            <td>{{ transaction.name }}</td>
+            <td>{{ transaction.shares|intcomma }}</td>
+            <td>{{ transaction.price}}</td>
+            <td>{{ transaction.time_stamp }}</td>
+          </tr>
+        {% empty %}
+          <h3>No transactions made yet.</h3>
+        {% endfor %}
+      </tbody>
+    </table>
+  {% endif %}
+
+
+{% endblock %}

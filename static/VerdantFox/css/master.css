@@ -10,9 +10,6 @@ h1{
     border: 2px solid black;
 }
 
-/*.top-row{*/
-    /*height: 100px*/
-/*}*/
 
 .transparent{
   background: transparent;
@@ -25,13 +22,6 @@ h1{
     display:inline-block;
     width:4px;
 }
-/*.testchange{*/
-
-/*}*/
-
-/*.top-row{*/
-    /*background: white url("../images/verdantfoxbackground.jpg") no-repeat top center;*/
-/*}*/
 
 .errorlist {
     color: red;
@@ -60,8 +50,4 @@ h1{
     padding: 0;
     list-style-type: none;
     font-size: 1.4em;
-}
-
-#alt-profile-img {
-
 }

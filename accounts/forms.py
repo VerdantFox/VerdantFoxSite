@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.utils.translation import gettext_lazy as _
 from .models import UserProfile
+import pytz
 
 
 UserModel = get_user_model()
@@ -102,10 +103,18 @@ class EditUserForm(forms.ModelForm):
             'placeholder': 'Last Name'}))
 
 
+timezone_list = []
+
+for timezone in pytz.common_timezones:
+    timezone_list.append([timezone, timezone])
+
+
 class EditProfileForm(forms.ModelForm):
+
     class Meta:
         model = UserProfile
-        fields = ('profile_picture', 'bio', 'location', 'birth_date')
+        fields = ('profile_picture', 'bio', 'location',
+                  'timezone', 'birth_date')
 
     profile_picture = forms.ImageField(
         label=_('Profile Picture:'), required=False,
@@ -121,8 +130,14 @@ class EditProfileForm(forms.ModelForm):
         widget=forms.TextInput(attrs={
             'class': 'form-control',
             'placeholder': 'San Fransisco, CA'}))
+    timezone = forms.TypedChoiceField(
+        choices=timezone_list,
+        empty_value=None, required=False,
+        widget=forms.Select(attrs={
+            'class': 'form-control'}))
     birth_date = forms.DateField(
         label=_('Birth Date:'), required=False,
         widget=forms.DateInput(attrs={
             'placeholder': 'mm/dd/yyyy',
             'class': 'form-control'}))
+

@@ -4,11 +4,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 
-class StockPurchase(models.Model):
+class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     symbol = models.CharField(max_length=12)
     name = models.CharField(max_length=50)
-    shares = models.PositiveIntegerField()
+    shares = models.IntegerField()
     price = models.FloatField()
     time_stamp = models.DateTimeField(auto_now=True)
 
@@ -30,20 +30,20 @@ class StockSymbolName(models.Model):
         return f"{self.stock_symbol} is {self.stock_name} shares"
 
 
-class UserCash(models.Model):
+class UserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    cash = models.FloatField()
+    cash = models.FloatField(default=10000)
 
     def __str__(self):
-        return f"${self.cash:,.2f}"
+        return f"{self.user.username}: ${self.cash:,.2f}"
 
 
 @receiver(post_save, sender=User)
-def create_user_cash(sender, instance, created, **kwargs):
+def create_user_info(sender, instance, created, **kwargs):
     if created:
-        UserCash.objects.create(user=instance)
+        UserInfo.objects.create(user=instance)
 
 
 @receiver(post_save, sender=User)
-def save_user_cash(sender, instance, **kwargs):
-    instance.usercash.save()
+def save_user_info(sender, instance, **kwargs):
+    instance.userinfo.save()

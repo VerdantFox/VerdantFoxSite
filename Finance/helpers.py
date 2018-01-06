@@ -1,7 +1,7 @@
 import urllib.request
 import json
 import math
-from .models import StockPurchase, StockSymbolName
+from .models import Transaction, StockSymbolName
 import time
 
 
@@ -101,10 +101,10 @@ def stock_index(user):
     """Given a user, return list of stocks"""
 
     # Query database for unique stock symbols in "portfolio" from current user
-    unique_stocks = StockPurchase.objects.values('symbol').distinct().filter(user__exact=user)
+    unique_stocks = Transaction.objects.values('symbol').distinct().filter(user__exact=user)
 
     # Query database for all info in "portfolio" from current user
-    stock_portfolio = StockPurchase.objects.filter(user__exact=user)
+    stock_portfolio = Transaction.objects.filter(user__exact=user)
 
     # Make a list to sort unique stocks
     presorted_stock_list = []

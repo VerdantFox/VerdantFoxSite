@@ -2,11 +2,13 @@ from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from .helpers import stock_index, single_lookup, get_stock_name
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from .forms import QuoteForm, BuyForm
-from .models import StockPurchase
+from .models import Transaction
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.contrib import messages
+from django.utils import timezone
 
 
 class Home(TemplateView):
@@ -23,9 +25,7 @@ def portfolio(request):
     total_stock_worth = 0
     # Iterate over stock_list adding together all stock "total" values
 
-    # TODO make user_cash
-    # user_cash temporarily $5000
-    user_cash = request.user.usercash.cash
+    user_cash = request.user.userinfo.cash
 
     for totals in stock_list:
         totals_float = totals["total"].replace("$", "")
@@ -56,7 +56,7 @@ def quote(request):
     quote_form = None
     # if user reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
-        if "get quote" in request.POST:
+        if "quote" in request.POST:
             print("here")
             # create a form instance and populate it with data from quote
             quote_form = QuoteForm(request.POST)
@@ -110,20 +110,28 @@ def quote(request):
                     price = None
                 print(f'stock price: {price}')
 
-                user_cash = request.user.usercash
+                user_info = request.user.userinfo
 
-                if name and shares and user_cash and total_cost:
-                    if user_cash.cash >= total_cost:
-                        purchase = StockPurchase(user=request.user,
-                                                 symbol=symbol,
-                                                 name=name,
-                                                 shares=shares,
-                                                 price=price)
-                        original_cash = user_cash.cash
-                        user_cash.cash -= total_cost
-                        if purchase and original_cash != user_cash:
-                            user_cash.save()
+                if name and shares and user_info and total_cost:
+                    if user_info.cash >= total_cost:
+                        purchase = Transaction(user=request.user,
+                                               symbol=symbol,
+                                               name=name,
+                                               shares=shares,
+                                               price=price)
+                        original_cash = user_info.cash
+                        user_info.cash -= total_cost
+                        if purchase and original_cash != user_info:
+                            user_info.save()
                             purchase.save()
+                            if shares == 1:
+                                share_plural = 'share'
+                            else:
+                                share_plural = 'shares'
+                            messages.add_message(
+                                request, messages.SUCCESS,
+                                f'Bought {shares} {share_plural} '
+                                f'of {name} ({symbol})!')
                             return HttpResponseRedirect(
                                 reverse('Finance:portfolio'))
                         else:
@@ -141,3 +149,84 @@ def quote(request):
                    'symbol': symbol,
                    'name': name,
                    'error': error})
+
+
+class History(LoginRequiredMixin, ListView):
+    """Display users purchase, sale, and money addition history"""
+    template_name = 'Finance/history.html'
+    model = Transaction
+
+    def get_queryset(self):
+        transactions = self.model.objects.filter(
+            user=self.request.user).order_by('-time_stamp')
+        for transaction in transactions:
+            transaction.price = f'${transaction.price:,.2f}'
+        user_timezone = self.request.user.userprofile.timezone
+        timezone.activate(user_timezone)
+        return transactions
+
+
+def add_funds(request):
+    """Add cash to account"""
+    return render(request, 'Finance/add_funds.html')
+
+    # if user reached route via POST (as by submitting a form via POST)
+    # if request.method == "POST":
+    #     # Ensure name is present and alpha
+    #     name_temp = request.form.get("name")
+    #     name_temp = name_temp.replace(" ", "")
+    #     if not request.form.get("name"):
+    #         return apology("Enter name")
+    #     if name_temp.isalpha() == False:
+    #         return apology("Cannot include symbols or numbers in name")
+    #
+    #     # Ensure credit card present
+    #     if not request.form.get("card_number"):
+    #         return apology("Enter credit card number!")
+    #
+    #     # Enusre card is valid
+    #     if credit(request.form.get("card_number")) == False:
+    #         return apology("invalid credit card number!")
+    #
+    #     # Ensure date is valid
+    #     # https://stackoverflow.com/questions/32483997/get-current-date-time-and-compare-with-other-date
+    #     current_date_time = datetime.datetime.now()
+    #     card_date = request.form.get("month") + "/" + request.form.get("year")
+    #     card_date = ExpectedDate = datetime.datetime.strptime(card_date, "%m/%Y")
+    #     if current_date_time >= card_date:
+    #         return apology("invalid expiration date")
+    #
+    #     # convert cash added to float without commas and 2 decimal places
+    #     cash_added = str(request.form.get("cash"))
+    #     try:
+    #         # Ensure valid cash type and convert to float with 2 decimal places
+    #         cash_added = float(cash_added)
+    #         # https://stackoverflow.com/questions/455612/limiting-floats-to-two-decimal-points
+    #         cash_added = float("{0:.2f}".format(cash_added))
+    #     except:
+    #         return apology("invalid cash amount!")
+    #     # Ensure cash within valid range
+    #     if cash_added > 500000.00 or cash_added <= 0:
+    #         return apology("invalid cash amount")
+    #
+    #     else:
+    #         # history_symbol = "Cash added"
+    #         # Update portfolio with cash additin
+    #         history_update = db.execute("INSERT INTO portfolio (user_id, stock, number_of_shares, price)"
+    #             " VALUES(:user_id, :stock, NULL, :price)", user_id=session["user_id"],
+    #             stock="Cash added", price=cash_added)
+    #         # Error if could not update portfolio
+    #         if not history_update:
+    #             return apology("Error: failed to create cash update in history")
+    #         #update user's cash
+    #         user_cash_update = db.execute("UPDATE users SET cash = cash + :cash_added WHERE id = :id", cash_added=cash_added, id=session["user_id"])
+    #         if not user_cash_update:
+    #             return apology("Error: failed to add cash")
+    #         # Flash sold message
+    #         flash("Cash added!")
+    #         # redirect user to home page
+    #         return redirect(url_for("index"))
+    #
+    # # else if user reached route via GET (as by clicking a link or via redirect)
+    # else:
+    #     return render_template("add_cash.html")
