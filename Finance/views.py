@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from .helpers import stock_index, single_lookup, get_stock_name
-from django.views.generic import TemplateView, ListView
-from .forms import QuoteForm, BuyForm
+from .helpers import (stock_index, single_lookup, get_stock_name,
+                      check_repeats, validate_shares)
+from django.views.generic import TemplateView, ListView, FormView, base
+from .forms import QuoteForm, BuyForm, SellForm, AddFundsForm
 from .models import Transaction
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.utils import timezone
 
@@ -23,25 +24,158 @@ def portfolio(request):
 
     # Create a variable for finding the combined worth of all owned stocks
     total_stock_worth = 0
+
+    user_funds = request.user.userinfo.cash
+
     # Iterate over stock_list adding together all stock "total" values
-
-    user_cash = request.user.userinfo.cash
-
-    for totals in stock_list:
-        totals_float = totals["total"].replace("$", "")
-        totals_float = totals_float.replace(",", "")
-        total_stock_worth += float(totals_float)
+    for stock in stock_list:
+        total_stock_worth += stock['total']
 
     # Find net worth (cash + total stock value)
-    net_worth = user_cash + total_stock_worth
+    net_worth = user_funds + total_stock_worth
 
-    user_cash = f"${user_cash:,.2f}"
+    user_funds = f"${user_funds:,.2f}"
     net_worth = f"${net_worth:,.2f}"
+
+    if request.method == "POST":
+        user_info = request.user.userinfo
+        # Create dictionary of user's stocks.
+        # stock_dict['symbol'] = (name, shares owned, stock price)
+        stock_dict = {}
+        for stock in stock_list:
+            stock_dict[stock['symbol']] = stock['name'], stock['shares'], stock['price'],
+
+        repeat_list = check_repeats(request.POST)
+
+        for item in request.POST:
+            stock_symbol = None
+            if item[:3] == "buy" or item[:4] == "sell":
+                # Split item to get buy/sell:0 and stock symbol:1
+                split_item = item.split('-')
+                # Get stock symbol
+                stock_symbol = split_item[1].upper()
+
+                if stock_symbol in repeat_list and item[:4] == "sell":
+                    messages.add_message(
+                        request, messages.WARNING,
+                        f'Could not resolve {stock_symbol}. Listed as '
+                        f'both "buy" and "sell"!')
+
+            # Check if item name starts with "buy" and isn't repeat
+            if stock_symbol not in repeat_list and item[:3] == "buy":
+                # Check if item was bought bought
+                if request.POST[item]:
+
+                    # Check if share count is valid and get integer back
+                    valid_shares = validate_shares(request, stock_symbol, request.POST[item])
+                    if valid_shares:
+                        # Get stock shares and price
+                        name, owned_shares, price = stock_dict[stock_symbol]
+                        price = float(price)
+                        # Get total cost of transaction
+                        purchase_cost = valid_shares * price
+
+                        # If user can afford purchase, buy stocks
+                        if purchase_cost <= user_info.cash:
+
+                            try:
+                                # Add add sale value to user account
+                                user_info.cash -= purchase_cost
+                                # Record transaction
+                                purchase = Transaction(user=request.user,
+                                                       symbol=stock_symbol,
+                                                       name=name,
+                                                       shares=valid_shares,
+                                                       price=price)
+                                # Save models
+                                user_info.save()
+                                purchase.save()
+                                # Check plural for success message
+                                if valid_shares == 1:
+                                    share_plural = 'share'
+                                else:
+                                    share_plural = 'shares'
+                                # Success message
+                                messages.add_message(
+                                    request, messages.SUCCESS,
+                                    f'Bought {valid_shares} {share_plural} '
+                                    f'of {name} ({stock_symbol})!')
+
+                            except:
+                                messages.add_message(
+                                    request, messages.WARNING,
+                                    f'Failed {stock_symbol} purchase!')
+                                pass
+                        else:
+                            messages.add_message(
+                                request, messages.WARNING,
+                                f'Failed to purchase{stock_symbol}, '
+                                f'not enough funds!')
+
+            # Check if item name starts with "sell"
+            if stock_symbol not in repeat_list and item[:4] == "sell":
+                # Check if item was sold
+                if request.POST[item]:
+
+                    # Get stock shares and price
+                    name, owned_shares, price = stock_dict[stock_symbol]
+                    owned_shares = int(owned_shares)
+                    price = float(price)
+
+                    # Check if share count is valid and get integer back
+                    valid_shares = validate_shares(
+                        request, stock_symbol, request.POST[item], owned_shares)
+
+                    if valid_shares:
+                        # Get total cost of transaction
+                        sale_value = valid_shares * price
+
+                        try:
+                            # Add add sale value to user account
+                            user_info.cash += sale_value
+                            # Record transaction
+                            sale = Transaction(user=request.user,
+                                               symbol=stock_symbol.upper(),
+                                               name=name,
+                                               shares=-valid_shares,
+                                               price=price)
+                            # Save models
+                            user_info.save()
+                            sale.save()
+
+                            # Check plural for success message
+                            if valid_shares == 1:
+                                share_plural = 'share'
+                            else:
+                                share_plural = 'shares'
+                            # Success message
+                            messages.add_message(
+                                request, messages.SUCCESS,
+                                f'Sold {valid_shares} {share_plural} '
+                                f'of {name} ({stock_symbol})!')
+                            return HttpResponseRedirect(
+                                reverse('Finance:portfolio'))
+                        except:
+                            messages.add_message(
+                                request, messages.WARNING,
+                                f'Failed {stock_symbol} sale!')
+                            pass
+
+        return HttpResponseRedirect(
+            reverse('Finance:portfolio'))
+
+    else:
+        pass
+
+    # Format stock money values for template view
+    for stock in stock_list:
+        stock['price'] = f"${stock['price']:,.2f}"
+        stock['total'] = f"${stock['total']:,.2f}"
 
     return render(request, 'Finance/portfolio.html', context={
         "stock_list": stock_list,
-        "cash": user_cash,
-        "net_worth": net_worth
+        "funds": user_funds,
+        "net_worth": net_worth,
     })
 
 
@@ -98,7 +232,7 @@ def quote(request):
                 except:
                     name = None
                 print(f'stock name: {name}')
-                shares = buy_form.cleaned_data['shares']
+                shares = buy_form.cleaned_data['buy_shares']
                 total_cost = None
                 print(f'shares: {shares}')
                 if name:
@@ -138,6 +272,7 @@ def quote(request):
                             error = "Could not save file"
                     else:
                         error = "Not enough funds to make that purchase."
+                        price = f'${price:,.2f}'
 
     else:
         quote_form = QuoteForm()
@@ -161,72 +296,50 @@ class History(LoginRequiredMixin, ListView):
             user=self.request.user).order_by('-time_stamp')
         for transaction in transactions:
             transaction.price = f'${transaction.price:,.2f}'
+            if transaction.shares == 0:
+                transaction.shares = ''
         user_timezone = self.request.user.userprofile.timezone
         timezone.activate(user_timezone)
+
         return transactions
 
 
-def add_funds(request):
-    """Add cash to account"""
-    return render(request, 'Finance/add_funds.html')
+class AddFunds(LoginRequiredMixin, FormView, base.ContextMixin):
+    template_name = 'Finance/add_funds.html'
+    form_class = AddFundsForm
+    success_url = reverse_lazy('Finance:portfolio')
 
-    # if user reached route via POST (as by submitting a form via POST)
-    # if request.method == "POST":
-    #     # Ensure name is present and alpha
-    #     name_temp = request.form.get("name")
-    #     name_temp = name_temp.replace(" ", "")
-    #     if not request.form.get("name"):
-    #         return apology("Enter name")
-    #     if name_temp.isalpha() == False:
-    #         return apology("Cannot include symbols or numbers in name")
-    #
-    #     # Ensure credit card present
-    #     if not request.form.get("card_number"):
-    #         return apology("Enter credit card number!")
-    #
-    #     # Enusre card is valid
-    #     if credit(request.form.get("card_number")) == False:
-    #         return apology("invalid credit card number!")
-    #
-    #     # Ensure date is valid
-    #     # https://stackoverflow.com/questions/32483997/get-current-date-time-and-compare-with-other-date
-    #     current_date_time = datetime.datetime.now()
-    #     card_date = request.form.get("month") + "/" + request.form.get("year")
-    #     card_date = ExpectedDate = datetime.datetime.strptime(card_date, "%m/%Y")
-    #     if current_date_time >= card_date:
-    #         return apology("invalid expiration date")
-    #
-    #     # convert cash added to float without commas and 2 decimal places
-    #     cash_added = str(request.form.get("cash"))
-    #     try:
-    #         # Ensure valid cash type and convert to float with 2 decimal places
-    #         cash_added = float(cash_added)
-    #         # https://stackoverflow.com/questions/455612/limiting-floats-to-two-decimal-points
-    #         cash_added = float("{0:.2f}".format(cash_added))
-    #     except:
-    #         return apology("invalid cash amount!")
-    #     # Ensure cash within valid range
-    #     if cash_added > 500000.00 or cash_added <= 0:
-    #         return apology("invalid cash amount")
-    #
-    #     else:
-    #         # history_symbol = "Cash added"
-    #         # Update portfolio with cash additin
-    #         history_update = db.execute("INSERT INTO portfolio (user_id, stock, number_of_shares, price)"
-    #             " VALUES(:user_id, :stock, NULL, :price)", user_id=session["user_id"],
-    #             stock="Cash added", price=cash_added)
-    #         # Error if could not update portfolio
-    #         if not history_update:
-    #             return apology("Error: failed to create cash update in history")
-    #         #update user's cash
-    #         user_cash_update = db.execute("UPDATE users SET cash = cash + :cash_added WHERE id = :id", cash_added=cash_added, id=session["user_id"])
-    #         if not user_cash_update:
-    #             return apology("Error: failed to add cash")
-    #         # Flash sold message
-    #         flash("Cash added!")
-    #         # redirect user to home page
-    #         return redirect(url_for("index"))
-    #
-    # # else if user reached route via GET (as by clicking a link or via redirect)
-    # else:
-    #     return render_template("add_cash.html")
+    def get_context_data(self, **kwargs):
+        cash = self.request.user.userinfo.cash
+        context = super().get_context_data(**kwargs)
+        context['cash'] = f'${cash:,.2f}'
+        return context
+
+    def form_valid(self, form):
+
+        funds = form.cleaned_data.get('funds')
+        name = form.cleaned_data.get('name')
+        card_number = form.cleaned_data.get('card_number')
+        cc_exp = form.cleaned_data.get('cc_exp')
+        cvv = form.cleaned_data.get('cvv')
+        zip_code = form.cleaned_data.get('zip_code')
+        user_info = self.request.user.userinfo
+
+        transaction = Transaction(
+            user=self.request.user,
+            symbol='FUNDS ADDED',
+            name='',
+            price=funds,
+            shares=0,
+        )
+        # try:
+        transaction.save()
+        user_info.cash += funds
+        user_info.save()
+        messages.add_message(
+            self.request, messages.SUCCESS,
+            f'Added ${funds:,.2f} to your account!')
+        # except:
+        #     print("Transaction failed!")
+
+        return HttpResponseRedirect(reverse_lazy('Finance:portfolio'))

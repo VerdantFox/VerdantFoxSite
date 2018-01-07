@@ -38,6 +38,14 @@ h1{
     font-size: 1.5em;
 }
 
+.warning {
+    color: red;
+    padding: 0;
+    list-style-type: none;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
 .profile-pic-div {
     max-width: 600px;
 }
@@ -50,4 +58,16 @@ h1{
     padding: 0;
     list-style-type: none;
     font-size: 1.4em;
+}
+
+/* https://css-tricks.com/snippets/css/turn-off-number-input-spinners/ */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.form-box {
+    min-width: 52px; /*fits 3 digits */
+    max-width: 78px; /*fits 6 digits */
 }

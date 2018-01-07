@@ -1,5 +1,6 @@
 {% extends 'Finance/Finance_base.html' %}
 {% load humanize %}
+{% load widget_tweaks %}
 
 {% block title_block %}
   Portfolio | Finance
@@ -16,43 +17,65 @@
 {% block body_block %}
 
   <h1>Portfolio</h1>
+  <form action="" method="post" id="portfolio-form">
+    {% for error in form.non_field_errors %}
+      <h6 class="form-error">{{ error }}</h6>
+    {% endfor %}
+    {% csrf_token %}
     <table class="table table-striped">
       <thead>
         <tr>
           <th scope="col">Symbol</th>
-          <th scope="col">Name</th>
+          <th class="d-none d-md-block" scope="col">Name</th>
           <th scope="col">Shares</th>
           <th scope="col">Price</th>
           <th scope="col">Total</th>
+          <th scope="col">Buy</th>
+          <th scope="col">Sell</th>
         </tr>
       </thead>
       <tbody>
         {% for stock in stock_list %}
           <tr>
-            <th scope="row">{{ stock.symbol }}</th>
-            <td>{{ stock.name }}</td>
-            <td>{{ stock.shares }}</td>
-            <td>{{ stock.price }}</td>
-            <td>{{ stock.total }}</td>
+          <th name="{{ stock.symbol }}" scope="row">{{ stock.symbol }}</th>
+          <td class="d-none d-md-block">{{ stock.name }}</td>
+          <td>{{ stock.shares }}</td>
+          <td>{{ stock.price }}</td>
+          <td>{{ stock.total }}</td>
+          <td><input class="form-control form-box" type="number" min="1"
+                     max="10000" step="1" name="buy-{{ stock.symbol }}"></td>
+          <td><input class="form-control form-box" type="number" min="1"
+                     max="10000" step="1" name="sell-{{ stock.symbol }}"></td>
           </tr>
         {% endfor %}
         <tr>
-          <th scope="row">CASH</th>
+          <th scope="row">FUNDS</th>
+          <td class="d-none d-md-block"></td>
           <td></td>
           <td></td>
-          <td></td>
-          <td>{{ cash }}</td>
+          <td>{{ funds }}</td>
+          <td colspan="2">
+            <button id="buy-sell-button" type="submit"
+                    class="btn btn-primary btn-block"
+                    form="portfolio-form" name="transaction" value="transaction" >
+              <span id="buy-sell">Buy/Sell</span>
+            </button>
+          </td>
+
         </tr>
       </tbody>
       <tfoot>
         <tr>
           <th scope="row">NET WORTH</th>
-          <td></td>
+          <td class="d-none d-md-block"></td>
           <td></td>
           <td></td>
           <td>{{ net_worth }}</td>
+          <td></td>
+          <td></td>
         </tr>
       </tfoot>
     </table>
+  </form>
 
 {% endblock %}

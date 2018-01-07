@@ -1,8 +1,8 @@
 import urllib.request
 import json
-import math
 from .models import Transaction, StockSymbolName
 import time
+from django.contrib import messages
 
 
 def get_stock_name(symbol):
@@ -112,8 +112,8 @@ def stock_index(user):
     for stock in unique_stocks:
         presorted_stock_list.append(stock["symbol"])
     # If "Cash added" is in our list, remove it from our list
-    if "Cash added" in presorted_stock_list:
-        presorted_stock_list.remove("Cash added")
+    if "FUNDS ADDED" in presorted_stock_list:
+        presorted_stock_list.remove("FUNDS ADDED")
     # Sort the list of stocks (now strings)
     sorted_stock_list = sorted(presorted_stock_list)
 
@@ -149,81 +149,76 @@ def stock_index(user):
                 {"symbol": unique_stock,
                  "name": stock_name,
                  "shares": unique_stock_shares,
-                 "price": f"${stock_price:,.2f}",
-                 "total": f"${stock_total:,.2f}"
+                 "price": stock_price,
+                 "total": stock_total
                  })
 
     return stock_list
 
 
-def credit(card_number):
-    """ Given a credit card, return True for valid or False for invalid """
-
-    # Convert card number to string.
-    card_number = str(card_number)
-    # Remove empty space and dashes
-    card_number = card_number.replace("-", "")
-    card_number = card_number.replace(" ", "")
-
-    # Number of digits in credit card number.
-    c_length = len(card_number)
-    # variable for our digit position on card string
-    # (beginning with last digit in array)
-    c_place = c_length - 1
-    # initializing our checking formula to zero
-    check_sum = 0
-
-    """
-    Valid cards require the following:
-    1. Multiply every other digit by 2, starting with the number’s
-        second-to-last digit, and then add those products' digits together.
-    2. Add the sum to the sum of the digits that weren’t multiplied by 2.
-    3. If the total’s last digit is 0, the number is valid!
-    Accomplish these goals with a forever while loop
-    that looks at each digit from end to front
-    """
+def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
     try:
-        while True:
-            # If is the second to last digit or every other digit thereafter
-            # (end to front) perform (1.) calculation from above^ notes
-            # adding result to our check_sum
-            if(c_length - c_place) % 2 == 0:
-                tempa = (int(card_number[c_place]) * 2)
-                check_sum += (math.floor((tempa % 100) / 10) +
-                              math.floor(tempa % 10))
-            # If the last digit or every other digit thereafter (end to front)
-            # perform (2.) calculation from above^ notes adding result
-            # to our check_sum
-            elif(c_length - c_place) % 2 == 1:
-                tempa = (int(card_number[c_place]))
-                check_sum += math.floor(tempa % 10)
-            # Travel backwards from last digit to first along credit card number
-            c_place -= 1
-            # Break loop after finishing with the first digit
-            # in credit card number
-            if c_place < 0:
-                break
+        # Invalidate any non-integer
+        trans_shares = int(trans_shares)
+        # Invalidate any integer less than one or greater than 10000
+        if not 0 < trans_shares < 1000:
+            messages.add_message(
+                request, messages.WARNING,
+                f'Failed {stock_symbol} validation, '
+                f'shares out of range (1-1000)')
+            return False
+        # If selling
+        if owned_shares:
+            # Invalidate instances where selling more shares than owned
+            if trans_shares > owned_shares:
+                messages.add_message(
+                    request, messages.WARNING,
+                    f'Failed {stock_symbol} validation, '
+                    f'selling more than owned')
+                return False
+            else:
+                # Everything checks out (selling)
+                print(f'validated shares: {trans_shares}')
+                return trans_shares
+        else:
+            # Everything checks out (buying)
+            print(f'validated shares: {trans_shares}')
+            return trans_shares
+    # Catch non-integer or other weird, un-checked-for error
     except:
+        messages.add_message(
+            request, messages.WARNING,
+            f'Failed {stock_symbol} validation, '
+            f'Not given integer share count.')
         return False
 
-    # AMEX requirements = (3.) from above notes, 15 digits, starts with 34 or 37
-    if((check_sum % 10 == 0) and (c_length == 15) and (int(card_number[0]) == 3)
-            and ((int(card_number[1]) == 4) or (int(card_number[1]) == 7))):
-        return True
-    # MASTERCARD requirements = (3.) from above notes,
-    # 16 digits, starts with 51, 52, 53, 54, or 55
-    elif((check_sum % 10 == 0) and (c_length == 16)
-         and (int(card_number[0]) == 5) and ((int(card_number[1]) > 0)
-         and (int(card_number[1]) < 6))):
-        return True
-    # VISA requirements = (3.) from above notes, 13 or 16 digits, starts with 4
-    elif((check_sum % 10 == 0) and (c_length == 13 or c_length == 16)
-            and (int(card_number[0]) == 4)):
-        return True
-    # If none of above conditions met card is invalid.
-    else:
-        return False
+
+def check_repeats(post):
+    repeat_symbol_check = ''
+    repeat_list = []
+    for item in post:
+        # Check if item name starts with "buy"
+        if item[:3] == "buy":
+            # Check if item was bought bought
+            if post[item]:
+                # Split item to get buy/sell:0 and stock symbol:1
+                split_item = item.split('-')
+                # Get stock symbol
+                # and a copy for checking buying and selling at same time
+                repeat_symbol_check = split_item[1]
+        # Check if item name starts with "sell"
+        if item[:4] == "sell":
+            # Check if item was sold
+            if post[item]:
+                # Check for buying and selling at same time
+                split_item = item.split('-')
+                stock_symbol = split_item[1]
+                if repeat_symbol_check == stock_symbol:
+                    repeat_list.append(stock_symbol)
+    return repeat_list
+
 
 
 if __name__ == "__main__":
     pass
+

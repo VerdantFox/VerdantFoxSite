@@ -1,4 +1,5 @@
 {% extends 'Finance/Finance_base.html' %}
+{% load widget_tweaks %}
 
 {% block title_block %}
   New Quote | Finance
@@ -14,25 +15,33 @@
 
 {% block body_block %}
 
-  {% if error %}
-    <h6 class="errorlist">{{ error }}</h6>
-  {% endif %}
-
   {% if price and symbol %}
     <h5>One share of {{ name }} ({{ symbol }}) is worth {{ price }}.</h5>
+  {% endif %}
+
+  {% if error %}
+    <h6 class="errorlist">{{ error }}</h6>
   {% endif %}
 
   <div class="form-group">
 
     {% if buy_form %}
-      <form class="form-group" method="post" id="buy-form">
+      {% for error in form.non_field_errors %}
+        <h6 class="form-error">{{ error }}</h6>
+      {% endfor %}
+      <form class="form" method="post" id="buy-form">
       {% csrf_token %}
-      {{ buy_form.as_p }}
+      {{ buy_form.symbol }}
+      {{ buy_form.buy_shares.errors }}
+      <label>{{ buy_form.buy_shares.label }}</label>
+{#      <p>{% render_field buy_form.shares placeholder="Number of shares" %}</p>#}
+      <p>{{ buy_form.buy_shares|attr:"required:true"|attr:"placeholder:Number of shares" }}</p>
+      {{ buy_form.price }}
       <input type="hidden" name="buy"/>
       <button id="buy-submit" type="submit" class="btn btn-primary" form="buy-form"
         name="buy" value="Buy">Buy stock</button>
     {% else %}
-      <form class="form-group" method="post" id="quote-form">
+      <form class="form" method="post" id="quote-form">
       {% csrf_token %}
       {{ quote_form.as_p }}
       <input type="hidden" name="quote"/>
