@@ -39,7 +39,15 @@ h1{
 }
 
 .warning {
-    color: red;
+    color: darkred;
+    padding: 0;
+    list-style-type: none;
+    font-weight: bold;
+    font-size: 1.5em;
+}
+
+.info{
+    color: black;
     padding: 0;
     list-style-type: none;
     font-weight: bold;
@@ -70,4 +78,16 @@ input[type=number]::-webkit-outer-spin-button {
 .form-box {
     min-width: 52px; /*fits 3 digits */
     max-width: 78px; /*fits 6 digits */
+}
+
+.stock {
+    font-size: 1em;
+}
+
+.buy-success {
+    color: orange;
+}
+
+.sale-success {
+    color: forestgreen;
 }

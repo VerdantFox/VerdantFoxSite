@@ -10,6 +10,7 @@ class Transaction(models.Model):
     name = models.CharField(max_length=50)
     shares = models.IntegerField()
     price = models.FloatField()
+    total = models.FloatField()
     time_stamp = models.DateTimeField(auto_now=True)
 
     class Meta:

@@ -24,9 +24,10 @@
       <thead>
         <tr>
           <th scope="col">Symbol</th>
-          <th scope="col">Name</th>
+          <th class="d-none d-md-block" scope="col">Name</th>
           <th scope="col">Shares</th>
           <th scope="col">Price</th>
+          <th scope="col">Total</th>
           <th scope="col">Timestamp</th>
         </tr>
       </thead>
@@ -34,10 +35,12 @@
         {% for transaction in transaction_list %}
           <tr>
             <th scope="row">{{ transaction.symbol }}</th>
-            <td>{{ transaction.name }}</td>
+            <td class="d-none d-md-block">{{ transaction.name }}</td>
             <td>{{ transaction.shares|intcomma }}</td>
             <td>{{ transaction.price}}</td>
-            <td>{{ transaction.time_stamp }}</td>
+            <td>{{ transaction.total }}</td>
+            <td>{{ transaction.time_stamp|date:"SHORT_DATE_FORMAT" }}
+                {{ transaction.time_stamp|time }}</td>
           </tr>
         {% empty %}
           <h3>No transactions made yet.</h3>

@@ -10,6 +10,7 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.utils import timezone
+# from django.core.paginator import Pa
 
 
 class Home(TemplateView):
@@ -46,7 +47,7 @@ def portfolio(request):
             stock_dict[stock['symbol']] = stock['name'], stock['shares'], stock['price'],
 
         repeat_list = check_repeats(request.POST)
-
+        transaction_made = False
         for item in request.POST:
             stock_symbol = None
             if item[:3] == "buy" or item[:4] == "sell":
@@ -59,13 +60,17 @@ def portfolio(request):
                     messages.add_message(
                         request, messages.WARNING,
                         f'Could not resolve {stock_symbol}. Listed as '
-                        f'both "buy" and "sell"!')
+                        f'both "buy" and "sell"!',
+                        extra_tags='stock'
+                    )
 
             # Check if item name starts with "buy" and isn't repeat
             if stock_symbol not in repeat_list and item[:3] == "buy":
+
                 # Check if item was bought bought
                 if request.POST[item]:
-
+                    # List there was a transaction (for error)
+                    transaction_made = True
                     # Check if share count is valid and get integer back
                     valid_shares = validate_shares(request, stock_symbol, request.POST[item])
                     if valid_shares:
@@ -79,14 +84,16 @@ def portfolio(request):
                         if purchase_cost <= user_info.cash:
 
                             try:
-                                # Add add sale value to user account
+                                # Subtract purchase cost from user account
                                 user_info.cash -= purchase_cost
                                 # Record transaction
                                 purchase = Transaction(user=request.user,
                                                        symbol=stock_symbol,
                                                        name=name,
                                                        shares=valid_shares,
-                                                       price=price)
+                                                       price=price,
+                                                       total=purchase_cost
+                                                       )
                                 # Save models
                                 user_info.save()
                                 purchase.save()
@@ -99,24 +106,33 @@ def portfolio(request):
                                 messages.add_message(
                                     request, messages.SUCCESS,
                                     f'Bought {valid_shares} {share_plural} '
-                                    f'of {name} ({stock_symbol})!')
+                                    f'of {name} ({stock_symbol})!',
+                                    extra_tags='stock buy-success'
+                                    )
 
                             except:
                                 messages.add_message(
                                     request, messages.WARNING,
-                                    f'Failed {stock_symbol} purchase!')
-                                pass
+                                    f'Failed {stock_symbol} purchase!',
+                                    extra_tags='stock'
+                                )
+
                         else:
                             messages.add_message(
                                 request, messages.WARNING,
                                 f'Failed to purchase{stock_symbol}, '
-                                f'not enough funds!')
+                                f'not enough funds!',
+                                extra_tags='stock'
+
+                            )
 
             # Check if item name starts with "sell"
             if stock_symbol not in repeat_list and item[:4] == "sell":
+
                 # Check if item was sold
                 if request.POST[item]:
-
+                    # List there was a transaction (for error)
+                    transaction_made = True
                     # Get stock shares and price
                     name, owned_shares, price = stock_dict[stock_symbol]
                     owned_shares = int(owned_shares)
@@ -138,7 +154,9 @@ def portfolio(request):
                                                symbol=stock_symbol.upper(),
                                                name=name,
                                                shares=-valid_shares,
-                                               price=price)
+                                               price=price,
+                                               total=sale_value
+                                               )
                             # Save models
                             user_info.save()
                             sale.save()
@@ -152,17 +170,23 @@ def portfolio(request):
                             messages.add_message(
                                 request, messages.SUCCESS,
                                 f'Sold {valid_shares} {share_plural} '
-                                f'of {name} ({stock_symbol})!')
-                            return HttpResponseRedirect(
-                                reverse('Finance:portfolio'))
+                                f'of {name} ({stock_symbol})!',
+                                extra_tags='stock sale-success'
+                            )
                         except:
                             messages.add_message(
                                 request, messages.WARNING,
-                                f'Failed {stock_symbol} sale!')
-                            pass
+                                f'Failed {stock_symbol} sale!',
+                                extra_tags='stock'
+                            )
+        if not transaction_made:
+            messages.add_message(
+                request, messages.WARNING,
+                f'No purchases or sales indicated.',
+                extra_tags='stock'
+            )
+        return HttpResponseRedirect(reverse_lazy('Finance:portfolio'))
 
-        return HttpResponseRedirect(
-            reverse('Finance:portfolio'))
 
     else:
         pass
@@ -252,7 +276,9 @@ def quote(request):
                                                symbol=symbol,
                                                name=name,
                                                shares=shares,
-                                               price=price)
+                                               price=price,
+                                               total=total_cost
+                                               )
                         original_cash = user_info.cash
                         user_info.cash -= total_cost
                         if purchase and original_cash != user_info:
@@ -295,9 +321,14 @@ class History(LoginRequiredMixin, ListView):
         transactions = self.model.objects.filter(
             user=self.request.user).order_by('-time_stamp')
         for transaction in transactions:
-            transaction.price = f'${transaction.price:,.2f}'
             if transaction.shares == 0:
                 transaction.shares = ''
+            if transaction.price == 0:
+                transaction.price = ''
+            else:
+                transaction.price = f'${transaction.price:,.2f}'
+            transaction.total = f'${transaction.total:,.2f}'
+
         user_timezone = self.request.user.userprofile.timezone
         timezone.activate(user_timezone)
 
@@ -329,17 +360,15 @@ class AddFunds(LoginRequiredMixin, FormView, base.ContextMixin):
             user=self.request.user,
             symbol='FUNDS ADDED',
             name='',
-            price=funds,
+            price=0,
             shares=0,
+            total=funds
         )
-        # try:
         transaction.save()
         user_info.cash += funds
         user_info.save()
         messages.add_message(
             self.request, messages.SUCCESS,
             f'Added ${funds:,.2f} to your account!')
-        # except:
-        #     print("Transaction failed!")
 
         return HttpResponseRedirect(reverse_lazy('Finance:portfolio'))

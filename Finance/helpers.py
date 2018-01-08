@@ -29,9 +29,9 @@ def multiple_lookup(symbols):
     for symbol in symbol_set:
         # Print error for symbols with obvious problems.
         if not symbol.isalpha():
-            print(f"error with '{symbol}' symbol")
+            print(f"error with '{symbol}' symbol alpha during lookup")
         if not 0 < len(symbol) < 6:
-            print(f"error with '{symbol}' symbol")
+            print(f"error with '{symbol}' symbol length during lookup")
         # Add symbol to the set
         query += symbol.upper() + ','
 
@@ -73,7 +73,6 @@ def single_lookup(symbol):
     try:
         start_time = time.time()
         # GET JSON webpage
-
         url = f"https://www.alphavantage.co/query?function=BATCH_STOCK_" \
                   f"QUOTES&symbols={symbol}&apikey=1PSE4E7QME3PUPTU"
 
@@ -98,10 +97,11 @@ def single_lookup(symbol):
 
 
 def stock_index(user):
-    """Given a user, return list of stocks"""
+    """Given a user, return list of unique stocks and total shares"""
 
     # Query database for unique stock symbols in "portfolio" from current user
     unique_stocks = Transaction.objects.values('symbol').distinct().filter(user__exact=user)
+    print(unique_stocks)
 
     # Query database for all info in "portfolio" from current user
     stock_portfolio = Transaction.objects.filter(user__exact=user)
@@ -138,6 +138,7 @@ def stock_index(user):
             if stock.symbol == unique_stock:
                 unique_stock_shares += int(stock.shares)
                 stock_name = stock.name
+
         # Get current unique stock value (via lookup)
         stock_price = float(current_stock_values[unique_stock])
         # Get total price of all shares for unique stock
@@ -165,7 +166,9 @@ def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
             messages.add_message(
                 request, messages.WARNING,
                 f'Failed {stock_symbol} validation, '
-                f'shares out of range (1-1000)')
+                f'shares out of range (1-1000)!',
+                extra_tags='stock'
+            )
             return False
         # If selling
         if owned_shares:
@@ -174,22 +177,24 @@ def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
                 messages.add_message(
                     request, messages.WARNING,
                     f'Failed {stock_symbol} validation, '
-                    f'selling more than owned')
+                    f'selling more than owned!',
+                    extra_tags='stock'
+                )
                 return False
             else:
                 # Everything checks out (selling)
-                print(f'validated shares: {trans_shares}')
                 return trans_shares
         else:
             # Everything checks out (buying)
-            print(f'validated shares: {trans_shares}')
             return trans_shares
     # Catch non-integer or other weird, un-checked-for error
     except:
         messages.add_message(
             request, messages.WARNING,
             f'Failed {stock_symbol} validation, '
-            f'Not given integer share count.')
+            f'Given non-integer integer share count!',
+            extra_tags='stock'
+        )
         return False
 
 
@@ -216,7 +221,6 @@ def check_repeats(post):
                 if repeat_symbol_check == stock_symbol:
                     repeat_list.append(stock_symbol)
     return repeat_list
-
 
 
 if __name__ == "__main__":
