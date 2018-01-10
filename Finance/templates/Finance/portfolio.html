@@ -54,6 +54,7 @@
           <td></td>
           <td></td>
           <td>{{ funds }}</td>
+          {% if stock_list %}
           <td colspan="2">
             <button id="buy-sell-button" type="submit"
                     class="btn btn-primary btn-block"
@@ -61,6 +62,10 @@
               <span id="buy-sell">Buy/Sell</span>
             </button>
           </td>
+          {% else %}
+          <td></td>
+          <td></td>
+          {% endif %}
 
         </tr>
       </tbody>
