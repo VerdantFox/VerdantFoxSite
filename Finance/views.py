@@ -11,6 +11,7 @@ from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.utils import timezone
 # from django.core.paginator import Pa
+from .bokeh_graph import bokeh_graph
 
 # tests
 from .models import StockInfo
@@ -331,11 +332,15 @@ class History(LoginRequiredMixin, ListView):
 
 def analysis(request):
     """Show graphs of individual stock performance over time"""
+    script = None
+    div = None
+
     if request.method == 'POST':
         quote_form = QuoteForm(request.POST)
         if quote_form.is_valid():
             # process the data in form.cleaned_data as required
             symbol = quote_form.cleaned_data['symbol'].upper()
+            script, div = bokeh_graph(symbol, "weekly", )
 
 
 
@@ -345,7 +350,9 @@ def analysis(request):
     quote_form = QuoteForm()
 
     return render(request, 'Finance/analysis.html',
-                  {'quote_form': quote_form})
+                  {'quote_form': quote_form,
+                   'script': script,
+                   'div': div})
 
 
 class AddFunds(LoginRequiredMixin, FormView, base.ContextMixin):

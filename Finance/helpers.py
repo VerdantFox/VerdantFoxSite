@@ -17,7 +17,7 @@ def search_stock_info(symbol):
     # Check if stock is found in database. All stocks from
     # (http://www.nasdaq.com/screening/company-list.aspx) should exist
     if stock:
-        # Check if stock price was ever updated in database, if so:
+        # Check if stock price was ever updated in database
         if stock.price and stock.price_update_time:
             # Check if stock price was updated recently (1 hour)
             time_now = datetime.datetime.now(tz=datetime.timezone.utc)

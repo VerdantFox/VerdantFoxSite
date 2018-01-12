@@ -12,7 +12,29 @@
 
 {% block active3 %}active{% endblock %}
 
+{% block css %}
+  {% include "Finance/_bokeh_css_js.html" %}
+  {{ script|safe }}
+{% endblock %}
+
 {% block body_block %}
   <h1>Analysis</h1>
   <p>Stock data goes back up to a maximum of 20 years.</p>
+
+  <h5>Look up new stock quote?</h5>
+  <form class="form-group" method="post" id="quote-form">
+    {% csrf_token %}
+    {{ quote_form.as_p }}
+    <input type="hidden" name="quote"/>
+    <button id="quote-submit" type="submit" class="btn btn-primary" form="quote-form"
+            name="get quote" value="Get Quote" >Get Quote</button>
+  </form>
+  <br>
+  {% if div %}
+    {{ div|safe }}
+  {% endif %}
+
+{% endblock %}
+{% block javascript %}
+
 {% endblock %}
