@@ -38,9 +38,6 @@ class BuyForm(forms.Form):
             'name': 'shares',
             'class': 'form-control',
         }))
-    price = forms.FloatField(
-        label='stock price:',
-        widget=forms.HiddenInput())
 
     def clean(self):
         super().clean()

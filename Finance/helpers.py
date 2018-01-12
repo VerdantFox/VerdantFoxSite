@@ -1,15 +1,58 @@
 import urllib.request
 import json
-from .models import Transaction, StockSymbolName
+from .models import Transaction, StockInfo
 import time
 from django.contrib import messages
+import datetime
+from django.core.exceptions import ObjectDoesNotExist
+from django.db.models import Q
 
 
-def get_stock_name(symbol):
-    stock = StockSymbolName.objects.values('stock_name').get(
-        stock_symbol__exact=symbol)
-    stock_name = stock['stock_name']
-    return stock_name
+def search_stock_info(symbol):
+    try:
+        stock = StockInfo.objects.get(symbol__exact=symbol)
+    except ObjectDoesNotExist:
+        stock = None
+
+    # Check if stock is found in database. All stocks from
+    # (http://www.nasdaq.com/screening/company-list.aspx) should exist
+    if stock:
+        # Check if stock price was ever updated in database, if so:
+        if stock.price and stock.price_update_time:
+            # Check if stock price was updated recently (1 hour)
+            time_now = datetime.datetime.now(tz=datetime.timezone.utc)
+            time_delta = time_now - stock.price_update_time
+            # If not updated recently (>1 hour since update), then update
+            if time_delta > datetime.timedelta(hours=1):
+                update_stock_price(stock)
+            # Stock was recently updated (no new update necessary)
+            else:
+                pass
+        # Stock price never updated in database, update it now
+        else:
+            update_stock_price(stock)
+
+        # Store current stock price and names as variables
+        current_price = stock.price
+        name = stock.name
+
+    # Stock wasn't found in database, return no price or name
+    else:
+        name = None
+        current_price = None
+
+    return name, current_price
+
+
+def update_stock_price(stock):
+    # Look up stock price
+    price = single_lookup(stock.symbol)
+    # Update stock info with current price
+    stock.price = price
+    # Update stock with current datetime (UTC)
+    stock.price_update_time = datetime.datetime.now(tz=datetime.timezone.utc)
+    # Save updated stock attributes to database
+    stock.save()
 
 
 def multiple_lookup(symbols):
@@ -50,9 +93,13 @@ def multiple_lookup(symbols):
         print(f"Time = {time.time() - start_time}")
         # Get the stock symbol and it's associated price
         for stock_info in data['Stock Quotes']:
+            # Get symbol
             stock_symbol = stock_info['1. symbol']
+            # Get symbol and string format it to have 2 decimal places
             stock_price = f"{float(stock_info['2. price']):.2f}"
+            # Convert string formatted stock to a float
             stock_price = float(stock_price)
+            # Add stock to stock_dict
             stock_dict[stock_symbol] = stock_price
 
         return stock_dict
@@ -99,34 +146,75 @@ def single_lookup(symbol):
 def stock_index(user):
     """Given a user, return list of unique stocks and total shares"""
 
-    # Query database for unique stock symbols in "portfolio" from current user
+    # Query database for UNIQUE stock symbols in "portfolio" from current user
     unique_stocks = Transaction.objects.values('symbol').distinct().filter(user__exact=user)
-    print(unique_stocks)
 
-    # Query database for all info in "portfolio" from current user
+    # Query database for ALL info in "portfolio" from current user
     stock_portfolio = Transaction.objects.filter(user__exact=user)
 
-    # Make a list to sort unique stocks
-    presorted_stock_list = []
-    # Iterate over unique stocks, converting each dict to a single string
+    # Make a list to sort unique stock symbols
+    presorted_stock_symbol_list = []
+    # Iterate over unique stocks, converting each dict to a "symbol" string
+    # and appending to presorted stock list
     for stock in unique_stocks:
-        presorted_stock_list.append(stock["symbol"])
+        presorted_stock_symbol_list.append(stock["symbol"])
     # If "Cash added" is in our list, remove it from our list
-    if "FUNDS ADDED" in presorted_stock_list:
-        presorted_stock_list.remove("FUNDS ADDED")
-    # Sort the list of stocks (now strings)
-    sorted_stock_list = sorted(presorted_stock_list)
+    if "FUNDS ADDED" in presorted_stock_symbol_list:
+        presorted_stock_symbol_list.remove("FUNDS ADDED")
+    # Sort the list of stock symbols
+    sorted_stock_symbol_list = sorted(presorted_stock_symbol_list)
+
+    # Create Q object for complex lookup
+    q = Q()
+    # Add stock names to "OR" = "|" query filter
+    for symbol in sorted_stock_symbol_list:
+        q |= Q(symbol=symbol)
+    # query for user's unique stocks using Q() filter
+    db_stocks = StockInfo.objects.filter(q)
+
+    # get current time
+    time_now = datetime.datetime.now(tz=datetime.timezone.utc)
+
+    # Create bool variable for checking if ALL user's stock prices are updated
+    all_stocks_updated = True
+
+    # Create dictionary of stocks and their updated values
+    current_stock_prices = {}
+
+    # Check if all stocks have been updated recently
+    for stock in db_stocks:
+        # db contains price and update time for current stock
+        if stock.price and stock.price_update_time:
+            time_delta = time_now - stock.price_update_time
+            # If updated recently (<1 hour since update)
+            # then append to current_stock_prices
+            if time_delta < datetime.timedelta(hours=1):
+                current_stock_prices[stock.symbol] = stock.price
+            # Not all updated recently (break out of 'for' loop
+            else:
+                all_stocks_updated = False
+                break
+        # db contains no price and update time for current stock
+        else:
+            all_stocks_updated = False
+            break
+
+    if not all_stocks_updated:
+        # Look up all current stock prices
+        current_stock_prices = multiple_lookup(sorted_stock_symbol_list)
+        # Update all stock prices in db
+        for stock in db_stocks:
+            stock.price = current_stock_prices[stock.symbol]
+            stock.price_update_time = time_now
+            stock.save()
 
     # Create a list of dictionaries where the dictionary keys are:
     # "sybmol", "name", "shares", "price", "total"
     # for each unique stock in list.
     stock_list = []
 
-    # Look up all current stock values
-    current_stock_values = multiple_lookup(sorted_stock_list)
-
     # Iterate over sorted, unique stock symbols
-    for unique_stock in sorted_stock_list:
+    for unique_symbol in sorted_stock_symbol_list:
         # Set "unique_stock_shares" variable to 0 for each unique stock
         unique_stock_shares = 0
         # Iterate over stocks portfolio of current user
@@ -135,19 +223,19 @@ def stock_index(user):
             # Gives number of shares for each stock by adding each repeated
             # stock shares value to current unique stock
 
-            if stock.symbol == unique_stock:
+            if stock.symbol == unique_symbol:
                 unique_stock_shares += int(stock.shares)
                 stock_name = stock.name
 
-        # Get current unique stock value (via lookup)
-        stock_price = float(current_stock_values[unique_stock])
+        # Get current unique stock value from dict
+        stock_price = float(current_stock_prices[unique_symbol])
         # Get total price of all shares for unique stock
         stock_total = stock_price * unique_stock_shares
         # Only update stock_list if user owns stocks
         if stock_total > 0:
             # Append dictionary to stock list with all known info about stock
             stock_list.append(
-                {"symbol": unique_stock,
+                {"symbol": unique_symbol,
                  "name": stock_name,
                  "shares": unique_stock_shares,
                  "price": stock_price,
@@ -225,4 +313,5 @@ def check_repeats(post):
 
 if __name__ == "__main__":
     pass
+
 

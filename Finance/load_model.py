@@ -6,11 +6,13 @@ django.setup()
 
 import csv
 
-from Finance.models import StockSymbolName
+from Finance.models import StockInfo
 
 with open('COMBO_names.csv') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
-        p = StockSymbolName(
-            stock_symbol=row['stock_symbol'], stock_name=row['stock_name'])
+        p = StockInfo(
+            symbol=row['symbol'], name=row['name'])
         p.save()
+
+print("Stocks updated!")

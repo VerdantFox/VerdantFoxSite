@@ -10,8 +10,8 @@ from bokeh.resources import CDN
 from bokeh.embed import file_html
 from bokeh.models import HoverTool, LayoutDOM, NumeralTickFormatter, DatetimeTickFormatter
 
-symbol = "AAPL"
-time_scale = "daily"  # daily, weekly, monthly
+symbol = "MSFT"
+time_scale = "monthly"  # daily, weekly, monthly
 
 
 # """This commented out data for getting actual time series"""
@@ -92,14 +92,14 @@ hover = HoverTool(
 )
 
 if time_scale == "daily":
-    time_title = "Day"
+    time_title = "Daily"
 elif time_scale == "weekly":
-    time_title = "Week"
+    time_title = "Weekly"
 elif time_scale == "monthly":
-    time_title = "Month"
+    time_title = "Monthly"
 
 # create a new plot with a title and axis labels
-p = figure(title=f"{symbol} Prices by {time_title}",
+p = figure(title=f"{symbol} {time_title} Stock Prices",
            x_axis_label='Dates',
            y_axis_label='Price',
            x_axis_type="datetime",

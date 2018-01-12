@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from .helpers import (stock_index, single_lookup, get_stock_name,
+from .helpers import (stock_index, single_lookup, search_stock_info,
                       check_repeats, validate_shares)
 from django.views.generic import TemplateView, ListView, FormView, base
 from .forms import QuoteForm, BuyForm, SellForm, AddFundsForm
@@ -12,6 +12,10 @@ from django.contrib import messages
 from django.utils import timezone
 # from django.core.paginator import Pa
 
+# tests
+from .models import StockInfo
+import datetime
+
 
 class Home(TemplateView):
     """Display static page with information about app"""
@@ -21,11 +25,13 @@ class Home(TemplateView):
 @login_required()
 def portfolio(request):
     """List users stock portfolio, cash and net worth"""
+    # Get user's stock list
     stock_list = stock_index(request.user)
 
     # Create a variable for finding the combined worth of all owned stocks
     total_stock_worth = 0
 
+    # get users funds
     user_funds = request.user.userinfo.cash
 
     # Iterate over stock_list adding together all stock "total" values
@@ -215,33 +221,22 @@ def quote(request):
     # if user reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
         if "quote" in request.POST:
-            print("here")
             # create a form instance and populate it with data from quote
             quote_form = QuoteForm(request.POST)
             # Check if valid
             if quote_form.is_valid():
                 # process the data in form.cleaned_data as required
                 symbol = quote_form.cleaned_data['symbol'].upper()
-                print(symbol)
-                try:
-                    name = get_stock_name(symbol)
-                except:
-                    name = None
-                print(name)
-                if name:
-                    price = single_lookup(symbol)
-                else:
-                    price = "Error, could not find stock."
-                print(price)
 
+                # Get stock name and price
+                name, price = search_stock_info(symbol)
+                # Reset quote form for searching up new stock
                 quote_form = QuoteForm()
-                if isinstance(price, str):
-                    error = price
-                    price = None
-                else:
-                    buy_form = BuyForm(initial={'symbol': symbol,
-                                                'price': price})
+                if name and price:
+                    buy_form = BuyForm(initial={'symbol': symbol})
                     price = f'${price:,.2f}'
+                else:
+                    error = "Error, could not find stock"
 
         if "buy" in request.POST:
             # create a form instance and populate it with data from quote
@@ -250,28 +245,18 @@ def quote(request):
             if buy_form.is_valid():
                 # process the data in form.cleaned_data as required
                 symbol = buy_form.cleaned_data['symbol'].upper()
-                print(f'stock symbol: {symbol}')
-                try:
-                    name = get_stock_name(symbol)
-                except:
-                    name = None
-                print(f'stock name: {name}')
                 shares = buy_form.cleaned_data['buy_shares']
-                total_cost = None
-                print(f'shares: {shares}')
-                if name:
-                    # price = single_lookup(symbol)
-                    price = buy_form.cleaned_data['price']
-                    print(f"this is still the price: {price}")
-                    total_cost = price * shares
-                else:
-                    price = None
-                print(f'stock price: {price}')
-
+                # Get name and price from symbol
+                name, price = search_stock_info(symbol)
+                # multiply for total transaction cost
+                total_cost = price * shares
+                # get user info
                 user_info = request.user.userinfo
-
+                # Check essential transaction attributes present
                 if name and shares and user_info and total_cost:
+                    # Check user can affort purchase
                     if user_info.cash >= total_cost:
+                        # set up transaction
                         purchase = Transaction(user=request.user,
                                                symbol=symbol,
                                                name=name,
@@ -279,30 +264,39 @@ def quote(request):
                                                price=price,
                                                total=total_cost
                                                )
+                        # Remember user's old cash and define new cash
                         original_cash = user_info.cash
                         user_info.cash -= total_cost
+                        # Only save if model went through and user cash updated
                         if purchase and original_cash != user_info:
+                            # Save both models
                             user_info.save()
                             purchase.save()
+                            # Define plurality of 'share' for success statement
                             if shares == 1:
                                 share_plural = 'share'
                             else:
                                 share_plural = 'shares'
+                            # Success statement
                             messages.add_message(
                                 request, messages.SUCCESS,
                                 f'Bought {shares} {share_plural} '
                                 f'of {name} ({symbol})!')
+                            # redirect to portfolio
                             return HttpResponseRedirect(
                                 reverse('Finance:portfolio'))
+                        # transaction was entered correctly
+                        # or user cash not changed
                         else:
                             error = "Could not save file"
+                    # total cost greater than user's funds
                     else:
                         error = "Not enough funds to make that purchase."
                         price = f'${price:,.2f}'
-
+    # 'GET' request
     else:
         quote_form = QuoteForm()
-
+    # Render form
     return render(request, 'Finance/quote.html',
                   {'quote_form': quote_form,
                    'buy_form': buy_form,
@@ -333,6 +327,25 @@ class History(LoginRequiredMixin, ListView):
         timezone.activate(user_timezone)
 
         return transactions
+
+
+def analysis(request):
+    """Show graphs of individual stock performance over time"""
+    if request.method == 'POST':
+        quote_form = QuoteForm(request.POST)
+        if quote_form.is_valid():
+            # process the data in form.cleaned_data as required
+            symbol = quote_form.cleaned_data['symbol'].upper()
+
+
+
+    else:
+        pass
+
+    quote_form = QuoteForm()
+
+    return render(request, 'Finance/analysis.html',
+                  {'quote_form': quote_form})
 
 
 class AddFunds(LoginRequiredMixin, FormView, base.ContextMixin):
