@@ -34,7 +34,6 @@
       {{ buy_form.symbol }}
       {{ buy_form.buy_shares.errors }}
       <label>{{ buy_form.buy_shares.label }}</label>
-{#      <p>{% render_field buy_form.shares placeholder="Number of shares" %}</p>#}
       <p>{{ buy_form.buy_shares|attr:"required:true"|attr:"placeholder:Number of shares" }}</p>
       <input type="hidden" name="buy"/>
       <button id="buy-submit" type="submit" class="btn btn-primary" form="buy-form"

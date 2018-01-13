@@ -21,6 +21,9 @@
     {% for error in form.non_field_errors %}
       <h6 class="form-error">{{ error }}</h6>
     {% endfor %}
+    {% if error %}
+      <h3>{{ error }}</h3>
+    {% endif %}
     {% csrf_token %}
     <table class="table table-striped">
       <thead>

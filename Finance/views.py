@@ -4,14 +4,14 @@ from django.contrib.auth.decorators import login_required
 from .helpers import (stock_index, single_lookup, search_stock_info,
                       check_repeats, validate_shares)
 from django.views.generic import TemplateView, ListView, FormView, base
-from .forms import QuoteForm, BuyForm, SellForm, AddFundsForm
+from .forms import QuoteForm, BuyForm, AddFundsForm, AnalysisForm
 from .models import Transaction
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.utils import timezone
 # from django.core.paginator import Pa
-from .bokeh_graph import bokeh_graph
+from .bgraph import bokeh_graph
 
 # tests
 from .models import StockInfo
@@ -28,6 +28,11 @@ def portfolio(request):
     """List users stock portfolio, cash and net worth"""
     # Get user's stock list
     stock_list = stock_index(request.user)
+    # if failed return empty portfolio with error
+    if isinstance(stock_list, str):
+        return render(request, 'Finance/portfolio.html', context={
+            'error': stock_list
+        })
 
     # Create a variable for finding the combined worth of all owned stocks
     total_stock_worth = 0
@@ -330,29 +335,40 @@ class History(LoginRequiredMixin, ListView):
         return transactions
 
 
+@login_required()
 def analysis(request):
     """Show graphs of individual stock performance over time"""
+    # No graph script or div until valid one is returned
     script = None
     div = None
+    # No error's until one arises
+    error = None
 
     if request.method == 'POST':
-        quote_form = QuoteForm(request.POST)
-        if quote_form.is_valid():
+        analysis_form = AnalysisForm(request.POST)
+        if analysis_form.is_valid():
             # process the data in form.cleaned_data as required
-            symbol = quote_form.cleaned_data['symbol'].upper()
-            script, div = bokeh_graph(symbol, "weekly", )
-
-
-
+            symbol = analysis_form.cleaned_data['symbol'].upper()
+            time_frame = analysis_form.cleaned_data['time_frame']
+            print("time frame = ", time_frame)
+            script, div = bokeh_graph(symbol, time_frame)
+            if not div:
+                print('Got error making graph')
+                error = script
+                script = None
+            analysis_form = AnalysisForm(initial={
+                'symbol': symbol,
+                'time_frame': time_frame
+            })
     else:
-        pass
-
-    quote_form = QuoteForm()
+        analysis_form = AnalysisForm()
 
     return render(request, 'Finance/analysis.html',
-                  {'quote_form': quote_form,
+                  {'analysis_form': analysis_form,
                    'script': script,
-                   'div': div})
+                   'div': div,
+                   'error': error
+                   })
 
 
 class AddFunds(LoginRequiredMixin, FormView, base.ContextMixin):

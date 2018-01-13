@@ -1,4 +1,5 @@
 import urllib.request
+from urllib.error import HTTPError
 import json
 from .models import Transaction, StockInfo
 import time
@@ -17,18 +18,11 @@ def search_stock_info(symbol):
     # Check if stock is found in database. All stocks from
     # (http://www.nasdaq.com/screening/company-list.aspx) should exist
     if stock:
-        # Check if stock price was ever updated in database
-        if stock.price and stock.price_update_time:
-            # Check if stock price was updated recently (1 hour)
-            time_now = datetime.datetime.now(tz=datetime.timezone.utc)
-            time_delta = time_now - stock.price_update_time
-            # If not updated recently (>1 hour since update), then update
-            if time_delta > datetime.timedelta(hours=1):
-                update_stock_price(stock)
-            # Stock was recently updated (no new update necessary)
-            else:
-                pass
-        # Stock price never updated in database, update it now
+        # Check if stock recently updated
+        recent = check_price_updated(stock)
+        if recent:
+            # Use current stock price
+            pass
         else:
             update_stock_price(stock)
 
@@ -88,8 +82,12 @@ def multiple_lookup(symbols):
 
         # Convert JSON data from webpage into readable format
         # https://stackoverflow.com/questions/12965203/how-to-get-json-from-webpage-into-python-script
-        webpage = urllib.request.urlopen(url)
-        data = json.loads(webpage.read().decode())
+        try:
+            webpage = urllib.request.urlopen(url)
+            data = json.loads(webpage.read().decode())
+        except HTTPError:
+            print("took too long to load webpage")
+            return "Error: took too long to get stock data, try again."
         print(f"Time = {time.time() - start_time}")
         # Get the stock symbol and it's associated price
         for stock_info in data['Stock Quotes']:
@@ -183,18 +181,10 @@ def stock_index(user):
 
     # Check if all stocks have been updated recently
     for stock in db_stocks:
-        # db contains price and update time for current stock
-        if stock.price and stock.price_update_time:
-            time_delta = time_now - stock.price_update_time
-            # If updated recently (<1 hour since update)
-            # then append to current_stock_prices
-            if time_delta < datetime.timedelta(hours=1):
-                current_stock_prices[stock.symbol] = stock.price
-            # Not all updated recently (break out of 'for' loop
-            else:
-                all_stocks_updated = False
-                break
-        # db contains no price and update time for current stock
+        # Check if recently updated
+        recent = check_price_updated(stock)
+        if recent:
+            current_stock_prices[stock.symbol] = stock.price
         else:
             all_stocks_updated = False
             break
@@ -202,6 +192,8 @@ def stock_index(user):
     if not all_stocks_updated:
         # Look up all current stock prices
         current_stock_prices = multiple_lookup(sorted_stock_symbol_list)
+        if isinstance(current_stock_prices, str):
+            return current_stock_prices
         # Update all stock prices in db
         for stock in db_stocks:
             stock.price = current_stock_prices[stock.symbol]
@@ -243,6 +235,43 @@ def stock_index(user):
                  })
 
     return stock_list
+
+
+def check_price_updated(stock):
+    """Return True if stock updated within 1 hour of most recent market hour
+    Else return False"""
+    if stock.price and stock.price_update_time:
+        # Check if stock price was updated recently (1 hour)
+        time_now = datetime.datetime.now(tz=datetime.timezone.utc)
+        # Time since stock updated
+        time_delta = time_now - stock.price_update_time
+        # Stock market open and closing times
+        market_open = time_now.replace(hour=14, minute=30, second=0,
+                                       microsecond=0)
+        market_close = time_now.replace(hour=21, minute=0, second=0,
+                                        microsecond=0)
+
+        # if during market hours
+        if market_open < time_now < market_close:
+            # If updated within last hour
+            if time_delta < datetime.timedelta(hours=1):
+                # use current price
+                return True
+            # Not updated within last hour
+            else:
+                return False
+        # updated outside of market hours
+        else:
+            # if updated today after market hours
+            if stock.price_update_time.date() == datetime.datetime.today().date() \
+                    and stock.price_update_time > market_close:
+                return True
+            # updated before today's after market hours
+            else:
+                return False
+    # Stock price never updated in database
+    else:
+        return False
 
 
 def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
@@ -313,5 +342,3 @@ def check_repeats(post):
 
 if __name__ == "__main__":
     pass
-
-

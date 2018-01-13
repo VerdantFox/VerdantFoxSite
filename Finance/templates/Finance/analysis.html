@@ -14,20 +14,47 @@
 
 {% block css %}
   {% include "Finance/_bokeh_css_js.html" %}
-  {{ script|safe }}
+  {% if script %}
+    {{ script|safe }}
+  {% endif %}
 {% endblock %}
 
 {% block body_block %}
   <h1>Analysis</h1>
   <p>Stock data goes back up to a maximum of 20 years.</p>
 
-  <h5>Look up new stock quote?</h5>
-  <form class="form-group" method="post" id="quote-form">
+  {% if error %}
+    <h6 class="errorlist">{{ error }}</h6>
+  {% endif %}
+
+  {% for error in analysis_form.non_field_errors %}
+    <h6 class="errorlist">{{ error }}</h6>
+  {% endfor %}
+
+  <h5>Analyze a stock?</h5>
+  <form class="form-group" method="post" id="analysis-form">
     {% csrf_token %}
-    {{ quote_form.as_p }}
+    <div class="row">
+      <div class="col-6">
+        <p class="form-error">{{ analysis_form.symbol.errors }}</p>
+      </div>
+      <div class="col-6">
+        <p class="form-error"></p>{{ analysis_form.time_frame.errors }}
+      </div>
+    </div>
+    <div class="row">
+      <div class="form-group col-6">
+        <p>{{ analysis_form.symbol.label }}</p>
+        <p>{{ analysis_form.symbol }}</p>
+      </div>
+      <div class="form-group col-6">
+        <p>{{ analysis_form.time_frame.label }}</p>
+        <p>{{ analysis_form.time_frame }}</p>
+      </div>
+    </div>
     <input type="hidden" name="quote"/>
-    <button id="quote-submit" type="submit" class="btn btn-primary" form="quote-form"
-            name="get quote" value="Get Quote" >Get Quote</button>
+    <button id="analysis-submit" type="submit" class="btn btn-primary" form="analysis-form"
+            name="analyze" value="Analyze" >Get graph</button>
   </form>
   <br>
   {% if div %}

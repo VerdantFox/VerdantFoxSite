@@ -24,6 +24,35 @@ class QuoteForm(forms.Form):
                     "Stock symbol must be alphabetical")
 
 
+class AnalysisForm(forms.Form):
+    symbol = forms.CharField(
+        label="Look up stock by symbol:",
+        max_length=5,
+        widget=forms.TextInput(attrs={
+            'name': 'stock symbol',
+            'placeholder': 'Stock symbol',
+            'class': 'form-control',
+        }))
+    time_frame = forms.ChoiceField(
+        label='Time frame:',
+        choices=[['1 month', '1 month'], ['3 month', '3 month'],
+                 ['1 year', '1 year'], ['5 year', '5 year'],
+                 ['20 year', 'maximum']],
+        widget=forms.Select(attrs={
+            'name': 'time frame',
+            'class': 'form-control'}))
+
+    def clean(self):
+        super().clean()
+        if 'symbol' in self.cleaned_data:
+            symbol = self.cleaned_data['symbol']
+
+            if not symbol.isalpha():
+                print("symbol wasn't alphabetical!")
+                raise forms.ValidationError(
+                    "Stock symbol must be alphabetical", code='non_alpha')
+
+
 class BuyForm(forms.Form):
 
     symbol = forms.CharField(
@@ -46,35 +75,6 @@ class BuyForm(forms.Form):
             if shares <= 0:
                 raise forms.ValidationError(
                     "Must purchase a positive number of shares.")
-
-
-class SellForm(forms.Form):
-
-    symbol = forms.CharField(
-        label="Stock symbol:",
-        max_length=5,
-        widget=forms.HiddenInput())
-
-    sell_shares = forms.IntegerField(
-        required=False,
-        label='Purchase shares:',
-        widget=forms.NumberInput(attrs={
-            'name': 'shares',
-            'class': 'form-control',
-        }))
-    price = forms.FloatField(
-        label='stock price:',
-        widget=forms.HiddenInput())
-
-    def clean(self):
-        super().clean()
-        if 'shares' in self.cleaned_data:
-            print('form clean shares')
-            shares = self.cleaned_data['sell_shares']
-
-            if shares <= 0:
-                raise forms.ValidationError(
-                    "Must sell a positive number of shares.")
 
 
 class AddFundsForm(forms.Form):

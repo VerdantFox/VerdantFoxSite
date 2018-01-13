@@ -68,6 +68,10 @@ h1{
     font-size: 1.4em;
 }
 
+.bio {
+    font-size: 0.8em;
+}
+
 /* https://css-tricks.com/snippets/css/turn-off-number-input-spinners/ */
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

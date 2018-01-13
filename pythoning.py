@@ -14,3 +14,7 @@ if time_delta < datetime.timedelta(hours=17):
     print(True)
 else:
     print(False)
+
+today = new_time.replace(day=1)
+print(today)
+yesterday = new_time.replace(day=today.day-1)
