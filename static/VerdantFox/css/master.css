@@ -71,27 +71,3 @@ h1{
 .bio {
     font-size: 0.8em;
 }
-
-/* https://css-tricks.com/snippets/css/turn-off-number-input-spinners/ */
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.form-box {
-    min-width: 52px; /*fits 3 digits */
-    max-width: 78px; /*fits 6 digits */
-}
-
-.stock {
-    font-size: 1em;
-}
-
-.buy-success {
-    color: orange;
-}
-
-.sale-success {
-    color: forestgreen;
-}

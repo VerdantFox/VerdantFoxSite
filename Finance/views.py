@@ -202,7 +202,6 @@ def portfolio(request):
 
     else:
         pass
-
     # Format stock money values for template view
     for stock in stock_list:
         stock['price'] = f"${stock['price']:,.2f}"
@@ -316,6 +315,8 @@ class History(LoginRequiredMixin, ListView):
     """Display users purchase, sale, and money addition history"""
     template_name = 'Finance/history.html'
     model = Transaction
+    paginate_by = 10
+    paginate_orphans = 9
 
     def get_queryset(self):
         transactions = self.model.objects.filter(

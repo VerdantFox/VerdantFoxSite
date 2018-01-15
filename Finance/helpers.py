@@ -19,7 +19,7 @@ def search_stock_info(symbol):
     # (http://www.nasdaq.com/screening/company-list.aspx) should exist
     if stock:
         # Check if stock recently updated
-        recent = check_price_updated(stock)
+        recent = check_price_updated(stock, stock.price_update_time)
         if recent:
             # Use current stock price
             pass
@@ -147,6 +147,10 @@ def stock_index(user):
     # Query database for UNIQUE stock symbols in "portfolio" from current user
     unique_stocks = Transaction.objects.values('symbol').distinct().filter(user__exact=user)
 
+    # Return empty list if user has no stocks
+    if not unique_stocks:
+        return []
+
     # Query database for ALL info in "portfolio" from current user
     stock_portfolio = Transaction.objects.filter(user__exact=user)
 
@@ -182,10 +186,11 @@ def stock_index(user):
     # Check if all stocks have been updated recently
     for stock in db_stocks:
         # Check if recently updated
-        recent = check_price_updated(stock)
+        recent = check_price_updated(stock, stock.price_update_time)
         if recent:
             current_stock_prices[stock.symbol] = stock.price
         else:
+            print(f"here! {stock}")
             all_stocks_updated = False
             break
 
@@ -237,22 +242,27 @@ def stock_index(user):
     return stock_list
 
 
-def check_price_updated(stock):
+def check_price_updated(stock, update_datetime):
     """Return True if stock updated within 1 hour of most recent market hour
     Else return False"""
     if stock.price and stock.price_update_time:
         # Check if stock price was updated recently (1 hour)
-        time_now = datetime.datetime.now(tz=datetime.timezone.utc)
+        now = datetime.datetime.now(tz=datetime.timezone.utc)
         # Time since stock updated
-        time_delta = time_now - stock.price_update_time
+        time_delta = now - update_datetime
         # Stock market open and closing times
-        market_open = time_now.replace(hour=14, minute=30, second=0,
-                                       microsecond=0)
-        market_close = time_now.replace(hour=21, minute=0, second=0,
-                                        microsecond=0)
+        market_open = now.replace(hour=14, minute=30, second=0,
+                                  microsecond=0)
+        market_close = now.replace(hour=21, minute=0, second=0,
+                                   microsecond=0)
+        # day stock updated
+        update_date = update_datetime.date()
+        # Today and yesterday as dates
+        today = now.date()
+        yesterday = now.date() - datetime.timedelta(days=1)
 
         # if during market hours
-        if market_open < time_now < market_close:
+        if market_open < now < market_close:
             # If updated within last hour
             if time_delta < datetime.timedelta(hours=1):
                 # use current price
@@ -260,11 +270,22 @@ def check_price_updated(stock):
             # Not updated within last hour
             else:
                 return False
-        # updated outside of market hours
+        # Current time is before market hours
+        elif now < market_open:
+            # If updated today
+            if update_date == today:
+                return True
+            # if updated yesterday after market hours
+            elif update_date == yesterday and \
+                    update_datetime.time() > market_close.time():
+                return True
+            # Updated prior to yesterday's market close
+            else:
+                return False
+        # Current time is after market hours
         else:
             # if updated today after market hours
-            if stock.price_update_time.date() == datetime.datetime.today().date() \
-                    and stock.price_update_time > market_close:
+            if update_datetime > market_close:
                 return True
             # updated before today's after market hours
             else:

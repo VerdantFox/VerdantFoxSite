@@ -5,7 +5,6 @@ from django.dispatch import receiver
 from jsonfield import JSONField
 
 
-
 class Transaction(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     symbol = models.CharField(max_length=12)

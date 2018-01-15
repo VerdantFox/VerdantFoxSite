@@ -1,5 +1,9 @@
 {% extends "base.html" %}
+{% load staticfiles %}
 
+{% block css %}
+  <link rel="stylesheet" type="text/css" href="{% static 'Finance/css/Finance.css' %}">
+{% endblock %}
 
 {% block inner_navbar %}
   <a class="navbar-brand" href="{% url 'Finance:home' %}">Finance!</a>
@@ -23,4 +27,9 @@
       </li>
     </ul>
   </div>
+
+{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'Finance/js/Finance.js' %}"></script>
 {% endblock %}

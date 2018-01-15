@@ -175,21 +175,28 @@ def search_json(symbol, time_interval):
 
         # Use update time and json_points for specific interval
         if time_interval == "daily":
-            update_time = stock.day_json_update_time
+            update_datetime = stock.day_json_update_time
             json_points = stock.day_json
-            if now.hour < 14:
+            # If before market close
+            if now.hour < 21:
+                # check against yesterday close
                 check_day = now - datetime.timedelta(days=1)
+            # After market open
             else:
+                # check against today's close
                 check_day = now
-            check_datetime = check_day.replace(hour=14, minute=0, second=0,
+            # check against market close
+            check_datetime = check_day.replace(hour=21, minute=0, second=0,
                                                microsecond=0)
         elif time_interval == "weekly":
-            update_time = stock.week_json_update_time
+            update_datetime = stock.week_json_update_time
             json_points = stock.week_json
+            # Check if updated within past 7 days
             check_datetime = now - datetime.timedelta(days=7)
         elif time_interval == "monthly":
-            update_time = stock.month_json_update_time
+            update_datetime = stock.month_json_update_time
             json_points = stock.month_json
+            # Check if updated this month
             check_datetime = now.replace(day=1)
         else:
             return "Invalid time interval", None
@@ -201,10 +208,10 @@ def search_json(symbol, time_interval):
     # (http://www.nasdaq.com/screening/company-list.aspx) should exist
     if stock:
         # Check if stock json_points was ever updated in database
-        if json_points and update_time:
+        if json_points and update_datetime:
             # Check if json was updated recently
             # If not updated recently, then update
-            if update_time < check_datetime:
+            if update_datetime < check_datetime:
                 json_points = update_json(stock, time_interval)
             # Stock was recently updated (no new update necessary)
             else:
