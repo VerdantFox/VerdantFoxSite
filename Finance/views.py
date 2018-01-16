@@ -267,20 +267,19 @@ def ajax_stock_list(request):
                 stock_list = stock_index(request.user)
                 # if failed return empty portfolio with error
                 if isinstance(stock_list, str):
-                    return render(request, 'Finance/ajax_stock_list.html', context={
-                        'error': stock_list
-                    })
+                    return render(request, 'Finance/ajax_stock_list.html',
+                                  context={'error': stock_list})
             else:
                 messages.add_message(
                     request, messages.WARNING,
                     f'No purchases or sales indicated.',
                     extra_tags='stock'
                 )
-            # return HttpResponseRedirect(reverse_lazy('Finance:ajax_stock_list'))
 
+    # request.method isn't POST (probably GET)
     else:
+        # Do nothing
         pass
-
 
     # Format stock money values for template view
     for stock in stock_list:
@@ -302,208 +301,12 @@ def portfolio(request):
     # Load up form for getting new quotes
     quote_form = QuoteForm()
 
-    # # Get user's stock list
-    # stock_list = stock_index(request.user)
-    # # if failed return empty portfolio with error
-    # if isinstance(stock_list, str):
-    #     return render(request, 'Finance/portfolio.html', context={
-    #         'error': stock_list
-    #     })
-    #
-    # # Create a variable for finding the combined worth of all owned stocks
-    # total_stock_worth = 0
-    #
-    # # get users funds
-    # user_funds = request.user.userinfo.cash
-    #
-    # # Iterate over stock_list adding together all stock "total" values
-    # for stock in stock_list:
-    #     total_stock_worth += stock['total']
-    #
-    # # Find net worth (cash + total stock value)
-    # net_worth = user_funds + total_stock_worth
-    #
-    # user_funds = f"${user_funds:,.2f}"
-    # net_worth = f"${net_worth:,.2f}"
-    #
-    # if request.method == "POST":
-    #     user_info = request.user.userinfo
-    #     # Create dictionary of user's stocks.
-    #     # stock_dict['symbol'] = (name, shares owned, stock price)
-    #     stock_dict = {}
-    #     for stock in stock_list:
-    #         stock_dict[stock['symbol']] = stock['name'], stock['shares'], stock['price'],
-    #
-    #     repeat_list = check_repeats(request.POST)
-    #     transaction_made = False
-    #     for item in request.POST:
-    #         stock_symbol = None
-    #         if item[:3] == "buy" or item[:4] == "sell":
-    #             # Split item to get buy/sell:0 and stock symbol:1
-    #             split_item = item.split('-')
-    #             # Get stock symbol
-    #             stock_symbol = split_item[1].upper()
-    #
-    #             if stock_symbol in repeat_list and item[:4] == "sell":
-    #                 messages.add_message(
-    #                     request, messages.WARNING,
-    #                     f'Could not resolve {stock_symbol}. Listed as '
-    #                     f'both "buy" and "sell"!',
-    #                     extra_tags='stock'
-    #                 )
-    #
-    #         # Check if item name starts with "buy" and isn't repeat
-    #         if stock_symbol not in repeat_list and item[:3] == "buy":
-    #
-    #             # Check if item was bought bought
-    #             if request.POST[item]:
-    #                 # List there was a transaction (for error)
-    #                 transaction_made = True
-    #                 # Check if share count is valid and get integer back
-    #                 valid_shares = validate_shares(request, stock_symbol, request.POST[item])
-    #                 if valid_shares:
-    #                     # Get stock shares and price
-    #                     name, owned_shares, price = stock_dict[stock_symbol]
-    #                     price = float(price)
-    #                     # Get total cost of transaction
-    #                     purchase_cost = valid_shares * price
-    #
-    #                     # If user can afford purchase, buy stocks
-    #                     if purchase_cost <= user_info.cash:
-    #
-    #                         try:
-    #                             # Subtract purchase cost from user account
-    #                             user_info.cash -= purchase_cost
-    #                             # Record transaction
-    #                             purchase = Transaction(user=request.user,
-    #                                                    symbol=stock_symbol,
-    #                                                    name=name,
-    #                                                    shares=valid_shares,
-    #                                                    price=price,
-    #                                                    total=purchase_cost
-    #                                                    )
-    #                             # Save models
-    #                             user_info.save()
-    #                             purchase.save()
-    #                             # Check plural for success message
-    #                             if valid_shares == 1:
-    #                                 share_plural = 'share'
-    #                             else:
-    #                                 share_plural = 'shares'
-    #                             # Success message
-    #                             messages.add_message(
-    #                                 request, messages.SUCCESS,
-    #                                 f'Bought {valid_shares} {share_plural} '
-    #                                 f'of {name} ({stock_symbol})!',
-    #                                 extra_tags='stock buy-success'
-    #                                 )
-    #
-    #                         except:
-    #                             messages.add_message(
-    #                                 request, messages.WARNING,
-    #                                 f'Failed {stock_symbol} purchase!',
-    #                                 extra_tags='stock'
-    #                             )
-    #
-    #                     else:
-    #                         messages.add_message(
-    #                             request, messages.WARNING,
-    #                             f'Failed to purchase{stock_symbol}, '
-    #                             f'not enough funds!',
-    #                             extra_tags='stock'
-    #
-    #                         )
-    #
-    #         # Check if item name starts with "sell"
-    #         if stock_symbol not in repeat_list and item[:4] == "sell":
-    #
-    #             # Check if item was sold
-    #             if request.POST[item]:
-    #                 # List there was a transaction (for error)
-    #                 transaction_made = True
-    #                 # Get stock shares and price
-    #                 name, owned_shares, price = stock_dict[stock_symbol]
-    #                 owned_shares = int(owned_shares)
-    #                 price = float(price)
-    #
-    #                 # Check if share count is valid and get integer back
-    #                 valid_shares = validate_shares(
-    #                     request, stock_symbol, request.POST[item], owned_shares)
-    #
-    #                 if valid_shares:
-    #                     # Get total cost of transaction
-    #                     sale_value = valid_shares * price
-    #
-    #                     try:
-    #                         # Add add sale value to user account
-    #                         user_info.cash += sale_value
-    #                         # Record transaction
-    #                         sale = Transaction(user=request.user,
-    #                                            symbol=stock_symbol.upper(),
-    #                                            name=name,
-    #                                            shares=-valid_shares,
-    #                                            price=price,
-    #                                            total=sale_value
-    #                                            )
-    #                         # Save models
-    #                         user_info.save()
-    #                         sale.save()
-    #
-    #                         # Check plural for success message
-    #                         if valid_shares == 1:
-    #                             share_plural = 'share'
-    #                         else:
-    #                             share_plural = 'shares'
-    #                         # Success message
-    #                         messages.add_message(
-    #                             request, messages.SUCCESS,
-    #                             f'Sold {valid_shares} {share_plural} '
-    #                             f'of {name} ({stock_symbol})!',
-    #                             extra_tags='stock sale-success'
-    #                         )
-    #                     except:
-    #                         messages.add_message(
-    #                             request, messages.WARNING,
-    #                             f'Failed {stock_symbol} sale!',
-    #                             extra_tags='stock'
-    #                         )
-    #     if not transaction_made:
-    #         messages.add_message(
-    #             request, messages.WARNING,
-    #             f'No purchases or sales indicated.',
-    #             extra_tags='stock'
-    #         )
-    #     return HttpResponseRedirect(reverse_lazy('Finance:portfolio'))
-    #
-    #
-    # else:
-    #     pass
-    # # Format stock money values for template view
-    # for stock in stock_list:
-    #     stock['price'] = f"${stock['price']:,.2f}"
-    #     stock['total'] = f"${stock['total']:,.2f}"
-    #
-    # return render(request, 'Finance/portfolio.html', context={
-    #     "quote_form": quote_form,
-    #     "stock_list": stock_list,
-    #     "funds": user_funds,
-    #     "net_worth": net_worth,
-    # })
+    # All other functionality for portfolio moved to within ajax_quote
+    # and within ajax_stock_list views
 
     return render(request, 'Finance/portfolio.html', context={
         "quote_form": quote_form,
     })
-
-
-@login_required()
-def quote(request):
-    """Get stock quote. Allow purchase of quoted stock."""
-
-    quote_form = QuoteForm()
-
-    # Render form
-    return render(request, 'Finance/quote.html',
-                  {'quote_form': quote_form})
 
 
 @login_required()
@@ -533,65 +336,6 @@ def ajax_quote(request):
                     price = f'${price:,.2f}'
                 else:
                     error = "Error, could not find stock"
-
-        # if "buy" in request.POST:
-        #     # create a form instance and populate it with data from quote
-        #     buy_form = BuyForm(request.POST)
-        #     quote_form = QuoteForm()
-        #     if buy_form.is_valid():
-        #         # process the data in form.cleaned_data as required
-        #         symbol = buy_form.cleaned_data['symbol'].upper()
-        #         shares = buy_form.cleaned_data['buy_shares']
-        #         # Get name and price from symbol
-        #         name, price = search_stock_info(symbol)
-        #         # multiply for total transaction cost
-        #         total_cost = price * shares
-        #         # get user info
-        #         user_info = request.user.userinfo
-        #         # Check essential transaction attributes present
-        #         if name and shares and user_info and total_cost:
-        #             # Check user can affort purchase
-        #             if user_info.cash >= total_cost:
-        #                 # set up transaction
-        #                 purchase = Transaction(user=request.user,
-        #                                        symbol=symbol,
-        #                                        name=name,
-        #                                        shares=shares,
-        #                                        price=price,
-        #                                        total=total_cost
-        #                                        )
-        #                 # Remember user's old cash and define new cash
-        #                 original_cash = user_info.cash
-        #                 user_info.cash -= total_cost
-        #                 # Only save if model went through and user cash updated
-        #                 if purchase and original_cash != user_info:
-        #                     # Save both models
-        #                     user_info.save()
-        #                     purchase.save()
-        #                     # Define plurality of 'share' for success statement
-        #                     if shares == 1:
-        #                         share_plural = 'share'
-        #                     else:
-        #                         share_plural = 'shares'
-        #                     # Success statement
-        #                     messages.add_message(
-        #                         request, messages.SUCCESS,
-        #                         f'Bought {shares} {share_plural} '
-        #                         f'of {name} ({symbol})!')
-        #                     # # redirect back to this page
-        #                     # return HttpResponseRedirect(
-        #                     #     reverse('Finance:ajax_price'))
-        #                     # # redirect to portfolio
-        #                     # return HttpResponseRedirect(
-        #                     #     reverse('Finance:portfolio'))
-        #                 # transaction was entered correctly
-        #                 # or user cash not changed
-        #                 else:
-        #                     error = "Could not save file"
-        #             # total cost greater than user's funds
-        #             else:
-        #                 error = "Not enough funds to make that purchase."
-        #                 price = f'${price:,.2f}'
 
     return render(request, 'Finance/ajax_quote.html',
                   {'quote_form': quote_form,
@@ -652,7 +396,7 @@ def ajax_graph(request):
             graph_error = script
             script = None
 
-    return render(request, 'Finance/graph.html',
+    return render(request, 'Finance/ajax_graph.html',
                   {
                    'symbol': symbol,
                    'time_frame': time_frame,
