@@ -14,7 +14,7 @@
   {% endfor %}
 
   {# Stock table #}
-  <h3>Here are all of your current stocks:</h3>
+  <h3 class="text-center">Owned stocks</h3>
   <form action="" method="post" id="portfolio-form">
     {% csrf_token %}
     <table class="table table-striped">
@@ -30,17 +30,17 @@
         </tr>
       </thead>
       <tbody>
-        {% for stock in stock_list %}
+        {% for stock in stocks_pages %}
           <tr>
-          <th name="{{ stock.symbol }}" scope="row">{{ stock.symbol }}</th>
-          <td class="d-none d-md-block">{{ stock.name }}</td>
-          <td>{{ stock.shares }}</td>
-          <td>{{ stock.price }}</td>
-          <td>{{ stock.total }}</td>
-          <td><input class="form-control form-box" type="number" min="1"
-                     max="10000" step="1" name="buy-{{ stock.symbol }}"></td>
-          <td><input class="form-control form-box" type="number" min="1"
-                     max="10000" step="1" name="sell-{{ stock.symbol }}"></td>
+            <th name="{{ stock.symbol }}" scope="row">{{ stock.symbol }}</th>
+            <td class="d-none d-md-block">{{ stock.name }}</td>
+            <td>{{ stock.shares }}</td>
+            <td>{{ stock.price }}</td>
+            <td>{{ stock.total }}</td>
+            <td><input class="form-control form-box" type="number" min="1"
+                       max="10000" step="1" name="buy-{{ stock.symbol }}"></td>
+            <td><input class="form-control form-box" type="number" min="1"
+                       max="10000" step="1" name="sell-{{ stock.symbol }}"></td>
           </tr>
         {% endfor %}
         <tr>
@@ -49,12 +49,12 @@
           <td></td>
           <td></td>
           <td>{{ funds }}</td>
-          {% if stock_list %}
+          {% if stocks_pages %}
           <td colspan="2">
             <button id="buy-sell-button" type="submit"
                     class="btn btn-primary btn-block" form="portfolio-form"
                     name="transaction" value="transaction"
-                    ic-post-to="{% url 'Finance:ajax_stock_list' %}"
+                    ic-post-to="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.number }}"
                     ic-trigger-on="click"
                     ic-target="#stock-list-container">
               <span id="buy-sell">Buy/Sell</span>
@@ -81,6 +81,63 @@
       </tfoot>
     </table>
   </form>
+
+
+  <div class="text-center">
+    <h6>Showing {{ stocks_pages.start_index }}-{{ stocks_pages.end_index }}
+      of {{ stocks_pages.paginator.count }} total stocks owned</h6>
+  </div>
+
+  <nav aria-label="Page navigation">
+
+    <ul class="pagination justify-content-center cursor-pointer">
+
+      {% if stocks_pages.has_previous %}
+        <li class="page-item">
+          <a class="page-link"
+             ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.previous_page_number }}"
+             ic-target="#stock-list-container"
+          >previous</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1">Previous</a>
+        </li>
+      {% endif %}
+
+      {% for page in stocks_pages.paginator.page_range %}
+        {% if stocks_pages.number == forloop.counter %}
+          <li class="page-item active">
+            <a class="page-link"
+               ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ forloop.counter }}"
+               ic-target="#stock-list-container"
+            >{{ forloop.counter }}</a>
+          </li>
+        {% else %}
+          <li class="page-item">
+            <a class="page-link"
+               ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ forloop.counter }}"
+               ic-target="#stock-list-container"
+            >{{ forloop.counter }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% if stocks_pages.has_next %}
+        <li class="page-item">
+          <a class="page-link"
+             ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.next_page_number }}"
+             ic-target="#stock-list-container"
+          >Next</a>
+        </li>
+      {% else %}
+        <li class="page-item disabled">
+          <a class="page-link" href="#" tabindex="-1">Next</a>
+        </li>
+      {% endif %}
+
+    </ul>
+  </nav>
 
 </div>
 

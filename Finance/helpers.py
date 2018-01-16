@@ -86,7 +86,6 @@ def multiple_lookup(symbols):
             webpage = urllib.request.urlopen(url)
             data = json.loads(webpage.read().decode())
         except HTTPError:
-            print("took too long to load webpage")
             return "Error: took too long to get stock data, try again."
         print(f"Time = {time.time() - start_time}")
         # Get the stock symbol and it's associated price
@@ -190,7 +189,6 @@ def stock_index(user):
         if recent:
             current_stock_prices[stock.symbol] = stock.price
         else:
-            print(f"here! {stock}")
             all_stocks_updated = False
             break
 

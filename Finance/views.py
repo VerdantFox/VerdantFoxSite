@@ -1,23 +1,20 @@
 from django.shortcuts import render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
-from .helpers import (stock_index, single_lookup, search_stock_info,
+from .helpers import (stock_index, search_stock_info,
                       check_repeats, validate_shares)
 from django.views.generic import TemplateView, ListView, FormView, base
-from .forms import QuoteForm, BuyForm, AddFundsForm, AnalysisForm
+from .forms import QuoteForm, BuyForm, AddFundsForm
 from .models import Transaction
 from django.http import HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 from django.utils import timezone
-# from django.core.paginator import Pa
 from .bgraph import bokeh_graph
-
-# tests
-from .models import StockInfo
-import datetime
+from django.core.paginator import Paginator
 
 
+# No login required for this view
 class Home(TemplateView):
     """Display static page with information about app"""
     template_name = 'Finance/Finance_index.html'
@@ -57,7 +54,6 @@ def ajax_stock_list(request):
 
         # Did request come from the quote "buy" form
         if "buy" in request.POST:
-            print("BUY WAS IN REQUEST.POST")
             # create a form instance and populate it with data from quote
             buy_form = BuyForm(request.POST)
             if buy_form.is_valid():
@@ -286,10 +282,15 @@ def ajax_stock_list(request):
         stock['price'] = f"${stock['price']:,.2f}"
         stock['total'] = f"${stock['total']:,.2f}"
 
+    paginator = Paginator(stock_list, 30)
+    page = request.GET.get('page')
+    stocks_pages = paginator.get_page(page)
+
     return render(request, 'Finance/ajax_stock_list.html', context={
         "error": error,
         "buy_form": buy_form,
-        "stock_list": stock_list,
+        'stocks_pages': stocks_pages,
+        # "stock_list": stock_list,
         "funds": user_funds,
         "net_worth": net_worth,
     })
@@ -346,31 +347,6 @@ def ajax_quote(request):
                    'error': error})
 
 
-class History(LoginRequiredMixin, ListView):
-    """Display users purchase, sale, and money addition history"""
-    template_name = 'Finance/history.html'
-    model = Transaction
-    paginate_by = 10
-    paginate_orphans = 9
-
-    def get_queryset(self):
-        transactions = self.model.objects.filter(
-            user=self.request.user).order_by('-time_stamp')
-        for transaction in transactions:
-            if transaction.shares == 0:
-                transaction.shares = ''
-            if transaction.price == 0:
-                transaction.price = ''
-            else:
-                transaction.price = f'${transaction.price:,.2f}'
-            transaction.total = f'${transaction.total:,.2f}'
-
-        user_timezone = self.request.user.userprofile.timezone
-        timezone.activate(user_timezone)
-
-        return transactions
-
-
 @login_required()
 def ajax_graph(request):
     # No graph script or div until valid one is returned
@@ -392,7 +368,11 @@ def ajax_graph(request):
         script, div = bokeh_graph(symbol, time_frame)
 
         if not div:
-            print('Got error making graph')
+            messages.add_message(
+                request, messages.WARNING,
+                f'error building graph',
+                extra_tags='stock'
+            )
             graph_error = script
             script = None
 
@@ -404,6 +384,31 @@ def ajax_graph(request):
                    'div': div,
                    'graph_error': graph_error
                    })
+
+
+class History(LoginRequiredMixin, ListView):
+    """Display users purchase, sale, and money addition history"""
+    template_name = 'Finance/history.html'
+    model = Transaction
+    paginate_by = 50
+    paginate_orphans = 9
+
+    def get_queryset(self):
+        transactions = self.model.objects.filter(
+            user=self.request.user).order_by('-time_stamp')
+        for transaction in transactions:
+            if transaction.shares == 0:
+                transaction.shares = ''
+            if transaction.price == 0:
+                transaction.price = ''
+            else:
+                transaction.price = f'${transaction.price:,.2f}'
+            transaction.total = f'${transaction.total:,.2f}'
+
+        user_timezone = self.request.user.userprofile.timezone
+        timezone.activate(user_timezone)
+
+        return transactions
 
 
 class AddFunds(LoginRequiredMixin, FormView, base.ContextMixin):

@@ -8,7 +8,7 @@
   <br>
   {# Stock price #}
   {% if price and symbol %}
-    <h5>One share of {{ name }} ({{ symbol }}) is worth {{ price }}.</h5>
+    <h5 class="text-center">One share of {{ name }} ({{ symbol }}) is worth {{ price }}.</h5>
   {% endif %}
 
 
@@ -54,7 +54,7 @@
           <input type="hidden" name="buy"/>
           <button id="buy-submit" type="submit" class="btn btn-primary"
                   form="buy-form" name="buy" value="Buy"
-                  ic-post-to="{% url 'Finance:ajax_stock_list' %}"
+                  ic-post-to="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.number }}"
                   ic-trigger-on="click"
                   ic-target="#stock-list-container">Buy stock
             <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i>
