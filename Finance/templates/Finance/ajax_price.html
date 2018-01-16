@@ -1,0 +1,76 @@
+{# Whole page in container to refresh this sub-page with ajax call #}
+<div id="ajax-quote-container">
+  {% load widget_tweaks %}
+  {% block css %}
+    {% include "Finance/_bokeh_css_js.html" %}
+  {% endblock %}
+
+  <br>
+  {# Stock price #}
+  {% if price and symbol %}
+    <h5>One share of {{ name }} ({{ symbol }}) is worth {{ price }}.</h5>
+  {% endif %}
+
+
+  {# Error messages #}
+  {% if error %}
+    <h6 class="errorlist">{{ error }}</h6>
+  {% endif %}
+  {% for error in quote_form.non_field_errors %}
+    <h6 class="errorlist">{{ error }}</h6>
+  {% endfor %}
+  {% for error in quote_form.symbol.errors %}
+    <h6 class="errorlist">{{ quote_form.symbol.errors }}</h6>
+  {% endfor %}
+
+  {% if not error and not quote_form.non_field_errors and not quote_form.symbol.errors %}
+
+    {# graphing #}
+    <form id="graph-form">
+      {% csrf_token %}
+      <input hidden name="symbol:{{ symbol }},tf:1-month">
+      <div id="graph-analysis" name="graph-analysis" ic-trigger-on="load"
+       ic-post-to="{% url 'Finance:ajax_graph' %}">
+        <h2>Loading stock graph</h2>
+        <i class="ic-indicator fa fa-spinner fa-spin fa-10x" style="display:none"></i>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+        <br>
+      </div>
+      <br>
+    </form>
+
+
+    {# Buy form #}
+    {% if buy_form %}
+      <div class="form-group">
+        {% for error in form.non_field_errors %}
+          <h6 class="form-error">{{ error }}</h6>
+        {% endfor %}
+        <form class="form" method="post" id="buy-form">
+          {% csrf_token %}
+          {{ buy_form.symbol }}
+          {{ buy_form.buy_shares.errors }}
+          <label>{{ buy_form.buy_shares.label }}</label>
+          <p>{{ buy_form.buy_shares|attr:"required:true"|attr:"placeholder:Number of shares" }}</p>
+          <input type="hidden" name="buy"/>
+          <button id="buy-submit" type="submit" class="btn btn-primary"
+                  form="buy-form" name="buy" value="Buy"
+                  ic-post-to="{% url 'Finance:ajax_price' %}"
+                  ic-trigger-on="click"
+                  ic-target="#ajax-quote-container">Buy stock
+            <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i>
+          </button>
+        </form>
+      </div>
+    {% endif %}
+  {% endif %}
+
+</div>
+

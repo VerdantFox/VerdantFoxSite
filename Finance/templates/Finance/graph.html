@@ -1,0 +1,97 @@
+<div id="new-graph-container">
+{% load staticfiles %}
+
+  <div class="errors">
+    {% if graph_error %}
+      <h6 class="errorlist">{{ error }}</h6>
+    {% endif %}
+
+  </div>
+  {% if not error and not analysis_form.non_field_errors and not analysis_form.symbol.errors and not analysis_form.time_frame.errors %}
+    <ul class="nav nav-tabs">
+      <li class="nav-item">
+        <form class="form" method="post">
+          {% csrf_token %}
+          <input hidden name="symbol:{{ symbol }},tf:1-month">
+          <a class="nav-link {% if time_frame == '1 month' %}active{% endif %}"
+             ic-post-to="{% url 'Finance:ajax_graph' %}"
+             ic-trigger-on="click"
+             ic-target="#new-graph-container">1 month
+            <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i>
+          </a>
+        </form>
+      </li>
+      <li class="nav-item">
+        <form class="form" method="post">
+          {% csrf_token %}
+          <input hidden name="symbol:{{ symbol }},tf:3-month">
+          <a class="nav-link {% if time_frame == '3 month' %}active{% endif %}"
+             ic-post-to="{% url 'Finance:ajax_graph' %}"
+             ic-trigger-on="click"
+             ic-target="#new-graph-container">3 months
+            <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i></a>
+        </form>
+      </li>
+      <li class="nav-item">
+        <form class="form" method="post">
+          {% csrf_token %}
+          <input hidden name="symbol:{{ symbol }},tf:1-year">
+          <a class="nav-link {% if time_frame == '1 year' %}active{% endif %}"
+             ic-post-to="{% url 'Finance:ajax_graph' %}"
+             ic-trigger-on="click"
+             ic-target="#new-graph-container">1 year
+            <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i></a>
+        </form>
+      </li>
+      <li class="nav-item">
+        <form class="form" method="post">
+          {% csrf_token %}
+          <input hidden name="symbol:{{ symbol }},tf:5-year">
+          <a class="nav-link {% if time_frame == '5 year' %}active{% endif %}"
+             ic-post-to="{% url 'Finance:ajax_graph' %}"
+             ic-trigger-on="click"
+             ic-target="#new-graph-container">5 years
+            <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i></a>
+
+        </form>
+      </li>
+      <li class="nav-item">
+        <form class="form" method="post">
+          {% csrf_token %}
+          <input hidden name="symbol:{{ symbol }},tf:20-year">
+          <a class="nav-link {% if time_frame == '20 year' %}active{% endif %}"
+             ic-post-to="{% url 'Finance:ajax_graph' %}"
+             ic-trigger-on="click"
+             ic-target="#new-graph-container">Maximum
+            <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i></a>
+        </form>
+      </li>
+    </ul>
+  {% endif %}
+
+
+  <div id="graph">
+    {# These 2 will build a graph #}
+    {% if script and div %}
+      {{ script|safe }}
+      {{ div|safe }}
+    {% endif %}
+    {# Without this div and below script, page scrolls up, then renders graph. #}
+    {# Graph therefore falls off screen #}
+    <div id="graph-placeholder">
+      <br><br><br><br><br><br><br><br><br><br>
+      <br><br><br><br><br><br><br><br><br><br>
+    </div>
+  </div>
+</div>
+
+{# hide the graph placehodler #}
+<script>
+  $('#graph').ready(function(ev) {
+    setTimeout(function(){
+      $('#graph-placeholder').hide();
+        }, 1);
+    console.log('loaded');
+});
+</script>
+

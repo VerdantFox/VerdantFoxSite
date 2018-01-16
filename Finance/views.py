@@ -217,13 +217,22 @@ def portfolio(request):
 @login_required()
 def quote(request):
     """Get stock quote. Allow purchase of quoted stock."""
-    error = None
+
+    quote_form = QuoteForm()
+
+    # Render form
+    return render(request, 'Finance/quote.html',
+                  {'quote_form': quote_form})
+
+
+def ajax_price(request):
+    quote_form = None
     buy_form = None
+    price = None
     symbol = None
     name = None
-    price = None
-    quote_form = None
-    # if user reached route via POST (as by submitting a form via POST)
+    error = None
+
     if request.method == "POST":
         if "quote" in request.POST:
             # create a form instance and populate it with data from quote
@@ -287,9 +296,12 @@ def quote(request):
                                 request, messages.SUCCESS,
                                 f'Bought {shares} {share_plural} '
                                 f'of {name} ({symbol})!')
-                            # redirect to portfolio
-                            return HttpResponseRedirect(
-                                reverse('Finance:portfolio'))
+                            # # redirect back to this page
+                            # return HttpResponseRedirect(
+                            #     reverse('Finance:ajax_price'))
+                            # # redirect to portfolio
+                            # return HttpResponseRedirect(
+                            #     reverse('Finance:portfolio'))
                         # transaction was entered correctly
                         # or user cash not changed
                         else:
@@ -298,11 +310,8 @@ def quote(request):
                     else:
                         error = "Not enough funds to make that purchase."
                         price = f'${price:,.2f}'
-    # 'GET' request
-    else:
-        quote_form = QuoteForm()
-    # Render form
-    return render(request, 'Finance/quote.html',
+
+    return render(request, 'Finance/ajax_price.html',
                   {'quote_form': quote_form,
                    'buy_form': buy_form,
                    'price': price,
@@ -339,37 +348,105 @@ class History(LoginRequiredMixin, ListView):
 @login_required()
 def analysis(request):
     """Show graphs of individual stock performance over time"""
+
+    analysis_form = AnalysisForm()
+
+    return render(request, 'Finance/analysis.html',
+                  {'analysis_form': analysis_form})
+
+
+@login_required()
+def ajax_graph(request):
     # No graph script or div until valid one is returned
     script = None
     div = None
+    # No symbol or time frame unless one is returned
+    symbol = None
+    time_frame = None
     # No error's until one arises
-    error = None
+    graph_error = None
+    analysis_form = None
 
     if request.method == 'POST':
-        analysis_form = AnalysisForm(request.POST)
-        if analysis_form.is_valid():
-            # process the data in form.cleaned_data as required
-            symbol = analysis_form.cleaned_data['symbol'].upper()
-            time_frame = analysis_form.cleaned_data['time_frame']
-            print("time frame = ", time_frame)
-            script, div = bokeh_graph(symbol, time_frame)
-            if not div:
-                print('Got error making graph')
-                error = script
-                script = None
-            analysis_form = AnalysisForm(initial={
-                'symbol': symbol,
-                'time_frame': time_frame
-            })
-    else:
-        analysis_form = AnalysisForm()
+        for item in request.POST:
+            if item[:6] == 'symbol':
+                symbol, time_frame = item.split(',')
+                symbol, time_frame = symbol.split(':'), time_frame.split(':')
+                symbol, time_frame = symbol[1], time_frame[1].replace('-', ' ')
 
-    return render(request, 'Finance/analysis.html',
-                  {'analysis_form': analysis_form,
-                   'script': script,
-                   'div': div,
-                   'error': error
-                   })
+        print(symbol, ',', time_frame)
+
+        script, div = bokeh_graph(symbol, time_frame)
+        print(script)
+        print('*****************')
+        print(div)
+        if not div:
+            print('Got error making graph')
+            graph_error = script
+            script = None
+
+        print('errorrrrrr:', graph_error)
+        return render(request, 'Finance/graph.html',
+                      {
+                       # 'analysis_form': analysis_form,
+                       'symbol': symbol,
+                       'time_frame': time_frame,
+                       'script': script,
+                       'div': div,
+                       'graph_error': graph_error
+                       })
+#
+#
+# @login_required()
+# def ajax_graph(request):
+#     # No graph script or div until valid one is returned
+#     script = None
+#     div = None
+#     # No symbol or time frame unless one is returned
+#     symbol = None
+#     time_frame = None
+#     # No error's until one arises
+#     error = None
+#     analysis_form = None
+#
+#     if request.method == 'POST':
+#         if 'analysis' in request.POST:
+#             analysis_form = AnalysisForm(request.POST)
+#             if analysis_form.is_valid():
+#                 # process the data in form.cleaned_data as required
+#                 symbol = analysis_form.cleaned_data['symbol'].upper()
+#                 time_frame = analysis_form.cleaned_data['time_frame']
+#                 print("time frame = ", time_frame)
+#                 script, div = bokeh_graph(symbol, time_frame)
+#                 if not div:
+#                     print('Got error making graph')
+#                     error = script
+#                     script = None
+#         else:
+#             for item in request.POST:
+#                 if item[:6] == 'symbol':
+#                     symbol, time_frame = item.split(',')
+#                     symbol, time_frame = symbol.split(':'), time_frame.split(
+#                         ':')
+#                     symbol, time_frame = symbol[1], time_frame[1].replace('-',
+#                                                                           ' ')
+#
+#             script, div = bokeh_graph(symbol, time_frame)
+#             if not div:
+#                 print('Got error making graph')
+#                 error = script
+#                 script = None
+#
+#         print('errorrrrrr:', error)
+#         return render(request, 'Finance/graph.html',
+#                       {
+#                        'analysis_form': analysis_form,
+#                        'symbol': symbol,
+#                        'time_frame': time_frame,
+#                        'script': script,
+#                        'div': div,
+#                        'error': error
+#                        })
 
 
 class AddFunds(LoginRequiredMixin, FormView, base.ContextMixin):

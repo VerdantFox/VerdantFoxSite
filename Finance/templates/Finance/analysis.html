@@ -14,34 +14,16 @@
 
 {% block css %}
   {% include "Finance/_bokeh_css_js.html" %}
-  {% if script %}
-    {{ script|safe }}
-  {% endif %}
 {% endblock %}
 
 {% block body_block %}
+
   <h1>Analysis</h1>
   <p>Stock data goes back up to a maximum of 20 years.</p>
 
-  {% if error %}
-    <h6 class="errorlist">{{ error }}</h6>
-  {% endif %}
-
-  {% for error in analysis_form.non_field_errors %}
-    <h6 class="errorlist">{{ error }}</h6>
-  {% endfor %}
-
-  <h5>Analyze a stock?</h5>
-  <form class="form-group" method="post" id="analysis-form">
+  <h5>Analyze a stock?</h5><br>
+  <form class="form" method="post" id="analysis-form">
     {% csrf_token %}
-    <div class="row">
-      <div class="col-6">
-        <p class="form-error">{{ analysis_form.symbol.errors }}</p>
-      </div>
-      <div class="col-6">
-        <p class="form-error"></p>{{ analysis_form.time_frame.errors }}
-      </div>
-    </div>
     <div class="row">
       <div class="form-group col-6">
         <p>{{ analysis_form.symbol.label }}</p>
@@ -52,17 +34,18 @@
         <p>{{ analysis_form.time_frame }}</p>
       </div>
     </div>
-    <input type="hidden" name="quote"/>
-    <button id="analysis-submit" type="submit" class="btn btn-primary" form="analysis-form"
-            name="analyze" value="Analyze" >Get graph</button>
+    <input type="hidden" name="analysis"/>
+    {# Replace normal post action with ajax call using intercooler #}
+    <button id="analysis-submit" type="submit" class="btn btn-primary"
+            form="analysis-form" name="analyze" value="Analyze"
+            ic-post-to="{% url 'Finance:ajax_graph' %}"
+            ic-trigger-on="click"
+            ic-target="#graph-container"
+            >Get graph
+      <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i>
+    </button>
+    <div id="graph-container"></div>
+  <br>
   </form>
-  <br>
-  {% if div %}
-    {{ div|safe }}
-  {% endif %}
-  <br>
-
-{% endblock %}
-{% block javascript %}
 
 {% endblock %}

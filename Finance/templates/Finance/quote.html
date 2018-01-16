@@ -19,45 +19,21 @@
     <h5>One share of {{ name }} ({{ symbol }}) is worth {{ price }}.</h5>
   {% endif %}
 
-  {% if error %}
-    <h6 class="errorlist">{{ error }}</h6>
-  {% endif %}
 
   <div class="form-group">
-
-    {% if buy_form %}
-      {% for error in form.non_field_errors %}
-        <h6 class="form-error">{{ error }}</h6>
-      {% endfor %}
-      <form class="form" method="post" id="buy-form">
-      {% csrf_token %}
-      {{ buy_form.symbol }}
-      {{ buy_form.buy_shares.errors }}
-      <label>{{ buy_form.buy_shares.label }}</label>
-      <p>{{ buy_form.buy_shares|attr:"required:true"|attr:"placeholder:Number of shares" }}</p>
-      <input type="hidden" name="buy"/>
-      <button id="buy-submit" type="submit" class="btn btn-primary" form="buy-form"
-        name="buy" value="Buy">Buy stock</button>
-    {% else %}
-      <form class="form" method="post" id="quote-form">
+    <form class="form" method="post" id="quote-form">
       {% csrf_token %}
       {{ quote_form.as_p }}
       <input type="hidden" name="quote"/>
-      <button id="quote-submit" type="submit" class="btn btn-primary" form="quote-form"
-              name="get quote" value="Get Quote">Get Quote</button>
-    {% endif %}
+      <button id="quote-submit" type="submit" class="btn btn-primary"
+              form="quote-form" name="get quote" value="Get Quote"
+              ic-post-to="{% url 'Finance:ajax_price' %}"
+              ic-trigger-on="click"
+              ic-target="#quote-container">Get Quote
+        <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i>
+      </button>
+      <div id="quote-container"></div>
     </form>
   </div>
-
-  {% if buy_form %}
-    <h5>Look up new stock quote?</h5>
-    <form class="form-group" method="post" id="quote-form">
-      {% csrf_token %}
-      {{ quote_form.as_p }}
-      <input type="hidden" name="quote"/>
-      <button id="quote-submit" type="submit" class="btn btn-primary" form="quote-form"
-              name="get quote" value="Get Quote" >Get Quote</button>
-    </form>
-  {% endif %}
 
 {% endblock %}
