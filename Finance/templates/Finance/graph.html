@@ -8,7 +8,7 @@
 
   </div>
   {% if not error and not analysis_form.non_field_errors and not analysis_form.symbol.errors and not analysis_form.time_frame.errors %}
-    <ul class="nav nav-tabs">
+    <ul class="nav nav-tabs cursor-pointer">
       <li class="nav-item">
         <form class="form" method="post">
           {% csrf_token %}

@@ -17,73 +17,30 @@
 {% block body_block %}
 
   <h1>Portfolio</h1>
-  <form action="" method="post" id="portfolio-form">
-    {% for error in form.non_field_errors %}
-      <h6 class="form-error">{{ error }}</h6>
-    {% endfor %}
-    {% if error %}
-      <h6 class="errorlist">{{ error }}</h6>
-    {% endif %}
-    {% csrf_token %}
-    <table class="table table-striped">
-      <thead>
-        <tr>
-          <th scope="col">Symbol</th>
-          <th class="d-none d-md-block" scope="col">Name</th>
-          <th scope="col">Shares</th>
-          <th scope="col">Price</th>
-          <th scope="col">Total</th>
-          <th scope="col">Buy</th>
-          <th scope="col">Sell</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for stock in stock_list %}
-          <tr>
-          <th name="{{ stock.symbol }}" scope="row">{{ stock.symbol }}</th>
-          <td class="d-none d-md-block">{{ stock.name }}</td>
-          <td>{{ stock.shares }}</td>
-          <td>{{ stock.price }}</td>
-          <td>{{ stock.total }}</td>
-          <td><input class="form-control form-box" type="number" min="1"
-                     max="10000" step="1" name="buy-{{ stock.symbol }}"></td>
-          <td><input class="form-control form-box" type="number" min="1"
-                     max="10000" step="1" name="sell-{{ stock.symbol }}"></td>
-          </tr>
-        {% endfor %}
-        <tr>
-          <th scope="row">FUNDS</th>
-          <td class="d-none d-md-block"></td>
-          <td></td>
-          <td></td>
-          <td>{{ funds }}</td>
-          {% if stock_list %}
-          <td colspan="2">
-            <button id="buy-sell-button" type="submit"
-                    class="btn btn-primary btn-block"
-                    form="portfolio-form" name="transaction" value="transaction" >
-              <span id="buy-sell">Buy/Sell</span>
-            </button>
-          </td>
-          {% else %}
-          <td></td>
-          <td></td>
-          {% endif %}
+  <br>
 
-        </tr>
-      </tbody>
-      <tfoot>
-        <tr>
-          <th scope="row">NET WORTH</th>
-          <td class="d-none d-md-block"></td>
-          <td></td>
-          <td></td>
-          <td>{{ net_worth }}</td>
-          <td></td>
-          <td></td>
-        </tr>
-      </tfoot>
-    </table>
-  </form>
+  <h3>Look up a new stock?</h3>
+  <div class="form-group">
+    <form class="form" method="post" id="quote-form">
+      {% csrf_token %}
+      {{ quote_form.as_p }}
+      <input type="hidden" name="quote"/>
+      <button id="quote-submit" type="submit" class="btn btn-primary"
+              form="quote-form" name="get quote" value="Get Quote"
+              ic-post-to="{% url 'Finance:ajax_quote' %}"
+              ic-trigger-on="click"
+              ic-target="#quote-container">Get Quote
+        <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i>
+      </button>
+      <div id="quote-container"></div>
+    </form>
+  </div>
+  <br>
+
+  <div id="ajax-portfolio" name="ajax-portfolio" ic-trigger-on="load"
+  ic-get-from="{% url 'Finance:ajax_stock_list' %}">
+    <h2>Loading your stocks</h2>
+    <i class="ic-indicator fa fa-spinner fa-spin fa-10x"></i>
+  </div>
 
 {% endblock %}

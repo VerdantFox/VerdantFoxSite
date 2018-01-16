@@ -1,0 +1,86 @@
+<div id="stock-list-container">
+
+  {% include '_messages.html' %}
+
+  {# Error messages #}
+  {% if error %}
+    <h6 class="errorlist">{{ error }}</h6>
+  {% endif %}
+  {% for error in buy_form.non_field_errors %}
+    <h6 class="errorlist">{{ error }}</h6>
+  {% endfor %}
+  {% for error in buy_form.buy_shares.errors %}
+    <h6 class="errorlist">{{ error }}</h6>
+  {% endfor %}
+
+  {# Stock table #}
+  <h3>Here are all of your current stocks:</h3>
+  <form action="" method="post" id="portfolio-form">
+    {% csrf_token %}
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">Symbol</th>
+          <th class="d-none d-md-block" scope="col">Name</th>
+          <th scope="col">Shares</th>
+          <th scope="col">Price</th>
+          <th scope="col">Total</th>
+          <th scope="col">Buy</th>
+          <th scope="col">Sell</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for stock in stock_list %}
+          <tr>
+          <th name="{{ stock.symbol }}" scope="row">{{ stock.symbol }}</th>
+          <td class="d-none d-md-block">{{ stock.name }}</td>
+          <td>{{ stock.shares }}</td>
+          <td>{{ stock.price }}</td>
+          <td>{{ stock.total }}</td>
+          <td><input class="form-control form-box" type="number" min="1"
+                     max="10000" step="1" name="buy-{{ stock.symbol }}"></td>
+          <td><input class="form-control form-box" type="number" min="1"
+                     max="10000" step="1" name="sell-{{ stock.symbol }}"></td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <th scope="row">FUNDS</th>
+          <td class="d-none d-md-block"></td>
+          <td></td>
+          <td></td>
+          <td>{{ funds }}</td>
+          {% if stock_list %}
+          <td colspan="2">
+            <button id="buy-sell-button" type="submit"
+                    class="btn btn-primary btn-block" form="portfolio-form"
+                    name="transaction" value="transaction"
+                    ic-post-to="{% url 'Finance:ajax_stock_list' %}"
+                    ic-trigger-on="click"
+                    ic-target="#stock-list-container">
+              <span id="buy-sell">Buy/Sell</span>
+              <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i>
+            </button>
+          </td>
+          {% else %}
+          <td></td>
+          <td></td>
+          {% endif %}
+
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th scope="row">NET WORTH</th>
+          <td class="d-none d-md-block"></td>
+          <td></td>
+          <td></td>
+          <td>{{ net_worth }}</td>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  </form>
+
+</div>
+

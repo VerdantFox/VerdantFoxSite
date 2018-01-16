@@ -15,11 +15,6 @@
 
 {% block body_block %}
 
-  {% if price and symbol %}
-    <h5>One share of {{ name }} ({{ symbol }}) is worth {{ price }}.</h5>
-  {% endif %}
-
-
   <div class="form-group">
     <form class="form" method="post" id="quote-form">
       {% csrf_token %}
@@ -27,7 +22,7 @@
       <input type="hidden" name="quote"/>
       <button id="quote-submit" type="submit" class="btn btn-primary"
               form="quote-form" name="get quote" value="Get Quote"
-              ic-post-to="{% url 'Finance:ajax_price' %}"
+              ic-post-to="{% url 'Finance:ajax_quote' %}"
               ic-trigger-on="click"
               ic-target="#quote-container">Get Quote
         <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i>

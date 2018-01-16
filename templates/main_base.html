@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+
 {% block inner_navbar %}
   <div class="navbar-collapse" id="navbarNav">
     {# <ul class="navbar-nav ml-md-auto">#}
@@ -21,4 +22,8 @@
       </li>
     </ul>
   </div>
+{% endblock %}
+
+{% block message_block %}
+  {% include '_messages.html' %}
 {% endblock %}

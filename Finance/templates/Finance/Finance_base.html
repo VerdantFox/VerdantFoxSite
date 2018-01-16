@@ -14,15 +14,9 @@
         <a class="nav-link" href="{% url 'Finance:portfolio' %}">Portfolio</a>
       </li>
       <li class="nav-item {% block active2 %}{% endblock %}">
-        <a class="nav-link" href="{% url 'Finance:quote' %}">New Quote</a>
-      </li>
-      <li class="nav-item {% block active3 %}{% endblock %}">
-        <a class="nav-link" href="{% url 'Finance:analysis' %}">Analysis</a>
-      </li>
-      <li class="nav-item {% block active4 %}{% endblock %}">
         <a class="nav-link" href="{% url 'Finance:history' %}">History</a>
       </li>
-      <li class="nav-item {% block active5 %}{% endblock %}">
+      <li class="nav-item {% block active3 %}{% endblock %}">
         <a class="nav-link" href="{% url 'Finance:add_funds' %}">Add Funds</a>
       </li>
     </ul>
@@ -33,3 +27,4 @@
 {% block javascript %}
   <script src="{% static 'Finance/js/Finance.js' %}"></script>
 {% endblock %}
+

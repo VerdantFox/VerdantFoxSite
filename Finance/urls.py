@@ -8,8 +8,8 @@ urlpatterns = [
     path('portfolio/', views.portfolio, name='portfolio'),
     path('quote/', views.quote, name='quote'),
     path('history/', views.History.as_view(), name='history'),
-    path('analysis/', views.analysis, name='analysis'),
     path('add_funds/', views.AddFunds.as_view(), name='add_funds'),
     path('ajax-graph/', views.ajax_graph, name='ajax_graph'),
-    path('ajax_price/', views.ajax_price, name='ajax_price'),
+    path('ajax_quote/', views.ajax_quote, name='ajax_quote'),
+    path('ajax_stock_list', views.ajax_stock_list, name='ajax_stock_list')
 ]

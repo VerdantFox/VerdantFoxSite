@@ -20,7 +20,7 @@
     <h6 class="errorlist">{{ error }}</h6>
   {% endfor %}
   {% for error in quote_form.symbol.errors %}
-    <h6 class="errorlist">{{ quote_form.symbol.errors }}</h6>
+    <h6 class="errorlist">{{ error }}</h6>
   {% endfor %}
 
   {% if not error and not quote_form.non_field_errors and not quote_form.symbol.errors %}
@@ -33,15 +33,7 @@
        ic-post-to="{% url 'Finance:ajax_graph' %}">
         <h2>Loading stock graph</h2>
         <i class="ic-indicator fa fa-spinner fa-spin fa-10x" style="display:none"></i>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
+        <br><br><br><br><br><br><br><br><br>
       </div>
       <br>
     </form>
@@ -62,9 +54,9 @@
           <input type="hidden" name="buy"/>
           <button id="buy-submit" type="submit" class="btn btn-primary"
                   form="buy-form" name="buy" value="Buy"
-                  ic-post-to="{% url 'Finance:ajax_price' %}"
+                  ic-post-to="{% url 'Finance:ajax_stock_list' %}"
                   ic-trigger-on="click"
-                  ic-target="#ajax-quote-container">Buy stock
+                  ic-target="#stock-list-container">Buy stock
             <i class="ic-indicator fa fa-spinner fa-spin" style="display:none"></i>
           </button>
         </form>
@@ -73,4 +65,3 @@
   {% endif %}
 
 </div>
-
