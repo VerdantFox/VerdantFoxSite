@@ -1,0 +1,35 @@
+{% extends 'games/games_base.html' %}
+{% load embed_video_tags %}
+
+{% block title_block %}
+  Twisted Towers | games
+{% endblock %}
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item active" aria-current="page"><a href="{% url 'games:index' %}">Games</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Twisted Towers</li>
+{% endblock %}
+
+{% block body_block %}
+
+  <h1 class="text-center">This is Twisted Towers!</h1>
+  <div class="centered-vid">
+    <iframe class="centered-vid" width="560" height="315"
+            src="https://www.youtube.com/embed/BZF5d-dr02E"
+            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+
+    </iframe>
+  </div>
+
+
+{#  {% video item.video as my_video %}#}
+{##}
+{#    URL: {{ my_video.url }}#}
+{#    Thumbnail: {{ my_video.thumbnail }}#}
+{#    Backend: {{ my_video.backend }}#}
+{#    {% video my_video 'medium' %}#}
+{##}
+{#  {% endvideo %}#}
+
+{% endblock %}
+

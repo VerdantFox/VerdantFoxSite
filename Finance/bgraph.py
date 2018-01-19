@@ -95,12 +95,15 @@ def bokeh_graph(symbol, time_frame):
                    plot_width=800,
                    plot_height=400,
                    tools=[hover, TOOLS],
-                   active_scroll="wheel_zoom",
+                   active_drag=None,
+                   active_scroll=None,
                    sizing_mode="scale_width",
                    )
 
         # Border commands
         p.border_fill_color = '#bfff00'
+
+
 
         # Outline commands
         p.outline_line_color = 'black'

@@ -5,22 +5,23 @@
   <link rel="stylesheet" type="text/css" href="{% static 'Finance/css/Finance.css' %}">
 {% endblock %}
 
-{% block inner_navbar %}
+{% block navbar_brand %}
   <a class="navbar-brand" href="{% url 'Finance:home' %}">Finance!</a>
-  {% include '_nav_collapse_button.html' %}
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item {% block active1 %}{% endblock %}">
-        <a class="nav-link" href="{% url 'Finance:portfolio' %}">Portfolio</a>
-      </li>
-      <li class="nav-item {% block active2 %}{% endblock %}">
-        <a class="nav-link" href="{% url 'Finance:history' %}">History</a>
-      </li>
-      <li class="nav-item {% block active3 %}{% endblock %}">
-        <a class="nav-link" href="{% url 'Finance:add_funds' %}">Add Funds</a>
-      </li>
-    </ul>
-  </div>
+{% endblock %}
+
+{% block inner_navbar %}
+
+  <ul class="navbar-nav">
+    <li class="nav-item {% block active1 %}{% endblock %}">
+      <a class="nav-link" href="{% url 'Finance:portfolio' %}">Portfolio</a>
+    </li>
+    <li class="nav-item {% block active2 %}{% endblock %}">
+      <a class="nav-link" href="{% url 'Finance:history' %}">History</a>
+    </li>
+    <li class="nav-item {% block active3 %}{% endblock %}">
+      <a class="nav-link" href="{% url 'Finance:add_funds' %}">Add Funds</a>
+    </li>
+  </ul>
 
 {% endblock %}
 
