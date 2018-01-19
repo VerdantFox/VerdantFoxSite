@@ -133,6 +133,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'Finance/static'),
+    os.path.join(BASE_DIR, 'games/static')
     ]
 # Media files (user uploaded files)
 # https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-MEDIA_ROOT
