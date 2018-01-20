@@ -328,7 +328,7 @@ def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
         messages.add_message(
             request, messages.WARNING,
             f'Failed {stock_symbol} validation, '
-            f'Given non-integer integer share count!',
+            f'Given non-integer share count!',
             extra_tags='stock'
         )
         return False

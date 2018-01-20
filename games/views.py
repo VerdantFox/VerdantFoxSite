@@ -8,10 +8,10 @@ def home(request):
 
 
 def twisted_towers(request):
+    # ttvideo = Video.objects.get(name__exact='twisted_towers')
 
-    ttvideo = Video.objects.get(name__exact='twisted_towers')
-    # response = HttpResponse(s.getvalue())
+    return render(request, 'games/twisted_towers.html')
 
-    return render(request, 'games/twisted_towers.html',
-                  {'ttvideo': ttvideo}
-                  )
+
+def moth_hunt(request):
+    return render(request, 'games/moth_hunt.html')
