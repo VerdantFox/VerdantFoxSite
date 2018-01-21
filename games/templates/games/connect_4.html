@@ -1,0 +1,87 @@
+{% extends 'games/games_base.html' %}
+{% load staticfiles %}
+
+{% block title_block %}
+  Connect 4 | games
+{% endblock %}
+
+{% block active3 %}active{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'games:index' %}">Games</a></li>
+  <li class="breadcrumb-item active" aria-current="page">Connect 4</li>
+{% endblock %}
+
+{% block body_block %}
+  <div class="container centered">
+    <h1>Welcome to connect 4!</h1>
+    <h2>The object of the game is to connect four of your chips in a row!</h2>
+    <h3>Player 1's turn!</h3>
+  </div>
+  <div class="container">
+    <table class = grid>
+      <tr class="row0">
+        <td class="circles column0"></td>
+        <td class="circles column1"></td>
+        <td class="circles column2"></td>
+        <td class="circles column3"></td>
+        <td class="circles column4"></td>
+        <td class="circles column5"></td>
+        <td class="circles column6"></td>
+      </tr>
+      <tr class="row1">
+        <td class="circles column0"></td>
+        <td class="circles column1"></td>
+        <td class="circles column2"></td>
+        <td class="circles column3"></td>
+        <td class="circles column4"></td>
+        <td class="circles column5"></td>
+        <td class="circles column6"></td>
+
+      </tr>
+      <tr class="row2">
+        <td class="circles column0"></td>
+        <td class="circles column1"></td>
+        <td class="circles column2"></td>
+        <td class="circles column3"></td>
+        <td class="circles column4"></td>
+        <td class="circles column5"></td>
+        <td class="circles column6"></td>
+
+      </tr>
+      <tr class="row3">
+        <td class="circles column0"></td>
+        <td class="circles column1"></td>
+        <td class="circles column2"></td>
+        <td class="circles column3"></td>
+        <td class="circles column4"></td>
+        <td class="circles column5"></td>
+        <td class="circles column6"></td>
+
+      </tr>
+      <tr class="row4">
+        <td class="circles column0"></td>
+        <td class="circles column1"></td>
+        <td class="circles column2"></td>
+        <td class="circles column3"></td>
+        <td class="circles column4"></td>
+        <td class="circles column5"></td>
+        <td class="circles column6"></td>
+
+      </tr>
+      <tr class="row5">
+        <td class="circles column0"></td>
+        <td class="circles column1"></td>
+        <td class="circles column2"></td>
+        <td class="circles column3"></td>
+        <td class="circles column4"></td>
+        <td class="circles column5"></td>
+        <td class="circles column6"></td>
+      </tr>
+    </table>
+  </div>
+{% endblock %}
+{% block javascript %}
+  <script src="{% static 'games/js/connect_4.js' %}"></script>
+{% endblock %}

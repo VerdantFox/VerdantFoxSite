@@ -8,3 +8,36 @@
 h1 {
     color:blue;
 }
+
+
+/* Connect 4 CSS */
+
+.centered{
+    text-align: center;
+}
+
+table{
+    margin: auto;
+    border-collapse: separate;
+
+}
+
+
+.circles{
+   -moz-border-radius:100%;
+    -webkit-border-radius:100%;
+    width: 100px;
+    height: 100px;
+    background-color: dimgrey;
+    border-spacing: 0;
+    border: 4px solid black;
+
+}
+
+.blue{
+    background-color: blue;
+}
+
+.red{
+    background-color: red;
+}

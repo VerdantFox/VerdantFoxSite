@@ -15,3 +15,7 @@ def twisted_towers(request):
 
 def moth_hunt(request):
     return render(request, 'games/moth_hunt.html')
+
+
+def connect_4(request):
+    return render(request, 'games/connect_4.html')
