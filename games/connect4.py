@@ -79,7 +79,7 @@ class AI:
     # Set test grid to real grid
     def set_test_grids(self):
         for test_grid in self.grid_list:
-            for row in range(7):
+            for row in range(6):
                 for column in range(7):
                     test_grid.grid[row][column] = self.grid.grid[row][column]
 
@@ -97,7 +97,7 @@ class Grid:
     def __init__(self, player1, player2):
         # Create connect 4 grid system
         grid = []
-        for i in range(7):
+        for i in range(6):
             grid.append([])
 
         for row in grid:
@@ -135,8 +135,8 @@ class Grid:
     # Check for bottom of column
     def check_bottom(self, column):
         for rev_row in range(7):
-            if self.grid[6-rev_row][column] == 'empty':
-                return 6-rev_row
+            if self.grid[5-rev_row][column] == 'empty':
+                return 5-rev_row
         # Row is full
         return None
 

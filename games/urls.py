@@ -8,4 +8,5 @@ urlpatterns = [
     path('twisted_towers/', views.twisted_towers, name='twisted_towers'),
     path('battys_moth_hunt/', views.moth_hunt, name='moth_hunt'),
     path('connect_4/', views.connect_4, name='connect_4'),
+    path('ajax_connect_4/', views.ajax_connect_4, name='ajax_connect_4'),
 ]

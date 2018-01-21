@@ -14,72 +14,12 @@
 {% endblock %}
 
 {% block body_block %}
-  <div class="container centered">
     <h1>Welcome to connect 4!</h1>
     <h2>The object of the game is to connect four of your chips in a row!</h2>
-    <h3>Player 1's turn!</h3>
-  </div>
-  <div class="container">
-    <table class = grid>
-      <tr class="row0">
-        <td class="circles column0"></td>
-        <td class="circles column1"></td>
-        <td class="circles column2"></td>
-        <td class="circles column3"></td>
-        <td class="circles column4"></td>
-        <td class="circles column5"></td>
-        <td class="circles column6"></td>
-      </tr>
-      <tr class="row1">
-        <td class="circles column0"></td>
-        <td class="circles column1"></td>
-        <td class="circles column2"></td>
-        <td class="circles column3"></td>
-        <td class="circles column4"></td>
-        <td class="circles column5"></td>
-        <td class="circles column6"></td>
-
-      </tr>
-      <tr class="row2">
-        <td class="circles column0"></td>
-        <td class="circles column1"></td>
-        <td class="circles column2"></td>
-        <td class="circles column3"></td>
-        <td class="circles column4"></td>
-        <td class="circles column5"></td>
-        <td class="circles column6"></td>
-
-      </tr>
-      <tr class="row3">
-        <td class="circles column0"></td>
-        <td class="circles column1"></td>
-        <td class="circles column2"></td>
-        <td class="circles column3"></td>
-        <td class="circles column4"></td>
-        <td class="circles column5"></td>
-        <td class="circles column6"></td>
-
-      </tr>
-      <tr class="row4">
-        <td class="circles column0"></td>
-        <td class="circles column1"></td>
-        <td class="circles column2"></td>
-        <td class="circles column3"></td>
-        <td class="circles column4"></td>
-        <td class="circles column5"></td>
-        <td class="circles column6"></td>
-
-      </tr>
-      <tr class="row5">
-        <td class="circles column0"></td>
-        <td class="circles column1"></td>
-        <td class="circles column2"></td>
-        <td class="circles column3"></td>
-        <td class="circles column4"></td>
-        <td class="circles column5"></td>
-        <td class="circles column6"></td>
-      </tr>
-    </table>
+    <div id="ajax-connect-4" ic-trigger-on="load"
+    ic-get-from="{% url 'games:ajax_connect_4' %}">
+      <h2>Loading connect 4</h2>
+    <i class="ic-indicator fa fa-spinner fa-spin fa-10x"></i>
   </div>
 {% endblock %}
 {% block javascript %}

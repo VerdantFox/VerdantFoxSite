@@ -1,0 +1,21 @@
+<div id="connect-4-inner-container">
+{% load connect_4_tags %}
+  <h3>It's {{ board.current_player.color }}'s turn!</h3>
+  <div class="container">
+    <table class = grid>
+      {% for row in board.grid %}
+        {% with forloop.counter0 as row_number %}
+          <tr>
+            {% for column in row %}
+              {% with forloop.counter0 as column_number %}
+              <td class="circles color-{{ board.grid|index:row_number|index:column_number }}">
+                  <button type="button">{{ board.grid|index:row_number|index:column_number }}</button>
+              </td>
+              {% endwith %}
+            {% endfor %}
+          </tr>
+        {% endwith %}
+      {% endfor %}
+    </table>
+  </div>
+</div>
