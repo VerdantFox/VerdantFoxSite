@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from .models import Video
-from .connect4 import Player, Grid, AI
+from .connect4 import Player, Grid, AI, set_game
 
 
 def home(request):
@@ -23,57 +23,127 @@ def connect_4(request):
 
 
 def ajax_connect_4(request):
-    p1 = Player('red', 'Bob', turn=True)
-    p2 = Player('blue', 'I am robot')
-    board = Grid(p1, p2)
-    robot = AI(ai=p2, opponent=p1, grid=board, Grid=Grid)
+    (p1, p2, board, robot, message, error, deactivate, restart,
+     p1_col, p1_row, p2_col, p2_row, p1_move_msg, p2_move_msg) = set_game()
 
-    board.grid[1][2] = 'green'
+    # board.grid[0][1] = 'green'
+    # board.grid[1][1] = 'green'
+    # board.grid[2][1] = 'green'
+    # board.grid[3][1] = 'green'
+    # board.grid[4][1] = 'green'
+    # board.grid[5][1] = 'green'
 
-    board.show_grid()
+    if request.method == "POST":
+        # Restart if restart button hit (ie. return without updating board)
+        if request.POST['ic-trigger-name'] == 'restart':
+            return render(request, 'games/ajax_connect_4.html',
+                          {'board': board,
+                           'message': message,
+                           'error': error,
+                           'deactivate': deactivate,
+                           'p1_row': p1_row, 'p1_col': p1_col,
+                           'p2_row': p2_row, 'p2_col': p2_col,
+                           'p1_move_msg': p1_move_msg,
+                           'p2_move_msg': p2_move_msg,
+                           })
 
+        # Iterate over post items to update board circles
+        for item in request.POST:
+            # Get each individual post item and check if it's a circle
+            if item[:7] == "circle-":
+                # Pull out circle's row and column index numbers
+                row, column = item[7:].split(',')
+                row, column = int(row), int(column)
+                # Update grid from post data
+                board.grid[row][column] = request.POST[item]
 
-    # while True:
-    #     print(f"{board.current_player.name} ({board.current_player.color})'s "
-    #           f"turn.")
-    #
-    #     # Initialize row and column choices to None
-    #     row_choice, column_choice = None, None
-    #     # Get column choice from player
-    #     while not column_choice:
-    #         if board.current_player == p1:
-    #             try:
-    #
-    #                 column_choice = int(
-    #                     input(f'{board.current_player.color}, '
-    #                           f'please select a column_choice: '))
-    #                 if 0 <= column_choice <= 6:
-    #                     row_choice = board.check_bottom(column_choice)
-    #                     if row_choice is None:
-    #                         print(f"column_choice {column_choice} is full")
-    #                         column_choice = None
-    #                 else:
-    #                     print("column_choice number must be an integer "
-    #                           "between 0 and 6")
-    #                     column_choice = None
-    #             except ValueError:
-    #                 print("Must input integer for column_choice number")
-    #         elif board.current_player == p2:
-    #             column_choice = robot.decide_move()
-    #             row_choice = board.check_bottom(column_choice)
-    #
-    #     print()
-    #     print(f"{board.current_player.color} played in column {column_choice}")
-    #     board.change_color(row_choice, column_choice,
-    #                        board.current_player.color)
-    #     winner = board.check_winner()
-    #     board.show_grid()
-    #
-    #     if winner:
-    #         print(f"{board.current_player.color} got a {winner}.")
-    #         break
-    #     else:
-    #         board.change_turn()
+        # Get chosen column (from button click)
+        p1_col = int(request.POST['ic-element-name'])
+        p1_row = board.check_bottom(p1_col)
+        # Check if move is legal
+        if p1_row is None:
+            error = f"Column {p1_col} is full! Try somewhere else!"
+            # Send render again so user can re-pick
+            return render(request, 'games/ajax_connect_4.html',
+                          {'board': board,
+                           'message': message,
+                           'error': error,
+                           'deactivate': deactivate,
+                           'p1_row': p1_row, 'p1_col': p1_col,
+                           'p2_row': p2_row, 'p2_col': p2_col,
+                           'p1_move_msg': p1_move_msg,
+                           'p2_move_msg': p2_move_msg,
+                           })
+        # Move was legal
+        else:
+            board.change_color(p1_row, p1_col, p1.color)
+            winner = board.check_winner()
+            p1_move_msg = f"You moved into column {p1_col}"
+            # End game with win message if player wins
+            if winner:
+                message = f"You won!"
+                p2_row, p2_col, p2_move_msg = None, None, None
+                deactivate = True
+                return render(request, 'games/ajax_connect_4.html',
+                              {'board': board,
+                               'message': message,
+                               'error': error,
+                               'deactivate': deactivate,
+                               'p1_row': p1_row, 'p1_col': p1_col,
+                               'p2_row': p2_row, 'p2_col': p2_col,
+                               'p1_move_msg': p1_move_msg,
+                               'p2_move_msg': p2_move_msg,
+                               })
+            # Else just change turn
+            else:
+                board.change_turn()
+
+        # Mr. Roboto's turn, he makes a move
+        p2_col = robot.decide_move()
+        # Get the row for his column
+        p2_row = board.check_bottom(p2_col)
+        # Update move color
+        board.change_color(p2_row, p2_col, p2.color)
+        # Update Mr. Roboto's move message
+        p2_move_msg = f"Mr. Roboto moved into column {p2_col}"
+        # Check for winner
+        winner = board.check_winner()
+        # End game with lose message if Mr. Roboto wins
+        if winner:
+            message = f"Mr. Roboto won!"
+            deactivate = True
+            return render(request, 'games/ajax_connect_4.html',
+                          {'board': board,
+                           'message': message,
+                           'error': error,
+                           'deactivate': deactivate,
+                           'p1_row': p1_row, 'p1_col': p1_col,
+                           'p2_row': p2_row, 'p2_col': p2_col,
+                           'p1_move_msg': p1_move_msg,
+                           'p2_move_msg': p2_move_msg,
+                           })
+        # Else just change turn
+        else:
+            board.change_turn()
+
+        return render(request, 'games/ajax_connect_4.html',
+                      {'board': board,
+                       'message': message,
+                       'error': error,
+                       'deactivate': deactivate,
+                       'p1_row': p1_row, 'p1_col': p1_col,
+                       'p2_row': p2_row, 'p2_col': p2_col,
+                       'p1_move_msg': p1_move_msg,
+                       'p2_move_msg': p2_move_msg,
+                       })
 
     return render(request, 'games/ajax_connect_4.html',
-                  {'board': board})
+                  {'board': board,
+                   'message': message,
+                   'error': error,
+                   'deactivate': deactivate,
+                   'p1_row': p1_row, 'p1_col': p1_col,
+                   'p2_row': p2_row, 'p2_col': p2_col,
+                   'p1_move_msg': p1_move_msg,
+                   'p2_move_msg': p2_move_msg,
+                   })

@@ -1,21 +1,80 @@
 <div id="connect-4-inner-container">
 {% load connect_4_tags %}
+  <form id="connect4-form" method="post">
   <h3>It's {{ board.current_player.color }}'s turn!</h3>
-  <div class="container">
-    <table class = grid>
+{#  <input hidden name="turn" value="{{ board.current_player.color }}">#}
+  {% if error %}
+    <h6 class="errorlist">{{ error }}</h6>
+    <h6 class="move"><br></h6>
+  {% else %}
+    {% if p1_move_msg %}
+      <h6 class="move">{{ p1_move_msg }}</h6>
+    {% else %}
+      <h6 class="move"><br></h6>
+    {% endif %}
+    {% if p2_move_msg %}
+      <h6 class="move">{{ p2_move_msg }}</h6>
+    {% else %}
+      <h6 class="move"><br></h6>
+    {% endif %}
+  {% endif %}
+
+  {% if message %}
+    <h6 class="win">{{ message }}</h6>
+  {% else %}
+    <h6 class="win"><br></h6>
+  {% endif %}
+
+  {% csrf_token %}
+    <table class="connect-4-table">
+      <tr>
+        {# Create for loop with range 7 #}
+        {% for col in "0123456" %}
+        <td class="text-center">
+          <button type="submit"
+                  class="btn btn-outline-info btn-block btn-sm"
+                  {% if deactivate %}disabled{% endif %}
+                  form="connect4-form"
+                  name="{{ forloop.counter0 }}"
+                  ic-post-to="{% url 'games:ajax_connect_4' %}"
+                  ic-trigger-on="click"
+                  ic-target="#connect-4-inner-container">
+            <h2>{{ forloop.counter }}</h2><i class="fas fa-chevron-down fa-2x"></i>
+          </button>
+          {% endfor %}
+        </td>
+      </tr>
       {% for row in board.grid %}
         {% with forloop.counter0 as row_number %}
           <tr>
             {% for column in row %}
               {% with forloop.counter0 as column_number %}
-              <td class="circles color-{{ board.grid|index:row_number|index:column_number }}">
-                  <button type="button">{{ board.grid|index:row_number|index:column_number }}</button>
-              </td>
+                <td class="circles chosen color-{{ board.grid|index:row_number|index:column_number }}">
+                  <input type="hidden"
+                         name="circle-{{ row_number }},{{ column_number }}"
+                         value="{{ board.grid|index:row_number|index:column_number }}">
+                </td>
               {% endwith %}
             {% endfor %}
           </tr>
         {% endwith %}
       {% endfor %}
+      <tr>
+        <td colspan="7">
+          <div class="text-center">
+            <button type="submit"
+                    class="btn btn-outline-danger btn-block btn-lg"
+                    form="connect4-form"
+                    name="restart"
+                    ic-post-to="{% url 'games:ajax_connect_4' %}"
+                    ic-trigger-on="click"
+                    ic-target="#connect-4-inner-container">
+              <strong>Restart</strong>
+            </button>
+          </div>
+        </td>
+      </tr>
     </table>
-  </div>
+  </form>
 </div>
+

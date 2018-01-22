@@ -1,6 +1,25 @@
 import random
 
 
+def set_game():
+    p1 = Player('red', 'player 1', turn=True)
+    p2 = Player('blue', 'robot')
+    board = Grid(p1, p2)
+    robot = AI(ai=p2, opponent=p1, grid=board, Grid=Grid)
+    message = None
+    error = None
+    deactivate = False
+    restart = False
+    p1_col = None
+    p1_row = None
+    p2_col = None
+    p2_row = None
+    p1_move_msg = None
+    p2_move_msg = None
+    return (p1, p2, board, robot, message, error, deactivate, restart,
+            p1_col, p1_row, p2_col, p2_row, p1_move_msg, p2_move_msg)
+
+
 class Player:
     def __init__(self, color, name, turn=False):
         self.color = color
@@ -264,27 +283,29 @@ class Grid:
 
 
 if __name__ == '__main__':
-    p1 = Player('red', 'Bob', turn=True)
-    p2 = Player('blue', 'I am robot')
-    board = Grid(p1, p2)
-    robot = AI(ai=p2, opponent=p1, grid=board, Grid=Grid)
+    (p1, p2, board, robot, message, error, deactivate, restart,
+     p1_col, p1_row, p2_col, p2_row, p1_move_msg, p2_move_msg) = set_game()
+
     board.show_grid()
 
     while True:
         print(f"{board.current_player.name} ({board.current_player.color})'s "
               f"turn.")
-
+        print("here1")
         # Initialize row and column choices to None
         row_choice, column_choice = None, None
         # Get column choice from player
-        while not column_choice:
+        while column_choice is None:
+            #TODO CHECKS NOT WORKING FOR COLUMN 0
             if board.current_player == p1:
                 try:
                     column_choice = int(
                         input(f'{board.current_player.color}, '
                               f'please select a column_choice: '))
                     if 0 <= column_choice <= 6:
+                        print(column_choice)
                         row_choice = board.check_bottom(column_choice)
+                        print(row_choice)
                         if row_choice is None:
                             print(f"column_choice {column_choice} is full")
                             column_choice = None

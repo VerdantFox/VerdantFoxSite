@@ -24,7 +24,7 @@ table{
 
 
 .circles{
-   -moz-border-radius:100%;
+    -moz-border-radius:100%;
     -webkit-border-radius:100%;
     width: 100px;
     height: 100px;
@@ -40,4 +40,25 @@ table{
 
 .red{
     background-color: red;
+}
+
+.color-green{
+    background-color: green;
+}
+
+.color-blue{
+    background-color: blue;
+}
+
+.color-red{
+    background-color: red;
+}
+
+.color-yellow{
+    background-color: yellow;
+}
+
+.win{
+    color:forestgreen;
+    font-size: 1.2em;
 }
