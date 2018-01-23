@@ -26,13 +26,6 @@ def ajax_connect_4(request):
     (p1, p2, board, robot, message, error, deactivate, restart,
      p1_col, p1_row, p2_col, p2_row, p1_move_msg, p2_move_msg) = set_game()
 
-    # board.grid[0][1] = 'green'
-    # board.grid[1][1] = 'green'
-    # board.grid[2][1] = 'green'
-    # board.grid[3][1] = 'green'
-    # board.grid[4][1] = 'green'
-    # board.grid[5][1] = 'green'
-
     if request.method == "POST":
         # Restart if restart button hit (ie. return without updating board)
         if request.POST['ic-trigger-name'] == 'restart':
@@ -81,6 +74,7 @@ def ajax_connect_4(request):
             p1_move_msg = f"You moved into column {p1_col}"
             # End game with win message if player wins
             if winner:
+                board.change_win_colors(winner, p1.color)
                 message = f"You won!"
                 p2_row, p2_col, p2_move_msg = None, None, None
                 deactivate = True
@@ -111,6 +105,7 @@ def ajax_connect_4(request):
         # End game with lose message if Mr. Roboto wins
         if winner:
             message = f"Mr. Roboto won!"
+            board.change_win_colors(winner, p2.color)
             deactivate = True
             return render(request, 'games/ajax_connect_4.html',
                           {'board': board,

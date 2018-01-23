@@ -7,14 +7,14 @@
   <li class="breadcrumb-item active" aria-current="page">Games</li>
 {% endblock %}
 {% block body_block %}
-  <h1>Games!</h1>
+  <h1 class="text-center">Games!</h1>
   <p class="text-justify">
     Games are fun! They are fun to build and fun to play. They can be an
     exciting conduit to learning new programming languages or new programming
-    techniques. Here are a couple of games I've built over the course learning
+    techniques. Here are a few of the games I've built over the course learning
     to program that have allowed me to learn interesting new concepts.
   </p>
-  <h3>Batty's Moth Hunt</h3>
+  <h3 class="text-center">Batty's Moth Hunt</h3>
   <p class="text-justify">
     This was the first game and one of the first programs I ever wrote. It's
     written in <a class="link-target" href="https://scratch.mit.edu/" target="_blank">
@@ -23,7 +23,7 @@
     language as a first try. It was a fun experience that got me excited to
     learn more programming with more useful languages.
   </p>
-  <h3>Twisted Towers</h3>
+  <h3 class="text-center">Twisted Towers</h3>
   <p class="text-justify">
     I wrote this game as my final project for Harvard's course, <a class="link-target" href="https://www.edx.org/course/cs50s-introduction-computer-science-harvardx-cs50x" target="_blank">
     CS50</a>, and I'd
@@ -32,6 +32,18 @@
     the procedural programming I'd learned up to that point. Twisted
     Towers is a <a class="link-target" href="https://en.wikipedia.org/wiki/Tower_defense" target="_blank">
     tower defense</a> style game that I wrote with Python's Pygame library.
+  </p>
+  <h3 class="text-center">Connect 4</h3>
+  <p class="text-justify">
+    Who doesn't enjoy a good board game? Test your wit against Mr. Roboto,
+    the simple AI I built for this game. I wrote connect 4 in python. As you
+    make your moves, information about your move choice and the board's status
+    is sent via AJAX (Asynchronous Javascript and XML) back to the python code
+    located on the server. Then, your move is processed, Mr. Roboto's
+    counter-move is processed, win conditions are checked, and everything gets
+    sent back with updated data for the game board. Since, this server talk
+    is asynchronous, we don't need to reload this whole page for every move,
+    just the game board. Fun!
   </p>
 
 

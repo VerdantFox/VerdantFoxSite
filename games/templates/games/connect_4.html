@@ -14,14 +14,40 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>Welcome to connect 4!</h1>
-    <h2>The object of the game is to connect four of your chips in a row!</h2>
+
+    <h1 class="text-center">Welcome to connect 4!</h1>
+    <p class="text-justify">
+      Who doesn't enjoy a good board game? Test your wit against Mr. Roboto,
+      the simple AI I built for this game. I wrote connect 4 in python. As you
+      make your moves, information about your move choice and the board's
+      status is sent via AJAX (Asynchronous Javascript and XML) back to the
+      python code located on the server. Then, your move is processed,
+      Mr. Roboto's counter-move is processed, win conditions are checked, and
+      everything gets sent back with updated data for the game board. Since,
+      this server talk is asynchronous, we don't need to reload this whole
+      page for every move, just the game board. Fun!
+    </p>
+    <h2 class="text-center">How to play:</h2>
+    <p class="text-justify">
+      <strong>The object of the game is to connect four of your chips in a
+      row!</strong> For this game, you will play the red chips and your
+      opponent, Mr. Roboto, will play the blue chips. You can place chips
+      into columns using the buttons 1-7 located at the top of each column.
+      When you click a button, your red chip will fall to the lowest available
+      grey circle. Then, in in the blink of an eye, Mr. Roboto will choose
+      where to drop his blue chip. His and your most recent chip drops are
+      denoted by yellow rings around those chips. If you are able to
+      <strong>connect 4</strong> chips in a row (vertically, horizontally,
+      or diagonally), you win! If Mr. Roboto connects 4 chips though, he wins!
+      The board can be reset with the button located below the board.
+      <strong>Good luck!</strong>
+    </p>
+
+
     <div id="ajax-connect-4" ic-trigger-on="load"
     ic-get-from="{% url 'games:ajax_connect_4' %}">
       <h2>Loading connect 4</h2>
     <i class="ic-indicator fa fa-spinner fa-spin fa-10x"></i>
   </div>
-{% endblock %}
-{% block javascript %}
-  <script src="{% static 'games/js/connect_4.js' %}"></script>
+
 {% endblock %}

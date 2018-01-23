@@ -34,52 +34,36 @@ class AI:
         self.color = ai.color
         self.opponent = opponent
         self.opponent_color = self.opponent.color
+        # Actual game board
         self.grid = grid
-        grid_list = []
+        # 7 test game boards for looking 1 move into the future
+        self.grid_list = []
         for i in range(7):
-            grid_list.append(Grid(opponent, ai))
-        self.grid_list = grid_list
+            self.grid_list.append(Grid(opponent, ai))
 
     def decide_move(self):
         self.set_test_grids()
         self.make_all_legal_moves(self.opponent)
         col_4_opponent = self.four_in_row()
-        col_3_opponent = self.three_in_row()
         self.set_test_grids()
         self.make_all_legal_moves(self.ai)
         col_4_ai = self.four_in_row()
-        col_3_ai = self.three_in_row()
         col_random = self.move_random()
 
-        if col_4_ai:
+        if col_4_ai is not None:
+            print("Winning the game!")
             return col_4_ai
-        elif col_4_opponent:
+        elif col_4_opponent is not None:
             print("col_4_opponent condition met")
             return col_4_opponent
-        elif col_3_ai:
-            print("col_3_ai condition met")
-            return col_3_ai
-        elif col_3_opponent:
-            print("col_3_opponent condition met")
-            return col_3_opponent
         else:
-            print("Going for a random ass move")
+            print("Making a random move")
             return col_random
 
     # Win the game or block game win if possible
     def four_in_row(self):
         for column, test_grid in enumerate(self.grid_list):
-            check_3 = test_grid.check_winner()
-            if check_3:
-                return column
-            else:
-                pass
-        return None
-
-    # Get or block 3 out of 4 if possible
-    def three_in_row(self):
-        for column, test_grid in enumerate(self.grid_list):
-            check_win = test_grid.check_3_consecutive()
+            check_win = test_grid.check_winner()
             if check_win:
                 return column
             else:
@@ -126,6 +110,8 @@ class Grid:
         self.player1 = player1
         self.player2 = player2
         self.current_player = self.player1
+        # Was getting weird results using range(7)
+        self.columns = [0, 1, 2, 3, 4, 5, 6]
 
     def show_grid(self):
         print('[   0        1        2        3        4        5        6   ]')
@@ -135,6 +121,11 @@ class Grid:
     # Change color of a circle
     def change_color(self, row, column, color):
         self.grid[row][column] = color
+
+    def change_win_colors(self, win_coordinates, color):
+        win_color = f"{color}-green"
+        for coord in win_coordinates:
+            self.grid[coord[0]][coord[1]] = win_color
 
     # Change player's turn
     def change_turn(self):
@@ -172,11 +163,14 @@ class Grid:
         veritcal_win = self.vertical_win_check()
         diagonal_win = self.diagonal_win_check()
         if horizontal_win:
-            return f"horizontal win at {horizontal_win}"
+            print(horizontal_win)
+            return horizontal_win
         elif veritcal_win:
-            return f"vertical win at {veritcal_win}"
+            print(veritcal_win)
+            return veritcal_win
         elif diagonal_win:
-            return f"diagonal win at {diagonal_win}"
+            print(diagonal_win)
+            return diagonal_win
         else:
             return None
 
@@ -190,94 +184,37 @@ class Grid:
                         self.report_color(row, col+2),
                         self.report_color(row, col+3)
                 ):
-                    return row, col
+                    return (row, col), (row, col+1), (row, col+2), (row, col+3)
                 else:
                     pass
 
     # Check vertical win
     def vertical_win_check(self):
         for col in range(7):
-            for row in range(4):
+            for row in range(3):
                 if self.check_match4(self.report_color(row, col),
                                      self.report_color(row+1, col),
                                      self.report_color(row+2, col),
                                      self.report_color(row+3, col)):
-                    return row, col
+                    return (row, col), (row+1, col), (row+2, col), (row+3, col)
                 else:
                     pass
 
     # Check diagonal win
     def diagonal_win_check(self):
         for row in range(7):
-            for col in range(7):
+            for col in range(4):
                 if self.check_match4(self.report_color(row, col),
                                      self.report_color(row+1, col+1),
                                      self.report_color(row+2, col+2),
                                      self.report_color(row+3, col+3)):
-                    return row, col
+                    return (row, col), (row+1, col+1), (row+2, col+2), (row+3, col+3)
+
                 if self.check_match4(self.report_color(row, col),
                                      self.report_color(row-1, col+1),
                                      self.report_color(row-2, col+2),
                                      self.report_color(row-3, col+3)):
-                    return row, col
-                else:
-                    pass
-
-    # Check if 3 circles' colors' match
-    def check_match3(self, color1, color2, color3):
-        if color1 == color2 == color3 != 'empty':
-            return True
-        else:
-            return False
-
-    # Check for 3 consecutive of same color
-    def check_3_consecutive(self):
-        horizontal_3 = self.horizontal_3_check()
-        vertical_3 = self.vertical_3_check()
-        diagonal_3 = self.diagonal_3_check()
-        if horizontal_3:
-            return f"horizontal 3 consecutive at {horizontal_3}"
-        elif vertical_3:
-            return f"vertical 3 consecutive at {vertical_3}"
-        elif diagonal_3:
-            return f"diagonal 3 consecutive at {diagonal_3}"
-        else:
-            return None
-
-    # Check horizontal 3
-    def horizontal_3_check(self):
-        for row in range(7):
-            for col in range(5):
-                if self.check_match3(self.report_color(row, col),
-                                     self.report_color(row, col+1),
-                                     self.report_color(row, col+2)):
-                    return row, col
-                else:
-                    pass
-
-    # Check vertical 3
-    def vertical_3_check(self):
-        for col in range(7):
-            for row in range(5):
-                if self.check_match3(self.report_color(row, col),
-                                     self.report_color(row+1, col),
-                                     self.report_color(row+2, col)):
-                    return row, col
-                else:
-                    pass
-
-    # Check diagonal 3
-    def diagonal_3_check(self):
-        for row in range(7):
-            for col in range(7):
-                if self.check_match3(self.report_color(row, col),
-                                     self.report_color(row+1, col+1),
-                                     self.report_color(row+2, col+2)):
-                    return row, col
-                if self.check_match3(self.report_color(row, col),
-                                     self.report_color(row-1, col+1),
-                                     self.report_color(row-2, col+2)):
-                    return row, col
+                    return (row, col), (row-1, col+1), (row-2, col+2), (row-3, col+3)
                 else:
                     pass
 
@@ -291,12 +228,10 @@ if __name__ == '__main__':
     while True:
         print(f"{board.current_player.name} ({board.current_player.color})'s "
               f"turn.")
-        print("here1")
         # Initialize row and column choices to None
         row_choice, column_choice = None, None
         # Get column choice from player
         while column_choice is None:
-            #TODO CHECKS NOT WORKING FOR COLUMN 0
             if board.current_player == p1:
                 try:
                     column_choice = int(

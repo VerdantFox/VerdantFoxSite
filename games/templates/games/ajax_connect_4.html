@@ -1,64 +1,72 @@
 <div id="connect-4-inner-container">
 {% load connect_4_tags %}
   <form id="connect4-form" method="post">
-  <h3>It's {{ board.current_player.color }}'s turn!</h3>
-{#  <input hidden name="turn" value="{{ board.current_player.color }}">#}
+{#  <h4>It is {{ board.current_player.color }}'s turn!</h4>#}
   {% if error %}
-    <h6 class="errorlist">{{ error }}</h6>
-    <h6 class="move"><br></h6>
+    <h5 class="errorlist text-center">{{ error }}</h5>
+    <h5 class="move text-center"><br></h5>
   {% else %}
     {% if p1_move_msg %}
-      <h6 class="move">{{ p1_move_msg }}</h6>
+      <h5 class="move text-center">{{ p1_move_msg }}</h5>
     {% else %}
-      <h6 class="move"><br></h6>
+      <h5 class="move text-center"><br></h5>
     {% endif %}
     {% if p2_move_msg %}
-      <h6 class="move">{{ p2_move_msg }}</h6>
+      <h5 class="move text-center">{{ p2_move_msg }}</h5>
     {% else %}
-      <h6 class="move"><br></h6>
+      <h5 class="move text-center"><br></h5>
     {% endif %}
   {% endif %}
 
   {% if message %}
-    <h6 class="win">{{ message }}</h6>
+    <h2 class="win text-center">{{ message }}</h2>
   {% else %}
-    <h6 class="win"><br></h6>
+    <h2 class="win text-center"><br></h2>
   {% endif %}
 
   {% csrf_token %}
     <table class="connect-4-table">
+    <thead>
       <tr>
         {# Create for loop with range 7 #}
         {% for col in "0123456" %}
-        <td class="text-center">
-          <button type="submit"
-                  class="btn btn-outline-info btn-block btn-sm"
-                  {% if deactivate %}disabled{% endif %}
-                  form="connect4-form"
-                  name="{{ forloop.counter0 }}"
-                  ic-post-to="{% url 'games:ajax_connect_4' %}"
-                  ic-trigger-on="click"
-                  ic-target="#connect-4-inner-container">
-            <h2>{{ forloop.counter }}</h2><i class="fas fa-chevron-down fa-2x"></i>
-          </button>
-          {% endfor %}
-        </td>
+          <td class="text-center">
+            <button type="submit"
+                    class="btn btn-outline-info btn-block btn-sm"
+                    {% if deactivate %}disabled{% endif %}
+                    form="connect4-form"
+                    name="{{ forloop.counter0 }}"
+                    ic-post-to="{% url 'games:ajax_connect_4' %}"
+                    ic-trigger-on="click"
+                    ic-target="#connect-4-inner-container">
+              <h2>{{ forloop.counter }}</h2><i class="fas fa-chevron-down fa-2x"></i>
+            </button>
+          </td>
+        {% endfor %}
       </tr>
-      {% for row in board.grid %}
-        {% with forloop.counter0 as row_number %}
-          <tr>
-            {% for column in row %}
-              {% with forloop.counter0 as column_number %}
+    </thead>
+    <tbody class="c4-table-body">
+    {% for row in board.grid %}
+      {% with forloop.counter0 as row_number %}
+        <tr>
+          {% for column in row %}
+            {% with forloop.counter0 as column_number %}
+              {% if row_number == p1_row and column_number == p1_col or row_number == p2_row and column_number == p2_col %}
                 <td class="circles chosen color-{{ board.grid|index:row_number|index:column_number }}">
-                  <input type="hidden"
-                         name="circle-{{ row_number }},{{ column_number }}"
-                         value="{{ board.grid|index:row_number|index:column_number }}">
-                </td>
-              {% endwith %}
-            {% endfor %}
-          </tr>
-        {% endwith %}
-      {% endfor %}
+              {% else %}
+                <td class="circles color-{{ board.grid|index:row_number|index:column_number }}">
+              {% endif %}
+                <input type="hidden"
+                       name="circle-{{ row_number }},{{ column_number }}"
+                       value="{{ board.grid|index:row_number|index:column_number }}">
+              </td>
+            {% endwith %}
+          {% endfor %}
+        </tr>
+      {% endwith %}
+    {% endfor %}
+    </tbody>
+    <tfoot>
       <tr>
         <td colspan="7">
           <div class="text-center">
@@ -69,11 +77,12 @@
                     ic-post-to="{% url 'games:ajax_connect_4' %}"
                     ic-trigger-on="click"
                     ic-target="#connect-4-inner-container">
-              <strong>Restart</strong>
+              <strong>Reset board</strong>
             </button>
           </div>
         </td>
       </tr>
+    </tfoot>
     </table>
   </form>
 </div>

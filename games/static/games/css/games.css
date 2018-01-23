@@ -16,12 +16,15 @@ h1 {
     text-align: center;
 }
 
-table{
+
+.connect-4-table {
     margin: auto;
     border-collapse: separate;
-
 }
 
+tbody{
+    border: 4px solid black;
+}
 
 .circles{
     -moz-border-radius:100%;
@@ -34,18 +37,6 @@ table{
 
 }
 
-.blue{
-    background-color: blue;
-}
-
-.red{
-    background-color: red;
-}
-
-.color-green{
-    background-color: green;
-}
-
 .color-blue{
     background-color: blue;
 }
@@ -54,11 +45,70 @@ table{
     background-color: red;
 }
 
-.color-yellow{
-    background-color: yellow;
+.chosen {
+    border: 10px dashed yellow;
+    /*outline: 10px dashed yellow;*/
 }
 
 .win{
     color:forestgreen;
-    font-size: 1.2em;
+}
+
+
+/*https://codepen.io/metagrapher/pen/tgcLl*/
+/*and*/
+/*https://css-tricks.com/almanac/properties/a/animation/*/
+
+/* Blue winning color animation */
+.color-blue-green {
+    animation: colorchange-blue 3s infinite; /* animation-name followed by duration in seconds*/
+     /* you could also use milliseconds (ms) or something like 2.5s */
+    -webkit-animation: colorchange-blue 3s infinite; /* Chrome and Safari */
+}
+
+@keyframes colorchange-blue
+{
+    0%   {background-color: blue;}
+    10%  {background-color: blue;}
+    40%  {background-color: green;}
+    60%  {background-color: green;}
+    90%  {background-color: blue;}
+    100% {background-color: blue;}
+}
+
+@-webkit-keyframes colorchange-blue /* Safari and Chrome - necessary duplicate */
+{
+    0%   {background-color: blue;}
+    10%  {background-color: blue;}
+    40%  {background-color: green;}
+    60%  {background-color: green;}
+    90%  {background-color: blue;}
+    100% {background-color: blue;}
+}
+
+/* Red winning color animation */
+.color-red-green {
+    animation: colorchange-red 3s infinite; /* animation-name followed by duration in seconds*/
+     /* you could also use milliseconds (ms) or something like 2.5s */
+    -webkit-animation: colorchange-red 3s infinite; /* Chrome and Safari */
+}
+
+@keyframes colorchange-red
+{
+    0%   {background-color: red;}
+    10%  {background-color: red;}
+    40%  {background-color: green;}
+    60%  {background-color: green;}
+    90%  {background-color: red;}
+    100% {background-color: red;}
+}
+
+@-webkit-keyframes colorchange-red /* Safari and Chrome - necessary duplicate */
+{
+    0%   {background-color: red;}
+    10%  {background-color: red;}
+    40%  {background-color: green;}
+    60%  {background-color: green;}
+    90%  {background-color: red;}
+    100% {background-color: red;}
 }
