@@ -176,7 +176,7 @@ class Grid:
 
     # Check horizontal win
     def horizontal_win_check(self):
-        for row in range(7):
+        for row in range(6):
             for col in range(4):
                 if self.check_match4(
                         self.report_color(row, col),
@@ -202,14 +202,15 @@ class Grid:
 
     # Check diagonal win
     def diagonal_win_check(self):
-        for row in range(7):
+        for row in range(3):
             for col in range(4):
                 if self.check_match4(self.report_color(row, col),
                                      self.report_color(row+1, col+1),
                                      self.report_color(row+2, col+2),
                                      self.report_color(row+3, col+3)):
                     return (row, col), (row+1, col+1), (row+2, col+2), (row+3, col+3)
-
+        for row in range(3, 6):
+            for col in range(4):
                 if self.check_match4(self.report_color(row, col),
                                      self.report_color(row-1, col+1),
                                      self.report_color(row-2, col+2),
