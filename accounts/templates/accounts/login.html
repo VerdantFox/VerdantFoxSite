@@ -19,6 +19,7 @@
   <br>
 {% endblock %}
 {% block body_block %}
+
   <div class="container">
     <h1>Login</h1>
     <div class="form-group">
@@ -29,5 +30,13 @@
       </form>
     </div>
     <p><a href="#">Forgot password?</a></p>
+
+    <div class="social-logins">
+      <p><strong>-- OR --</strong></p>
+      <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
+      <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a><br>
+      <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a><br>
+    </div>
   </div>
+
 {% endblock %}

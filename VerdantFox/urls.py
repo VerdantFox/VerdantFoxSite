@@ -27,7 +27,9 @@ urlpatterns = [
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('Finance/', include("Finance.urls", namespace="Finance")),
     path('Simple/', include("Simple.urls", namespace="Simple")),
-    path('games/', include("games.urls", namespace="games"))
+    path('games/', include("games.urls", namespace="games")),
+    path('oauth/', include("social_django.urls", namespace="social")),
+
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

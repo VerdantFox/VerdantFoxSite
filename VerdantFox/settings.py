@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.humanize',
+    'social_django',
     'debug_toolbar',
     'embed_video',
     'widget_tweaks',
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'VerdantFox.middleware.TimezoneMiddleware',
+    'social_django.middleware.SocialAuthExceptionMiddleware',
 ]
 
 ROOT_URLCONF = 'VerdantFox.urls'
@@ -74,6 +76,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -126,6 +130,7 @@ USE_L10N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
@@ -143,5 +148,25 @@ MEDIA_URL = '/media/'
 ENABLE_USER_ACTIVATION = False
 
 LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = 'home'
 
 INTERNAL_IPS = ['127.0.0.1']
+
+
+# Social API logins
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.github.GithubOAuth2',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.facebook.FacebookOAuth2',
+
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+# Logins and keys (Python-decouple in production)
+# https://simpleisbetterthancomplex.com/2015/11/26/package-of-the-week-python-decouple.html
+SOCIAL_AUTH_GITHUB_KEY = 'bede084642d6ce59650e'
+SOCIAL_AUTH_GITHUB_SECRET = '6c5a3da8716f59c0cb0d94b23ae53a2f7cff2a6e'
+SOCIAL_AUTH_TWITTER_KEY = 's0EBEd5DsEqdDad6qDWrnRMad'
+SOCIAL_AUTH_TWITTER_SECRET = 'x1mYD7HGgJhLhoXisWJSi0wQ1qvzKVAxPFElQHDN71CwVqvsBD'
+SOCIAL_AUTH_FACEBOOK_KEY = '714229838782158'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = '550b64d2f73bbb20d504bcd0ed1aa5fa'  # App Secret
