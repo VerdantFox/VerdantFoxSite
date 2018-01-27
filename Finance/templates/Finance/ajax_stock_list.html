@@ -52,7 +52,7 @@
           {% if stocks_pages %}
           <td colspan="2">
             <button id="buy-sell-button" type="submit"
-                    class="btn btn-primary btn-block" form="portfolio-form"
+                    class="btn btn-info btn-block" form="portfolio-form"
                     name="transaction" value="transaction"
                     ic-post-to="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.number }}"
                     ic-trigger-on="click"
@@ -88,56 +88,62 @@
       of {{ stocks_pages.paginator.count }} total stocks owned</h6>
   </div>
 
-  <nav aria-label="Page navigation">
+  <div>
 
-    <ul class="pagination justify-content-center cursor-pointer">
+    <nav aria-label="Page navigation">
 
-      {% if stocks_pages.has_previous %}
-        <li class="page-item">
-          <a class="page-link"
-             ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.previous_page_number }}"
-             ic-target="#stock-list-container"
-          >previous</a>
-        </li>
-      {% else %}
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1">Previous</a>
-        </li>
-      {% endif %}
+      <ul class="pagination justify-content-center cursor-pointer">
 
-      {% for page in stocks_pages.paginator.page_range %}
-        {% if stocks_pages.number == forloop.counter %}
-          <li class="page-item active">
-            <a class="page-link"
-               ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ forloop.counter }}"
-               ic-target="#stock-list-container"
-            >{{ forloop.counter }}</a>
-          </li>
-        {% else %}
+        {% if stocks_pages.has_previous %}
           <li class="page-item">
             <a class="page-link"
-               ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ forloop.counter }}"
-               ic-target="#stock-list-container"
-            >{{ forloop.counter }}</a>
+               ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.previous_page_number }}"
+               ic-target="#stock-list-container">
+              previous
+            </a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
           </li>
         {% endif %}
-      {% endfor %}
 
-      {% if stocks_pages.has_next %}
-        <li class="page-item">
-          <a class="page-link"
-             ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.next_page_number }}"
-             ic-target="#stock-list-container"
-          >Next</a>
-        </li>
-      {% else %}
-        <li class="page-item disabled">
-          <a class="page-link" href="#" tabindex="-1">Next</a>
-        </li>
-      {% endif %}
+        {% for page in stocks_pages.paginator.page_range %}
+          {% if stocks_pages.number == forloop.counter %}
+            <li class="page-item active">
+              <a class="page-link"
+                 ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ forloop.counter }}"
+                 ic-target="#stock-list-container"
+              >{{ forloop.counter }}</a>
+            </li>
+          {% else %}
+            <li class="page-item">
+              <a class="page-link"
+                 ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ forloop.counter }}"
+                 ic-target="#stock-list-container"
+              >{{ forloop.counter }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
 
-    </ul>
-  </nav>
+        {% if stocks_pages.has_next %}
+          <li class="page-item">
+            <a class="page-link"
+               ic-get-from="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.next_page_number }}"
+               ic-target="#stock-list-container"
+            >Next</a>
+          </li>
+        {% else %}
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Next</a>
+          </li>
+        {% endif %}
+
+      </ul>
+    </nav>
+
+  </div>
+
 
 </div>
 

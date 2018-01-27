@@ -7,17 +7,17 @@
 
 {% block navbar_2 %}
   <ul class="nav nav-tabs">
-  <li class="nav-item">
+  <li class="nav-item not-active">
     <a class="nav-link" href="{% url 'accounts:view_profile' %}">
       View Profile</a>
   </li>
   <li class="nav-item">
     <a class="nav-link active" href="">Edit Profile</a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item not-active">
     <a class="nav-link" href="{% url 'accounts:settings' %}">Account Settings</a>
   </li>
-  <li class="nav-item">
+  <li class="nav-item not-active">
     <a class="nav-link" href="{% url 'accounts:password' %}">Change Password</a>
   </li>
   </ul>

@@ -21,72 +21,86 @@
 
   <body>
     <header>
-      <div class="top-row">
 
-        <nav class="navbar navbar-expand-md navbar-light">
-          <div class="container">
-            <a class="navbar-brand navbar-brand-size" href="{% url 'home' %}">
-              <img src="{% static 'VerdantFox/images/VerdantFoxIcon.jpg' %}" width="40"
-                   height="40" class="d-inline-block align-top rounded"
-                   alt="No image found"> Verdant Fox</a>
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item">
-              {% if user.is_authenticated %}
-                <div class="user-info">
-                  <div class="nav dropdown">
-                    <a class="dropdown-toggle dropdown-custom nav-link welcome-bar" href="#"
-                       role="button" id="dropdownMenuLink" data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false">
-                      Welcome, {{ request.user.username }}
-                      {% if request.user.userprofile.profile_picture %}
-                        <img src="{{ request.user.userprofile.profile_picture.url }}"
-                             height="30"
-                             alt="Image not found" class="rounded"
-                             id="thumbnail-profile-img">
-                      {% else %}
-                      <i class="fas fa-user"></i>
-                      {% endif %}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="{% url 'accounts:view_profile' %}">
-                        <i class="fas fa-user"></i> View Profile
-                      </a>
-                      <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">
-                        <i class="fas fa-edit"></i> Update Profile
-                      </a>
-                      <a class="dropdown-item" href="{% url 'accounts:settings' %}">
-                        <i class="fas fa-cog"></i> Account Settings
-                      </a>
-                      <a class="dropdown-item" href="{% url 'accounts:logout' %}">
-                        <i class="fas fa-sign-out-alt"></i> Logout
-                      </a>
+      <div class="top-row bgc-1">
+
+        {# Fox walking image #}
+        <div class="position-absolute fox-top-row">
+          <img src="{% static 'VerdantFox/images/green_fox_night_cropped.png' %}"
+               height="150" class=""
+               alt="No image found">
+        </div>
+
+        <div class="position-relative header-div">
+
+          <nav class="navbar navbar-light">
+            <div class="container">
+              <a class="navbar-brand navbar-brand-size" href="{% url 'home' %}">
+                <img src="{% static 'VerdantFox/images/VerdantFoxIcon.jpg' %}" width="40"
+                     height="40" class="d-inline-block align-top rounded"
+                     alt="No image found"> Verdant Fox</a>
+              <div class="">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                  {% if user.is_authenticated %}
+                    <div class="user-info">
+                      <div class="nav dropdown">
+                        <a class="dropdown-toggle dropdown-custom nav-link welcome-bar" href="#"
+                           role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                          Welcome, {{ request.user.username }}
+                          {% if request.user.userprofile.profile_picture %}
+                            <img src="{{ request.user.userprofile.profile_picture.url }}"
+                                 height="30"
+                                 alt="Image not found" class="rounded"
+                                 id="thumbnail-profile-img">
+                          {% else %}
+                          <i class="fas fa-user"></i>
+                          {% endif %}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item" href="{% url 'accounts:view_profile' %}">
+                            <i class="fas fa-user"></i> View Profile
+                          </a>
+                          <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">
+                            <i class="fas fa-edit"></i> Update Profile
+                          </a>
+                          <a class="dropdown-item" href="{% url 'accounts:settings' %}">
+                            <i class="fas fa-cog"></i> Account Settings
+                          </a>
+                          <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                          </a>
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              {% else %}
-                <div class="user-info">
-                  <a class="nav-link mr-auto" href="{% url 'accounts:login' %}">
-                      <i class="fas fa-sign-in-alt"></i><span class="pad"></span>Login</a>
-                </div>
-              {% endif %}
-              </li>
-            </ul>
-          </div>
-        </nav>
+                  {% else %}
+                    <div class="user-info">
+                      <a class="nav-link mr-auto" href="{% url 'accounts:login' %}">
+                          <i class="fas fa-sign-in-alt"></i><span class="pad"></span>Login</a>
+                    </div>
+                  {% endif %}
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
 
-        <br><br>
+          <br><br>
 
-        <nav class="" aria-label="breadcrumb" role="navigation">
-          <div class="container">
-            <ol class="breadcrumb transparent">
-              {% block breadcrumb %}{% endblock %}
-            </ol>
-          </div>
-        </nav>
+          <nav class="" aria-label="breadcrumb" role="navigation">
+            <div class="container">
+              <ol class="breadcrumb transparent">
+                {% block breadcrumb %}{% endblock %}
+              </ol>
+            </div>
+          </nav>
+        </div>
       </div>
 
-      <div class="bottom-row">
-        <nav class="navbar navbar-expand-md navbar-light bg-light">
+
+      <div class="bottom-row position-static">
+        <nav class="navbar navbar-expand-md navbar-light bgc-2">
 
           <div class="container">
 
@@ -99,15 +113,16 @@
               {% endblock inner_navbar %}
 
             </div>
-
-
           </div>
 
         </nav>
       </div>
     </header>
+
+
+
     <br>
-    <div class="container">
+    <div class="container position-static">
       {% block navbar_2 %}
       {% endblock %}
     </div>

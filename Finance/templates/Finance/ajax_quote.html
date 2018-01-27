@@ -52,7 +52,7 @@
           <label>{{ buy_form.buy_shares.label }}</label>
           <p>{{ buy_form.buy_shares|attr:"required:true"|attr:"placeholder:Number of shares" }}</p>
           <input type="hidden" name="buy"/>
-          <button id="buy-submit" type="submit" class="btn btn-primary"
+          <button id="buy-submit" type="submit" class="btn btn-info"
                   form="buy-form" name="buy" value="Buy"
                   ic-post-to="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.number }}"
                   ic-trigger-on="click"

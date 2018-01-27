@@ -25,7 +25,7 @@
       {% csrf_token %}
       {{ quote_form.as_p }}
       <input type="hidden" name="quote"/>
-      <button id="quote-submit" type="submit" class="btn btn-primary"
+      <button id="quote-submit" type="submit" class="btn btn-info"
               form="quote-form" name="get quote" value="Get Quote"
               ic-post-to="{% url 'Finance:ajax_quote' %}"
               ic-trigger-on="click"

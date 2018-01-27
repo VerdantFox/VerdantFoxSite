@@ -57,8 +57,7 @@ def bokeh_graph(symbol, time_frame):
             volumes=volumes
         ))
 
-
-        # # output to static HTML file
+        # output to static HTML file
         # output_file("stock_test.html")
 
         TOOLS = "pan, wheel_zoom, save, reset"
@@ -101,19 +100,17 @@ def bokeh_graph(symbol, time_frame):
                    )
 
         # Border commands
-        p.border_fill_color = '#bfff00'
-
-
+        p.border_fill_color = '#EBE8BE'
 
         # Outline commands
-        p.outline_line_color = 'black'
+        p.outline_line_color = '#083836'
         p.outline_line_width = 1
 
         # Set background color
-        p.background_fill_color = '#4a7d66'
+        p.background_fill_color = '#B3C87A'
 
         # Set title controls
-        p.title.text_color = '#cb9a01'
+        p.title.text_color = '#202E24'
 
         # Axis line controls
         p.axis.axis_line_width = 3
@@ -122,13 +119,13 @@ def bokeh_graph(symbol, time_frame):
         p.axis.major_tick_out = 10
         p.axis.minor_tick_in = -2
         p.axis.minor_tick_out = 6
-        p.axis.axis_label_text_color = "#000099"
+        p.axis.axis_label_text_color = "#202E24"
         p.axis.axis_label_standoff = 10
         p.axis.axis_label_text_font_style = 'bold'
 
         # Grid controls
         p.grid.grid_line_alpha = 0.3
-        p.grid.grid_line_color = '#cb9a01'
+        p.grid.grid_line_color = '#202E24'
 
         # Create flexible date formatter
         time_delta = (dates[0] - dates[len(dates)-1]).days
@@ -148,7 +145,7 @@ def bokeh_graph(symbol, time_frame):
                x='dates', y='prices',
                legend=False,
                line_width=2,
-               line_color='#cb9a01',
+               line_color='#202E24',
                line_cap='round',
                source=source)
 
