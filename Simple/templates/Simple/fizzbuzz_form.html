@@ -9,16 +9,16 @@
 {% endblock %}
 {% block active2 %}active{% endblock %}
 {% block body_block %}
-  <h1>Welcome to FizzBuzz!</h1>
-    <p>
+  <h1 class="text-center">Welcome to FizzBuzz!</h1>
+    <p class="text-justify">
       This mini-app is a slight expansion on the classic kids game,
       <a class="link-target" href="https://en.wikipedia.org/wiki/Fizz_buzz"
          target="_blank">Fizz Buzz</a>, where you can input some name values
       (ie. Fizz, Buzz, Foo, etc.) to replace numbers at certain multiples.
     </p>
-  <h3>Give FizzBuzz a try!</h3>
+  <h3 class="text-center">Give FizzBuzz a try!</h3><br>
 
-  <form method="POST" action="{% url 'Simple:fizzbuzz' %}">
+  <form method="POST" id="fizzbuzz-form" action="{% url 'Simple:fizzbuzz' %}">
     {% for error in fizzbuzz_form.non_field_errors %}
       <h6 class="form-error">{{ error }}</h6>
     {% endfor %}
@@ -72,15 +72,18 @@
           {{ fizzbuzz_form.var_3_multiple }}
         </div>
       </div>
-      <input class="btn btn-lg btn-primary green" type="submit" name="count" value="Count!" />
+      <div class="text-center">
+        <input class="btn btn-lg btn-primary green" type="submit" name="count" value="Count!" />
+      </div>
   </form>
+  <br>
 
   {% if fizzbuzz_list %}
-    <ul class="fizzbuzz-list">
-      {% for sub_list in fizzbuzz_list %}
-        <li>{% for item in sub_list %}{{ item }} {% endfor %}</li>
-      {% endfor %}
-    </ul>
+    <div class="text-center">
+        {% for sub_list in fizzbuzz_list %}
+          <h6>{% for item in sub_list %}{{ item }} {% endfor %}</h6>
+        {% endfor %}
+    </div>
   {% endif %}
 
 {% endblock %}

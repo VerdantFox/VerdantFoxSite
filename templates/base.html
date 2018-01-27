@@ -15,39 +15,51 @@
     <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
     {# Custom CSS #}
     <link rel="stylesheet" type="text/css" href="{% static 'VerdantFox/css/master.css' %}">
-
     {% block css %}{% endblock %}
+
   </head>
+
   <body>
     <header>
-
-
       <div class="top-row">
 
         <nav class="navbar navbar-expand-md navbar-light">
           <div class="container">
-            <a class="navbar-brand" href="{% url 'home' %}">
-              <img src="{% static 'VerdantFox/images/VerdantFoxIcon.jpg' %}" width="30"
-                   height="30" class="d-inline-block align-top rounded"
+            <a class="navbar-brand navbar-brand-size" href="{% url 'home' %}">
+              <img src="{% static 'VerdantFox/images/VerdantFoxIcon.jpg' %}" width="40"
+                   height="40" class="d-inline-block align-top rounded"
                    alt="No image found"> Verdant Fox</a>
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
               {% if user.is_authenticated %}
                 <div class="user-info">
                   <div class="nav dropdown">
-                    <a class="dropdown-toggle dropdown-custom nav-link" href="#"
+                    <a class="dropdown-toggle dropdown-custom nav-link welcome-bar" href="#"
                        role="button" id="dropdownMenuLink" data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false">
                       Welcome, {{ request.user.username }}
+                      {% if request.user.userprofile.profile_picture %}
+                        <img src="{{ request.user.userprofile.profile_picture.url }}"
+                             height="30"
+                             alt="Image not found" class="rounded"
+                             id="thumbnail-profile-img">
+                      {% else %}
                       <i class="fas fa-user"></i>
+                      {% endif %}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <a class="dropdown-item" href="{% url 'accounts:view_profile' %}"><i class="fas fa-user"></i>
-                        View Profile</a>
-                      <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}"><i class="fas fa-edit"></i>
-                        Update Profile</a>
+                      <a class="dropdown-item" href="{% url 'accounts:view_profile' %}">
+                        <i class="fas fa-user"></i> View Profile
+                      </a>
+                      <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">
+                        <i class="fas fa-edit"></i> Update Profile
+                      </a>
+                      <a class="dropdown-item" href="{% url 'accounts:settings' %}">
+                        <i class="fas fa-cog"></i> Account Settings
+                      </a>
                       <a class="dropdown-item" href="{% url 'accounts:logout' %}">
-                        <i class="fas fa-sign-out-alt"></i> Logout</a>
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                      </a>
                     </div>
                   </div>
                 </div>
@@ -71,7 +83,6 @@
             </ol>
           </div>
         </nav>
-      </div>
       </div>
 
       <div class="bottom-row">

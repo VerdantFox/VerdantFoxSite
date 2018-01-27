@@ -1,4 +1,5 @@
 {% extends 'accounts/accounts_base.html' %}
+{% load bootstrap4 %}
 {% block title_block %}Sign up | Verdant Fox{% endblock %}
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -6,26 +7,36 @@
 {% endblock %}
 {% block navbar_2 %}
   <ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link  active" href="">Sign up</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="#">Reset Password</a>
-  </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'accounts:login' %}">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link  active" href="">Sign up</a>
+    </li>
   </ul>
   <br>
 {% endblock %}
 {% block body_block %}
   <div class="container">
-    <h1>Sign Up</h1>
+    <h1 class="text-center">Sign Up</h1><br>
+    <h3 class="text-center">Sign up through a social platform</h3>
+    <div class="social-logins text-center">
+      <a title="Facebook signup" href="{% url 'social:begin' 'facebook' %}"><i class="fab fa-facebook fa-5x"></i></a>
+      <a title="Twitter signup" href="{% url 'social:begin' 'twitter' %}"><i class="fab fa-twitter-square fa-5x"></i></a>
+      <a title="GitHub signup" href="{% url 'social:begin' 'github' %}"><i class="fab fa-github-square fa-5x"></i></a>
+      <br>
+    </div>
+    <br><h5 class="text-center">-- OR --</h5><br>
+    <h3 class="text-center">Create a new account</h3>
     <div class="form-group">
       <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" class="btn btn-primary" value="Sign Up">
+        {% bootstrap_form form %}
+        {% buttons %}
+          <div class="text-center">
+            <input type="submit" class="btn btn-primary btn-lg" value="Sign Up">
+          </div>
+        {% endbuttons %}
       </form>
     </div>
   </div>

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.humanize',
     'social_django',
     'debug_toolbar',
+    'bootstrap4',
     'embed_video',
     'widget_tweaks',
     'Finance',
@@ -170,3 +171,10 @@ SOCIAL_AUTH_TWITTER_KEY = 's0EBEd5DsEqdDad6qDWrnRMad'
 SOCIAL_AUTH_TWITTER_SECRET = 'x1mYD7HGgJhLhoXisWJSi0wQ1qvzKVAxPFElQHDN71CwVqvsBD'
 SOCIAL_AUTH_FACEBOOK_KEY = '714229838782158'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '550b64d2f73bbb20d504bcd0ed1aa5fa'  # App Secret
+
+
+# SOCIAL_AUTH_LOGIN_ERROR_URL = '/'
+# SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/accounts/settings/'
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/accounts/settings/'
+SOCIAL_AUTH_RAISE_EXCEPTIONS = False

@@ -9,8 +9,8 @@
 {% endblock %}
 {% block active1 %}active{% endblock %}
 {% block body_block %}
-  <h1>Welcome to the Vigenère Cipher!</h1>
-    <p>
+  <h1 class="text-center">Welcome to the Vigenère Cipher!</h1>
+    <p class="text-justify">
       This mini-app uses the
       <a class="link-target" href="https://en.wikipedia.org/wiki/Vigenère_cipher"
          target="_blank">Vigenère cipher</a>, a simple, fun cipher invented in
@@ -34,7 +34,7 @@
     <p class="vigenere-text">{{ decrypted_text }}</p><br>
     <h5>Try encrypting or decrypting a new message!</h5><br>
   {% else %}
-    <br><h5>Let's play with ciphers!</h5><br>
+    <h5 class="text-center">Let's play with ciphers!</h5><br>
   {% endif %}
 
   {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}

@@ -1,4 +1,5 @@
 {% extends 'accounts/accounts_base.html' %}
+{% load bootstrap4 %}
 {% block title_block %}Login | Verdant Fox{% endblock %}
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
@@ -6,37 +7,44 @@
 {% endblock %}
 {% block navbar_2 %}
   <ul class="nav nav-tabs">
-  <li class="nav-item">
-    <a class="nav-link active" href="">Login</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="{% url 'accounts:signup' %}">Sign up</a>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link" href="">Reset Password</a>
-  </li>
+    <li class="nav-item">
+      <a class="nav-link active" href="">Login</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'accounts:signup' %}">Sign up</a>
+    </li>
   </ul>
   <br>
 {% endblock %}
 {% block body_block %}
 
   <div class="container">
-    <h1>Login</h1>
+
+    <h1 class="text-center">Login</h1><br>
+    <h3 class="text-center">Login through a social platform</h3>
+    <div class="social-logins text-center">
+      <a title="Facebook login" href="{% url 'social:begin' 'facebook' %}?next={% url 'home' %}"><i class="fab fa-facebook fa-5x"></i></a>
+      <a title="Twitter login" href="{% url 'social:begin' 'twitter' %}?next={% url 'home' %}"><i class="fab fa-twitter-square fa-5x"></i></a>
+      <a title="GitHub login" href="{% url 'social:begin' 'github' %}?next={% url 'home' %}"><i class="fab fa-github-square fa-5x"></i></a>
+      <br>
+{#      ?next={% url 'home' %}#}
+
+    </div>
+    <br><h5 class="text-center"><strong>-- OR --</strong></h5><br>
     <div class="form-group">
+      <h3 class="text-center">Use Traditional Login</h3>
       <form method="post">
         {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" class="btn btn-primary" value="Log in">
+        {% bootstrap_form form %}
+        {% buttons %}
+          <div class="text-center">
+            <input type="submit" class="btn btn-primary btn-lg" value="Log in">
+          </div>
+        {% endbuttons %}
       </form>
     </div>
-    <p><a href="#">Forgot password?</a></p>
+    <p class="text-center"><a href="#">Forgot password?</a></p>
 
-    <div class="social-logins">
-      <p><strong>-- OR --</strong></p>
-      <a href="{% url 'social:begin' 'github' %}">Login with GitHub</a><br>
-      <a href="{% url 'social:begin' 'twitter' %}">Login with Twitter</a><br>
-      <a href="{% url 'social:begin' 'facebook' %}">Login with Facebook</a><br>
-    </div>
   </div>
 
 {% endblock %}

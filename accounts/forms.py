@@ -81,8 +81,15 @@ class LoginForm(AuthenticationForm):
 class EditUserForm(forms.ModelForm):
     class Meta:
         model = UserModel
-        fields = ('email', 'first_name', 'last_name')
-        exclude = ('username',)
+        fields = ('username', 'email', 'first_name', 'last_name')
+        # exclude = ('username',)
+
+    username = forms.CharField(
+        label=_('Username'), max_length=50, required=True,
+        help_text=_('Required. 150 characters or fewer. Letters, '
+                    'digits and @/./+/-/_ only.'),
+        widget=forms.TextInput(attrs={'class': 'form-control',
+                                      'placeholder': 'Username'}))
 
     email = forms.EmailField(
         label=_('Email:'), max_length=100, required=False,
