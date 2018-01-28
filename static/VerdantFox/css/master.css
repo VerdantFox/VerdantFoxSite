@@ -85,6 +85,14 @@ body {
     cursor: pointer;
 }
 
+.extra-padding {
+    padding: 10px;
+}
+
+.container-small {
+    max-width: 80%;
+}
+
 .top-row {
     margin-bottom: 0;
     /* without transparent border there is a margin I can't get rid of*/
