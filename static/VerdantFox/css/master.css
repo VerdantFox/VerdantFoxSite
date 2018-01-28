@@ -92,13 +92,27 @@ body {
 
 }
 
+.left-border{
+    border-left: 0.25px solid #202E24;
+    padding-left: 20px;
+    margin-left: 0;
+}
+
+.right-border{
+    border-right: 0.25px solid #202E24;
+    padding-right: 20px;
+    margin-right: 0;
+}
+
+/* fox image */
 .fox-top-row {
     width: 180px;
     height: 150px;
-    z-index: 2;
+    /*z-index: 1;*/
     vertical-align: top;
     /*border: 2px solid black;*/
-    left: 50%;
+    top: 1%;
+    left: 55%;
     margin-left: -90px; /* Negative half of width. */
 }
 
@@ -107,12 +121,23 @@ text{
     color: #202E24;
 }
 
+
+/* For testing */
 .crazy {
     background-color: pink;
     color: orangered;
     border: black;
 }
 
+.card-body{
+    background-color: #feffef;
+    border: 1px solid #202E24;
+    border-radius: .3em;
+}
+
+
+
+/* Theme colors */
 .bgc-1 {
     background-color: #EBE8BE;
 }
@@ -128,21 +153,71 @@ text{
 .bgc-4 {
     background-color: #202E24;
 }
+
+.bgc-5 {
+    background-color: #DEFBC2;
+}
+
+.bgc-6 {
+    background-color: #90D26D;
+}
+
+.bgc-7 {
+    background-color: #459D72;
+}
+
+.bgc-8 {
+    background-color: #342B2B;
+}
+
+.c-1 {
+    color: #EBE8BE;
+}
+
+.c-2 {
+    color: #B3C87A;
+}
+
+.c-3 {
+    color: #347A2A;
+}
+
+.c-4 {
+    color: #202E24;
+}
+
+.c-5 {
+    color: #DEFBC2;
+}
+
+.c-6 {
+    color: #90D26D;
+}
+
+.c-7 {
+    color: #459D72;
+}
+
+.c-8 {
+    color: #342B2B;
+}
+
+
 .info-color {
     color: #fff;
     background-color: #17a2b8;
     border-color: #17a2b8;
 }
 
-
-a {
-    color: #202E24;
+a{
+    color: #459D72;
 }
+
+
 
 
 /* Pagination CSS */
 /* https://www.jquery-az.com/bootstrap-4-pagination-9-demos-custom-default-css/ */
-
 
 /* Pagination links not active */
 .page-link {
@@ -161,70 +236,64 @@ a {
 
 /* Active item color */
 .page-item.active .page-link {
-  z-index: 1;
+  color: #fff;
+  background-color: #202E24;
+  border-color: #202E24;
+}
+
+/* Change pagination active hover color */
+.page-item.active .page-link:hover {
   color: #fff;
   background-color: #202E24;
   border-color: #202E24;
 }
 
 /* Change pagination hover color */
-.page-link:focus, .page-link:hover {
+.page-link:hover {
   color: #fff;
   background-color: #B3C87A;
   border-color: #202E24;
 }
 
 
-/* Nav Tabs CSS */
-/*.nav-tabs {*/
-    /*!*border-bottom:none;*!*/
-    /*!*border: 5px solid black;*!*/
 
-/*}*/
+
+/* Nav Tabs CSS */
+.nav-tabs {
+    border-bottom: 1px solid #202E24;
+    /*border: 5px solid black;*/
+
+}
 
 .nav-tabs .nav-link.active {
     background-color:#EBE8BE;
-    /*border-bottom:black;*/
     font-weight: bold;
-    /*border: 1px solid #202E24;*/
-    /*border-width: 1px 1px 0 1px;*/
+    border-left: 1px solid #202E24;
+    border-top: 1px solid #202E24;
+    border-right: 1px solid #202E24;
+    border-bottom: 1px solid #EBE8BE;
 }
 
-/*.nav-tabs .nav-link.active a {*/
-    /*color: #202E24;*/
-/*}*/
+.nav-tabs .nav-link.active a {
+    color: #202E24;
+}
 
-/*.nav-tabs .not-active:hover {*/
-    /*background-color:#EBE8BE;*/
-    /*color: #202E24;*/
-    /*font-weight: bold;*/
-    /*border-top-right-radius: .2rem;*/
-    /*border-top-left-radius: .2rem;*/
-    /*border: 1px solid #202E24;*/
-    /*border-width: 1px 1px 0 1px;*/
-/*}*/
-/*.nav-tabs .not-active a:hover {*/
+.nav-tabs .not-active:hover {
+    background-color:#EBE8BE;
+    color: #202E24;
+    font-weight: bold;
+    border-top-right-radius: .2rem;
+    border-top-left-radius: .2rem;
+    border-left: 1px solid #202E24;
+    border-top: 1px solid #202E24;
+    border-right: 1px solid #202E24;
+    border-bottom: 1px solid #EBE8BE;
+}
+.nav-tabs .not-active a:hover {
+    color: #202E24;
+        border-bottom: 1px solid #EBE8BE;
+}
 
-    /*color: #202E24;*/
-/*}*/
-
-/*.nav-tabs .nav-link {*/
-    /*border-bottom: 1px solid #202E24;*/
-/*}*/
-
-/*.nav-tabs {*/
-    /*border-bottom: 0;*/
-/*}*/
-
-/*.tab-pane.active .tab-pane-header {*/
-    /*padding:2rem;*/
-    /*background-color:pink;*/
-    /*border-top-right-radius: .5rem;*/
-    /*border-top-left-radius: .5rem;*/
-    /*margin-bottom:1rem;*/
-/*}*/
-
-/*.tab-pane:first-child .tab-pane-header {*/
-    /*!*border-top-left-radius: 0;*!*/
-    /*border: 3px solid blue;*/
-/*}*/
+.nav-link {
+    color: #202E24;
+}

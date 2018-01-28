@@ -45,7 +45,7 @@
     <li>Email: {{ user.email }}</li>
     <li>
       About me:
-      <p class="bio">{{ profile.bio }}</p>
+      <p class="bio text-justify">{{ profile.bio }}</p>
     </li>
     <li>First name: {{ user.first_name }}</li>
     <li>Last name: {{ user.last_name }}</li>
@@ -54,7 +54,7 @@
     <li>Birth Date: {{ profile.birth_date }}</li>
   </ul>
   <a href="{% url 'accounts:edit_profile' %}">
-  <button class="btn btn-lg btn-primary">Update</button></a>
+  <button class="btn btn-lg btn-info">Update</button></a>
   <br><br>
 
 

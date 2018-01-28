@@ -1,0 +1,101 @@
+<h2 class="text-center">Projects</h2>
+<br><br>
+
+{# Finance Carousel #}
+<div class="row">
+    {# Makes this column show first in small screen #}
+    <div class="col-lg-7 order-lg-12">
+      <h4 class="text-center">Finance</h4>
+      <div class="text-justify">
+        <p>
+          In this app, once <a href="{% url 'accounts:login' %}">logged in</a>,
+          you will be given virtual cash with which to "fake buy" stocks. These
+          stocks, however, are representations of real stocks on the actual
+          stock-market, updated in real time.
+        </p>
+        <p>
+          This app can be thought of as a practice round for real world stock market
+          trading. You will be able to look up quotes for stocks, buy and sell
+          stocks, and view graphs of how stocks have performed over time to make
+          informed buying and selling decisions. Although you
+          will be given $10,000 initially, you can add virtual money to your
+          account using a credit card (please don't use your actual credit card,
+          fake cards are provided).
+        </p>
+        <p>
+          I hope you like this introduction to stock finance. <strong>Now, let's
+          trade some stocks!</strong>
+        </p>
+      </div>
+  </div>
+  {# Makes this column show second in small screen #}
+  <div class="col-lg-5 order-lg-1">
+    {% include '_finance_carousel.html' %}
+  </div>
+</div>
+
+<br>
+{# Games carousel #}
+<div class="row">
+
+  {# Makes this column show second in small screen #}
+  <div class="col-lg-5 order-2">
+    {% include '_games_carousel.html' %}
+  </div>
+
+  {# Makes this column show first in small screen #}
+  <div class="col-lg-7 order-1">
+    <h4 class="text-center">Games</h4>
+    <div class="text-justify">
+      <p>
+        Games are fun! They are fun to build and fun to play. They can be an
+        exciting conduit to learning new programming languages or new programming
+        techniques. Here are a few of the games I've built over the course learning
+        to program that have allowed me to learn interesting new concepts.
+      </p>
+      <p>
+        In this app I have 3 games for display. The first, Batty's Moth
+        Hunt is a game built with MIT's Scratch, a learning language. Play
+        as a bat, hunting down moths in the night while running from the
+        scary owl. Then we have Twisted Towers, a tower defense game built
+        with Pygame, a python library. Build towers to fend off the horde
+        of enemies trying to take your castle. Finally, there's Connect 4,
+        the classic board game (built with Python) where you try to connect
+        4 of your chips in a row, playing against my AI, Mr. Roboto.
+        Good luck!
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<br>
+{# Simple Carousel #}
+<div class="row">
+    {# Makes this column show first in small screen #}
+    <div class="col-lg-7 order-lg-12">
+      <h4 class="text-center">Simple</h4>
+      <div class="text-justify">
+        <p>
+          Here you will find a series of mini-apps I created that perform some
+          simple, fun tasks. These were little ideas I created for classes or
+          that I thought up and thought "That would be fun to create or
+          could be useful in some context". Then I spent a couple hours each
+          writing them up and testing them.
+        </p>
+        <p>
+          Additionally, these were the first "apps" I wrote for this Django
+          website, and since they were conceptually simple to create and
+          implement, they were useful for helping me figure out some of
+          the mechanics of the app which can be difficult to wrap one's
+          head around when learning for the first time, like how to make
+          requests, work with forms, and other seemingly trivial tasks
+          that take longer than you'd like when learning something new.
+        </p>
+      </div>
+  </div>
+  {# Makes this column show second in small screen #}
+  <div class="col-lg-5 order-lg-1">
+    {% include '_simple_carousel.html' %}
+  </div>
+</div>

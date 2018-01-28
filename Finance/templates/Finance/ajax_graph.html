@@ -13,7 +13,7 @@
         <form class="form" method="post">
           {% csrf_token %}
           <input hidden name="symbol:{{ symbol }},tf:1-month">
-          <a class="nav-link {% if time_frame == '1 month' %}active{% endif %}"
+          <a class="nav-link {% if time_frame == '1 month' %}active{% else %}not-active{% endif %}"
              ic-post-to="{% url 'Finance:ajax_graph' %}"
              ic-trigger-on="click"
              ic-target="#new-graph-container">1 month
@@ -25,7 +25,7 @@
         <form class="form" method="post">
           {% csrf_token %}
           <input hidden name="symbol:{{ symbol }},tf:3-month">
-          <a class="nav-link {% if time_frame == '3 month' %}active{% endif %}"
+          <a class="nav-link {% if time_frame == '3 month' %}active{% else %}not-active{% endif %}"
              ic-post-to="{% url 'Finance:ajax_graph' %}"
              ic-trigger-on="click"
              ic-target="#new-graph-container">3 months
@@ -36,7 +36,7 @@
         <form class="form" method="post">
           {% csrf_token %}
           <input hidden name="symbol:{{ symbol }},tf:1-year">
-          <a class="nav-link {% if time_frame == '1 year' %}active{% endif %}"
+          <a class="nav-link {% if time_frame == '1 year' %}active{% else %}not-active{% endif %}"
              ic-post-to="{% url 'Finance:ajax_graph' %}"
              ic-trigger-on="click"
              ic-target="#new-graph-container">1 year
@@ -47,7 +47,7 @@
         <form class="form" method="post">
           {% csrf_token %}
           <input hidden name="symbol:{{ symbol }},tf:5-year">
-          <a class="nav-link {% if time_frame == '5 year' %}active{% endif %}"
+          <a class="nav-link {% if time_frame == '5 year' %}active{% else %}not-active{% endif %}"
              ic-post-to="{% url 'Finance:ajax_graph' %}"
              ic-trigger-on="click"
              ic-target="#new-graph-container">5 years
@@ -59,7 +59,7 @@
         <form class="form" method="post">
           {% csrf_token %}
           <input hidden name="symbol:{{ symbol }},tf:20-year">
-          <a class="nav-link {% if time_frame == '20 year' %}active{% endif %}"
+          <a class="nav-link {% if time_frame == '20 year' %}active{% else %}not-active{% endif %}"
              ic-post-to="{% url 'Finance:ajax_graph' %}"
              ic-trigger-on="click"
              ic-target="#new-graph-container">Maximum
@@ -94,4 +94,3 @@
     console.log('loaded');
 });
 </script>
-

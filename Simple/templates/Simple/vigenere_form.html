@@ -43,8 +43,17 @@
     {% csrf_token %}
     <div class="form-group">
       {{ vigenere_form.as_p }}
-      <input class="encrypt-btn btn btn-default" type="submit" name="encrypt" value="Encrypt" />
-      <input class="decrypt-btn btn btn-default" type="submit" name="decrypt" value="Decrypt" />
+      <div class="row">
+        <div class="col-sm-6">
+          <input class="encrypt-btn btn btn-info btn-block" type="submit" name="encrypt" value="Encrypt" />
+          <br>
+        </div>
+        <div class="col-sm-6">
+          <input class="decrypt-btn btn btn-info btn-block" type="submit" name="decrypt" value="Decrypt" />
+          <br>
+        </div>
+      </div>
+
     </div>
   </form>
 
