@@ -93,24 +93,21 @@ body {
     max-width: 80%;
 }
 
+.container-xs {
+    max-width: 70%;
+}
+
+.about {
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
 .top-row {
     margin-bottom: 0;
     /* without transparent border there is a margin I can't get rid of*/
     border-bottom: 1px solid transparent;
-
 }
 
-.left-border{
-    border-left: 0.25px solid #202E24;
-    padding-left: 20px;
-    margin-left: 0;
-}
-
-.right-border{
-    border-right: 0.25px solid #202E24;
-    padding-right: 20px;
-    margin-right: 0;
-}
 
 /* fox image */
 .fox-top-row {
