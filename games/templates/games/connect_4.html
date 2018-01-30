@@ -43,11 +43,13 @@
       <strong>Good luck!</strong>
     </p>
 
+    <div class="text-center">
+      <div id="ajax-connect-4" ic-trigger-on="load"
+      ic-get-from="{% url 'games:ajax_connect_4' %}">
+          <h2>Loading connect 4</h2>
+          <i class="ic-indicator fa fa-spinner fa-spin fa-10x"></i>
+      </div>
+    </div>
 
-    <div id="ajax-connect-4" ic-trigger-on="load"
-    ic-get-from="{% url 'games:ajax_connect_4' %}">
-      <h2>Loading connect 4</h2>
-    <i class="ic-indicator fa fa-spinner fa-spin fa-10x"></i>
-  </div>
 
 {% endblock %}

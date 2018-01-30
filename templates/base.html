@@ -19,8 +19,12 @@
 
   </head>
 
-  <body>
-    <header>
+  <body {% if landing %}
+    data-spy="scroll" data-target="#main-navbar" data-offset="65"
+  {% endif %}>
+
+
+    <section class="header">
 
       <div class="top-row bgc-1">
 
@@ -32,58 +36,56 @@
                alt="No image found">
         </div>
 
-        <div class="header-div">
-
-          <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-              {# Image borrowed and edited from https://pngtree.com/free-animal-vectors/fox #}
-              <a class="navbar-brand navbar-brand-size" href="{% url 'home' %}">
-                <img src="{% static 'VerdantFox/images/green_fox_logo1.png' %}"
-                     height="35" class="d-inline-block align-top rounded"
-                     alt="No image found"> Verdant Fox
-              </a>
-              <ul class="navbar-nav">
-                {% if user.is_authenticated %}
-                <li class="nav-item dropdown">
-                  <a class="dropdown-toggle nav-link welcome-bar" href="#"
-                     id="dropdownMenuLink" data-toggle="dropdown"
-                     aria-haspopup="true" aria-expanded="false">
-                    Welcome, {{ request.user.username }}
-                    {% if request.user.userprofile.profile_picture %}
-                      <img src="{{ request.user.userprofile.profile_picture.url }}"
-                           height="30"
-                           alt="Image not found" class="rounded"
-                           id="thumbnail-profile-img">
-                    {% else %}
-                    <i class="fas fa-user"></i>
-                    {% endif %}
+        <nav class="navbar navbar-expand-lg navbar-light">
+          <div class="container">
+            {# Image borrowed and edited from https://pngtree.com/free-animal-vectors/fox #}
+            <a class="navbar-brand navbar-brand-size" href="{% url 'home' %}">
+              <img src="{% static 'VerdantFox/images/green_fox_logo1.png' %}"
+                   height="35" class="d-inline-block align-top rounded"
+                   alt="No image found"> Verdant Fox
+            </a>
+            <ul class="navbar-nav">
+              {% if user.is_authenticated %}
+              <li class="nav-item dropdown">
+                <a class="dropdown-toggle nav-link welcome-bar" href="#"
+                   id="dropdownMenuLink" data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
+                  Welcome, {{ request.user.username }}
+                  {% if request.user.userprofile.profile_picture %}
+                    <img src="{{ request.user.userprofile.profile_picture.url }}"
+                         height="30"
+                         alt="Image not found" class="rounded"
+                         id="thumbnail-profile-img">
+                  {% else %}
+                  <i class="fas fa-user"></i>
+                  {% endif %}
+                </a>
+                <div class="dropdown-menu position-absolute" aria-labelledby="navbarDropdownMenuLink">
+                  <a class="dropdown-item" href="{% url 'accounts:view_profile' %}">
+                    <i class="fas fa-user"></i> View Profile
                   </a>
-                  <div class="dropdown-menu position-absolute" aria-labelledby="navbarDropdownMenuLink">
-                    <a class="dropdown-item" href="{% url 'accounts:view_profile' %}">
-                      <i class="fas fa-user"></i> View Profile
-                    </a>
-                    <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">
-                      <i class="fas fa-edit"></i> Update Profile
-                    </a>
-                    <a class="dropdown-item" href="{% url 'accounts:settings' %}">
-                      <i class="fas fa-cog"></i> Account Settings
-                    </a>
-                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">
-                      <i class="fas fa-sign-out-alt"></i> Logout
-                    </a>
-                  </div>
-                </li>
-                {% else %}
-                <li class="nav-item">
-                  <div class="user-info">
-                    <a class="nav-link mr-auto" href="{% url 'accounts:login' %}">
-                        <i class="fas fa-sign-in-alt"></i><span class="pad"></span>Login</a>
-                  </div>
-                </li>
-                {% endif %}
-              </ul>
-            </div>
-          </nav>
+                  <a class="dropdown-item" href="{% url 'accounts:edit_profile' %}">
+                    <i class="fas fa-edit"></i> Update Profile
+                  </a>
+                  <a class="dropdown-item" href="{% url 'accounts:settings' %}">
+                    <i class="fas fa-cog"></i> Account Settings
+                  </a>
+                  <a class="dropdown-item" href="{% url 'accounts:logout' %}">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                  </a>
+                </div>
+              </li>
+              {% else %}
+              <li class="nav-item">
+                <div class="user-info">
+                  <a class="nav-link mr-auto" href="{% url 'accounts:login' %}">
+                      <i class="fas fa-sign-in-alt"></i><span class="pad"></span>Login</a>
+                </div>
+              </li>
+              {% endif %}
+            </ul>
+          </div>
+        </nav>
 
           <br><br>
 
@@ -94,45 +96,51 @@
               </ol>
             </div>
           </nav>
+      </div>
+
+    </section>
+
+    {# Loses sticky-top functionality if in section #}
+    <nav id="main-navbar" class="navbar sticky-top navbar-expand-md navbar-light bgc-2">
+
+      <div class="container">
+
+        {% block navbar_brand %}{% endblock %}
+
+        {% include '_nav_collapse_button.html' %}
+        <div class="collapse navbar-collapse" id="navbarNav">
+
+          {% block inner_navbar %}
+          {% endblock inner_navbar %}
+
         </div>
       </div>
 
-
-      <div class="bottom-row">
-        <nav class="navbar navbar-expand-md navbar-light bgc-2">
-
-          <div class="container">
-
-            {% block navbar_brand %}{% endblock %}
-
-            {% include '_nav_collapse_button.html' %}
-            <div class="collapse navbar-collapse" id="navbarNav">
-
-              {% block inner_navbar %}
-              {% endblock inner_navbar %}
-
-            </div>
-          </div>
-
-        </nav>
+    </nav>
+    <section class="second nav">
+      <br>
+      <div class="container">
+        {% block navbar_2 %}
+        {% endblock %}
       </div>
-    </header>
+    </section>
 
 
+    <section class="messages">
+      <div class="container">
+        {% block message_block %}
+        {% endblock %}
+      </div>
+    </section>
 
-    <br>
-    <div class="container">
-      {% block navbar_2 %}
-      {% endblock %}
-    </div>
-    <div class="container">
-      {% block message_block %}
-      {% endblock %}
+    <section class="body-content">
+      <div class="container">
+        {% block body_block %}
+        {% endblock %}
+      </div>
+    </section>
 
-      {% block body_block %}
-      {% endblock %}
-
-    </div>
+    <section class="javascript">
       {# Bootstrap 4 Javascript (includes Jquery) #}
       <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
@@ -143,5 +151,8 @@
       <script src="{% static 'VerdantFox/js/master.js' %}"></script>
       {% block javascript %}
       {% endblock %}
+    </section>
+
+
   </body>
 </html>

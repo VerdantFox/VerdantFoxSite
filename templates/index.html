@@ -8,12 +8,55 @@
 {% endblock %}
 {% block body_block %}
   <h1 class="text-center">Welcome to Verdant Fox!</h1>
-  <br><br>
-  {% include '_projects.html' %}
-  <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-  {% include '_skills.html' %}
-  <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-  {% include '_about.html' %}
-  <br><br>
+  <section class="break">
+    <br><br><br>
+  </section>
 
+  <section class="projects">
+    <div id="projects">
+      {% include '_projects.html' %}
+    </div>
+  </section>
+
+  <section class="break">
+    <br><br><br><br><br><br>
+  </section>
+
+  <section class="spacer_image"
+           style="background-image: url('{% static 'VerdantFox/images/fox_backgrounds/fox-climb.jpg' %}')">
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  </section>
+
+  <section class="break">
+    <br><br><br><br><br><br>
+  </section>
+
+  <section class="skills">
+    <div id="skills">
+      {% include '_skills.html' %}
+    </div>
+  </section>
+
+  <section class="spacer_image">
+    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  </section>
+
+  <section class="break">
+    <br><br><br><br><br><br>
+  </section>
+
+  <section class="about">
+    <div id="about">
+      {% include '_about.html' %}
+    </div>
+  </section>
+
+  <section class="break">
+    <br><br><br>
+  </section>
+
+{% endblock %}
+
+{% block javascript %}
+  <script src="{% static 'VerdantFox/js/index.js' %}"></script>
 {% endblock %}

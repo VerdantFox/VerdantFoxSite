@@ -1,38 +1,49 @@
 <h2 class="text-center">Projects</h2>
 <br><br>
 
-{# Finance Carousel #}
-<div class="row">
-    {# Makes this column show first in small screen #}
-    <div class="col-lg-7 order-lg-12">
-      <h4 class="text-center">Finance</h4>
-      <div class="text-justify">
-        <p>
-          In this app, once <a href="{% url 'accounts:login' %}">logged in</a>,
-          you will be given virtual cash with which to "fake buy" stocks. These
-          stocks, however, are representations of real stocks on the actual
-          stock-market, updated in real time.
-        </p>
-        <p>
-          This app can be thought of as a practice round for real world stock market
-          trading. You will be able to look up quotes for stocks, buy and sell
-          stocks, and view graphs of how stocks have performed over time to make
-          informed buying and selling decisions. Although you
-          will be given $10,000 initially, you can add virtual money to your
-          account using a credit card (please don't use your actual credit card,
-          fake cards are provided).
-        </p>
-        <p>
-          I hope you like this introduction to stock finance. <strong>Now, let's
-          trade some stocks!</strong>
-        </p>
-      </div>
+<section class="Finance">
+  <div class="row">
+      {# Makes this column show first in small screen #}
+      <div class="col-lg-7 order-lg-12">
+        <a href="{% url 'Finance:home' %}">
+          <h4 class="text-center">Finance</h4>
+        </a>
+        <div class="text-justify">
+          <p>
+            In this app, once <a href="{% url 'accounts:login' %}">logged in</a>,
+            you will be given virtual cash with which to "fake buy" stocks. These
+            stocks, however, are representations of real stocks on the actual
+            stock-market, updated in real time.
+          </p>
+          <p>
+            This app can be thought of as a practice round for real world stock market
+            trading. You will be able to look up quotes for stocks, buy and sell
+            stocks, and view graphs of how stocks have performed over time to make
+            informed buying and selling decisions. Although you
+            will be given $10,000 initially, you can add virtual money to your
+            account using a credit card (please don't use your actual credit card,
+            fake cards are provided).
+          </p>
+          <p>
+            I hope you like this introduction to stock finance. <strong>Now, let's
+            trade some stocks!</strong>
+          </p>
+          <form action="{% url 'Finance:home' %}" id="Finance-link">
+            <button type="submit" class="btn btn-info btn-block" form="Finance-link" name="">
+              Check out Finance!
+            </button>
+          </form>
+
+        </div>
+    </div>
+    {# Makes this column show second in small screen #}
+    <div class="col-lg-5 order-lg-1">
+      {# Finance Carousel #}
+      {% include '_finance_carousel.html' %}
+    </div>
   </div>
-  {# Makes this column show second in small screen #}
-  <div class="col-lg-5 order-lg-1">
-    {% include '_finance_carousel.html' %}
-  </div>
-</div>
+</section>
+
 
 <br>
 {# Games carousel #}
@@ -45,7 +56,9 @@
 
   {# Makes this column show first in small screen #}
   <div class="col-lg-7 order-1">
-    <h4 class="text-center">Games</h4>
+    <a href="{% url 'games:index' %}">
+      <h4 class="text-center">Games</h4>
+    </a>
     <div class="text-justify">
       <p>
         Games are fun! They are fun to build and fun to play. They can be an
@@ -64,9 +77,13 @@
         4 of your chips in a row, playing against my AI, Mr. Roboto.
         Good luck!
       </p>
+      <form action="{% url 'games:index' %}" id="Games-link">
+        <button type="submit" class="btn btn-info btn-block" form="Games-link" name="">
+          Check out Games!
+        </button>
+      </form>
     </div>
   </div>
-
 </div>
 
 <br>
@@ -74,7 +91,9 @@
 <div class="row">
     {# Makes this column show first in small screen #}
     <div class="col-lg-7 order-lg-12">
-      <h4 class="text-center">Simple</h4>
+      <a href="{% url 'Simple:home' %}">
+        <h4 class="text-center">Simple</h4>
+      </a>
       <div class="text-justify">
         <p>
           Here you will find a series of mini-apps I created that perform some
@@ -92,6 +111,11 @@
           requests, work with forms, and other seemingly trivial tasks
           that take longer than you'd like when learning something new.
         </p>
+        <form action="{% url 'Simple:home' %}" id="Simple-link">
+          <button type="submit" class="btn btn-info btn-block" form="Simple-link" name="">
+            Check out Simple!
+          </button>
+        </form>
       </div>
   </div>
   {# Makes this column show second in small screen #}

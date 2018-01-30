@@ -22,7 +22,8 @@ from django.conf.urls import url
 
 
 urlpatterns = [
-    path('', views.HomePage.as_view(), name='home'),
+    path('', views.HomePage.as_view(extra_context={"landing": "landing"}),
+         name='home'),
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('Finance/', include("Finance.urls", namespace="Finance")),

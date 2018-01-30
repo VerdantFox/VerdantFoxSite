@@ -261,14 +261,24 @@ a{
 }
 
 
-
+.body{
+    position: relative;
+}
 
 /* Nav Tabs CSS */
 .nav-tabs {
     border-bottom: 1px solid #202E24;
     /*border: 5px solid black;*/
-
 }
+
+.nav-pills .nav-link.active, .nav-pills .show>.nav-link {
+    color: #fff;
+    background-color: #202E24;
+}
+
+/*.nav-pills > .active > a, .nav-pills > .active > a:hover {*/
+    /*background-color: red;*/
+/*}*/
 
 .nav-tabs .nav-link.active {
     background-color:#EBE8BE;
