@@ -17,6 +17,42 @@ body {
   border-color: transparent;
   box-shadow: none;
 }
+
+.spacer_image {
+    width: 100%;
+    height: 50vh;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #EBE8BE;
+}
+
+.top_image {
+    width: 100%;
+    height: 500px;
+    /*background-attachment: local;*/
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #EBE8BE;
+}
+
+/*section.lazy {*/
+    /*width: 100%;*/
+    /*height: 50vh;*/
+    /*display: flex;*/
+/*}*/
+
+
 .pad:before{
     content:" ";
     display:inline-block;
@@ -64,6 +100,11 @@ body {
 
 .welcome-bar{
     font-size: 1.25em;
+    z-index: 2;
+}
+
+#main-navbar{
+    z-index: 20;
 }
 
 
@@ -108,12 +149,24 @@ body {
     border-bottom: 1px solid transparent;
 }
 
+.footer {
+    height: 40vh;
+    background-color: #202E24;
+    color: #EBE8BE;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+    line-height: 1.4rem;
+}
+
 
 /* fox image */
 .fox-top-row {
     width: 180px;
     height: 150px;
-    /*z-index: 1;*/
+    z-index: 1;
     vertical-align: top;
     /*border: 2px solid black;*/
     top: 1%;
@@ -140,6 +193,32 @@ text{
     border-radius: .3em;
 }
 
+
+/* Buttons */
+.btn-green{
+    color: #fff;
+    background-color: #347A2A;
+    border-color: #347A2A;
+}
+
+.btn-green:hover{
+    color: #fff;
+    background-color: #34892a;
+    border-color: #34892a;
+}
+
+.btn-outline-green {
+    color: #347A2A;
+    background-color: transparent;
+    background-image: none;
+    border-color: #347A2A;
+}
+
+.btn-outline-green:hover{
+    color: #fff;
+    background-color: #347A2A;
+    border-color: #347A2A;
+}
 
 
 /* Theme colors */
@@ -215,7 +294,11 @@ text{
 }
 
 a{
-    color: #459D72;
+    color: #347A2A;
+}
+
+a:hover{
+    color: #36a52c;
 }
 
 

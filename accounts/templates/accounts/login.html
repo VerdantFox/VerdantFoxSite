@@ -27,8 +27,6 @@
       <a title="Twitter login" href="{% url 'social:begin' 'twitter' %}?next={% url 'home' %}"><i class="fab fa-twitter-square fa-5x"></i></a>
       <a title="GitHub login" href="{% url 'social:begin' 'github' %}?next={% url 'home' %}"><i class="fab fa-github-square fa-5x"></i></a>
       <br>
-{#      ?next={% url 'home' %}#}
-
     </div>
     <br><h5 class="text-center"><strong>-- OR --</strong></h5><br>
     <div class="form-group">
@@ -38,7 +36,7 @@
         {% bootstrap_form form %}
         {% buttons %}
           <div class="text-center">
-            <input type="submit" class="btn btn-primary btn-lg" value="Log in">
+            <input type="submit" class="btn btn-green btn-lg" value="Log in">
           </div>
         {% endbuttons %}
       </form>

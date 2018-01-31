@@ -52,7 +52,7 @@
           {% if stocks_pages %}
           <td colspan="2">
             <button id="buy-sell-button" type="submit"
-                    class="btn btn-info btn-block" form="portfolio-form"
+                    class="btn btn-green btn-block" form="portfolio-form"
                     name="transaction" value="transaction"
                     ic-post-to="{% url 'Finance:ajax_stock_list' %}?page={{ stocks_pages.number }}"
                     ic-trigger-on="click"

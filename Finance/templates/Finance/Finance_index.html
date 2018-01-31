@@ -1,4 +1,5 @@
 {% extends 'Finance/Finance_base.html' %}
+{% load staticfiles %}
 
 {% block title_block %}
   Portfolio | Finance
@@ -10,7 +11,13 @@
 {% endblock %}
 
 {% block body_block %}
-  <h1>Welcome to Finance!</h1>
+
+<section class="body-explanation">
+
+  <br>
+  <h1 class="text-center">Finance!</h1>
+  <br>
+
   <div class="text-justify">
     <p>
       In this app, once <a href="{% url 'accounts:login' %}">logged in</a>,
@@ -32,5 +39,6 @@
       trade some stocks!</strong>
     </p>
   </div>
+</section>
 
 {% endblock %}

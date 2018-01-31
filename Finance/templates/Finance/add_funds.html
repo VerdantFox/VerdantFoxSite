@@ -13,15 +13,18 @@
 {% block active3 %}active{% endblock %}
 
 {% block body_block %}
+
+  <br>
 <div class="container">
-  <h1>Add funds to your account here</h1>
+  <h1 class="text-center">Add funds to your account here</h1>
+  <br>
   <p>Accepted credit cards: VISA, MASTERCARD, AMERICAN EXPRESS, or DISCOVER.</p>
   <p>Note: Only valid credit cards will work. No credit card information will
     be saved from this page. However, since this is a fake "fund-adding" page, I
     suggest you use one of these valid, yet in-activated credit cards offered
     for testing by
   <a href="https://developer.paypal.com/docs/classic/payflow/payflow-pro/payflow-pro-testing/" target="_blank">paypal</a>.</p>
-  <h4>Current account funds: {{ cash }}</h4>
+  <h4 class="text-center">Current account funds: {{ cash }}</h4>
   <br>
 </div>
 
@@ -94,7 +97,7 @@
               {{ form.zip_code }}
             </div>
             <button id="add-funds-button" type="submit"
-                    class="btn btn-lg btn-info btn-block"
+                    class="btn btn-lg btn-green btn-block"
                     form="funds-form" name="add-funds" value="add-funds">
               <i class="fa fa-lock fa-lg"></i>
               <span id="payment-button-amount">Add Funds</span>

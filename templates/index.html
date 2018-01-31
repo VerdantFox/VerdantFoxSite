@@ -6,56 +6,121 @@
 {% block breadcrumb %}
   <li class="breadcrumb-item active" aria-current="page">Home</li>
 {% endblock %}
-{% block body_block %}
-  <h1 class="text-center">Welcome to Verdant Fox!</h1>
-  <section class="break">
-    <br><br><br>
+
+{% block top_image_break %}
+
+  <section class="top_image" id="welcome-image"
+           style="background-image: url('{% static 'VerdantFox/images/fox_backgrounds/fox-climb-2-crop.jpg' %}')">
+    <section class="welcome">
+      <h1 class="text-center">Welcome to Verdant Fox!</h1>
+    </section>
   </section>
 
+
+{% endblock %}
+
+
+{% block body_block %}
+  <section class="break">
+    <br><br>
+  </section>
   <section class="projects">
     <div id="projects">
       {% include '_projects.html' %}
     </div>
   </section>
+  <section class="break">
+    <br><br>
+  </section>
+
+{% endblock %}
+
+
+{% block image_break1 %}
+
+  <section class="spacer_image lazy"
+           style="background-image: url('{% static 'VerdantFox/images/fox_backgrounds/fox-white.jpg' %}')">
+    <h1>Always striving for improvement.</h1>
+    <h3>Looking opportunities wherever they lie.</h3>
+  </section>
+
+{% endblock %}
+
+
+{% block body_block2 %}
 
   <section class="break">
-    <br><br><br><br><br><br>
+    <br><br>
   </section>
-
-  <section class="spacer_image"
-           style="background-image: url('{% static 'VerdantFox/images/fox_backgrounds/fox-climb.jpg' %}')">
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-  </section>
-
-  <section class="break">
-    <br><br><br><br><br><br>
-  </section>
-
   <section class="skills">
     <div id="skills">
       {% include '_skills.html' %}
     </div>
   </section>
-
-  <section class="spacer_image">
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  <section class="break">
+    <br><br>
   </section>
+
+{% endblock %}
+
+
+{% block image_break2 %}
+
+  <section class="spacer_image  lazy"
+           style="background-image: url('{% static 'VerdantFox/images/fox_backgrounds/fox-sneak-5.jpg' %}')">
+    <h1>Face challenges head on.</h1>
+    <h3>Let's build something great together.</h3>
+  </section>
+
+
+{% endblock %}
+
+
+{% block body_block3 %}
 
   <section class="break">
-    <br><br><br><br><br><br>
+    <br><br>
   </section>
-
   <section class="about">
     <div id="about">
       {% include '_about.html' %}
     </div>
   </section>
-
   <section class="break">
-    <br><br><br>
+    <br><br>
   </section>
 
 {% endblock %}
+
+{% block footer_block %}
+
+  <p class="text-center">Thank you for visiting my portfolio! I hope you enjoyed it.</p>
+  <br>
+  <p class="text-center">Want to talk to me about a project?</p>
+  <p class="text-center">Reach out to me on LinkedIn, GitHub or Twitter.</p>
+  <br>
+    <div class="social-logins text-center">
+      <a title="Theodore's LinkedIn"
+         href="https://www.linkedin.com/in/theodore-williams-a36b2173/"
+         target="_blank">
+        <i class="fab fa-linkedin fa-3x"></i>
+      </a>
+      <span>&nbsp; &nbsp;</span>
+      <a title="Theodore's Twitter" href="https://twitter.com/VerdantFox17"
+         target="_blank">
+        <i class="fab fa-twitter-square fa-3x"></i>
+      </a>
+      <span>&nbsp; &nbsp;</span>
+      <a title="Theodore's GitHub" href="https://github.com/VerdantFox"
+         target="_blank">
+        <i class="fab fa-github-square fa-3x"></i>
+      </a>
+      <br>
+    </div>
+
+
+{% endblock %}
+
 
 {% block javascript %}
   <script src="{% static 'VerdantFox/js/index.js' %}"></script>

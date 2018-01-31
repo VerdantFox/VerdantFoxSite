@@ -4,15 +4,26 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+
     <title>
       {# Title Extensions go inside the block#}
       {% block title_block %}{% endblock %}
     </title>
+
+    {# Favicons #}
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'VerdantFox/images/favicons/apple-touch-icon.png' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'VerdantFox/images/favicons/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'VerdantFox/images/favicons/favicon-16x16.png' %}">
+    <link rel="manifest" href="{% static 'VerdantFox/images/favicons/manifest.json' %}">
+    <link rel="mask-icon" href="{% static 'VerdantFox/images/favicons/safari-pinned-tab.svg' %}" color="#5bbad5">
+    <meta name="theme-color" content="#ffffff">
+
     {# Bootstrap 4 CSS #}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css"
           integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
     {# Font Awesome icons #}
     <script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+
     {# Custom CSS #}
     <link rel="stylesheet" type="text/css" href="{% static 'VerdantFox/css/master.css' %}">
     {% block css %}{% endblock %}
@@ -26,7 +37,7 @@
 
     <section class="header">
 
-      <div class="top-row bgc-1">
+      <div class="top-row bgc-1" id="header">
 
         {# Fox walking image #}
         {# Image borrowed and edited from https://pngtree.com/free-animal-vectors/fox #}
@@ -60,7 +71,7 @@
                   <i class="fas fa-user"></i>
                   {% endif %}
                 </a>
-                <div class="dropdown-menu position-absolute" aria-labelledby="navbarDropdownMenuLink">
+                <div id="main-dropdown" class="dropdown-menu position-absolute" aria-labelledby="navbarDropdownMenuLink">
                   <a class="dropdown-item" href="{% url 'accounts:view_profile' %}">
                     <i class="fas fa-user"></i> View Profile
                   </a>
@@ -118,7 +129,6 @@
 
     </nav>
     <section class="second nav">
-      <br>
       <div class="container">
         {% block navbar_2 %}
         {% endblock %}
@@ -133,26 +143,60 @@
       </div>
     </section>
 
-    <section class="body-content">
-      <div class="container">
-        {% block body_block %}
-        {% endblock %}
-      </div>
+    <section class="main">
+      <section class="top_image_break">
+        {% block top_image_break %}{% endblock %}
+      </section>
+      <section class="body_section">
+        <div class="container">
+          {% block body_block %}{% endblock %}
+        </div>
+      </section>
+      <section class="image_break">
+        {% block image_break1 %}{% endblock %}
+      </section>
+      <section class="body_section">
+        <div class="container">
+          {% block body_block2 %}{% endblock %}
+        </div>
+      </section>
+      <section class="image_break">
+        {% block image_break2 %}{% endblock %}
+      </section>
+      <section class="body_section">
+        <div class="container">
+          {% block body_block3 %}{% endblock %}
+        </div>
+      </section>
+
     </section>
 
+    {% if landing %}
+      <section class="footer">
+        {% block footer_block %}{% endblock %}
+      </section>
+    {% endif %}
+
     <section class="javascript">
+
       {# Bootstrap 4 Javascript (includes Jquery) #}
       <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
       <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js" integrity="sha384-alpBpkh1PFOepccYVYDB4do5UnbKysX5WZXm3XxPqe5iKTfUKjNkCk9SaVuEZflJ" crossorigin="anonymous"></script>
+
+      {# JQuery Lazy (for lazy image loading) #}
+      <!-- cdnjs -->
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.6/jquery.lazy.min.js"></script>
+      <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery.lazy/1.7.6/jquery.lazy.plugins.min.js"></script>
+
+
       {# Intercooler ajax js library (requires Jquery) #}
       <script src="https://intercoolerreleases-leaddynocom.netdna-ssl.com/intercooler-1.2.1.min.js"></script>
+
       {# Custom javascript #}
       <script src="{% static 'VerdantFox/js/master.js' %}"></script>
-      {% block javascript %}
-      {% endblock %}
+      {% block javascript %}{% endblock %}
     </section>
-
 
   </body>
 </html>
