@@ -1,4 +1,5 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, logout, authenticate
+# from django.contrib.auth.views import logout
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
 from .forms import SignUpForm, LoginForm, EditUserForm, EditProfileForm
@@ -10,6 +11,22 @@ from django.shortcuts import render, redirect
 from social_django.models import UserSocialAuth
 from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeForm
 from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.signals import user_logged_out, user_logged_in
+from django.contrib import messages
+
+
+# https://stackoverflow.com/questions/46542502/django-how-to-add-a-logout-successful-message-using-the-django-contrib-auth
+def show_logout_message(sender, user, request, **kwargs):
+    messages.info(request, 'You have logged out.')
+
+
+def show_login_message(sender, user, request, **kwargs):
+    user = request.user
+    messages.success(request, f'Welcome {user}, you are now logged in.')
+
+
+user_logged_out.connect(show_logout_message)
+user_logged_in.connect(show_login_message)
 
 
 class SignUpView(FormView):
@@ -26,10 +43,6 @@ class SignUpView(FormView):
         user = authenticate(username=username, password=raw_password)
         login(self.request, user)
 
-        messages.add_message(
-            self.request, messages.SUCCESS,
-            'Welcome {}, you have successfully registered!'.format(username))
-
         return super(SignUpView, self).form_valid(form)
 
 
@@ -44,10 +57,6 @@ class LoginView(FormView):
 
         user = authenticate(username=username, password=raw_password)
         login(self.request, user)
-
-        messages.add_message(
-            self.request, messages.SUCCESS,
-            'Welcome {}, you are now logged in!'.format(username))
 
         return super(LoginView, self).form_valid(form)
 
@@ -87,7 +96,14 @@ def edit_profile(request):
 
 @login_required
 def settings(request):
+
     user = request.user
+
+    if request.method == 'POST':
+        if 'delete-account' in request.POST:
+            user.delete()
+            messages.info(request, 'Your account has been deleted!')
+            return redirect('home')
 
     try:
         github_login = user.social_auth.get(provider='github')

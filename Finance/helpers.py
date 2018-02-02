@@ -303,7 +303,7 @@ def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
                 request, messages.WARNING,
                 f'Failed {stock_symbol} validation, '
                 f'shares out of range (1-1000)!',
-                extra_tags='stock'
+                extra_tags=' stock'
             )
             return False
         # If selling
@@ -314,7 +314,7 @@ def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
                     request, messages.WARNING,
                     f'Failed {stock_symbol} validation, '
                     f'selling more than owned!',
-                    extra_tags='stock'
+                    extra_tags=' stock'
                 )
                 return False
             else:
@@ -329,7 +329,7 @@ def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
             request, messages.WARNING,
             f'Failed {stock_symbol} validation, '
             f'Given non-integer share count!',
-            extra_tags='stock'
+            extra_tags=' stock'
         )
         return False
 

@@ -24,7 +24,9 @@
     <h3 class="text-center">Login through a social platform</h3>
     <div class="social-logins text-center">
       <a title="Facebook login" href="{% url 'social:begin' 'facebook' %}?next={% url 'home' %}"><i class="fab fa-facebook fa-5x"></i></a>
+      <span>&nbsp; &nbsp;</span>
       <a title="Twitter login" href="{% url 'social:begin' 'twitter' %}?next={% url 'home' %}"><i class="fab fa-twitter-square fa-5x"></i></a>
+      <span>&nbsp; &nbsp;</span>
       <a title="GitHub login" href="{% url 'social:begin' 'github' %}?next={% url 'home' %}"><i class="fab fa-github-square fa-5x"></i></a>
       <br>
     </div>

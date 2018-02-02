@@ -96,7 +96,7 @@ def ajax_stock_list(request):
                                 request, messages.SUCCESS,
                                 f'Bought {shares} {share_plural} '
                                 f'of {name} ({symbol})!',
-                                extra_tags='stock buy-success'
+                                extra_tags=' stock buy-success'
                             )
                         # transaction was entered correctly
                         # or user cash not changed
@@ -140,7 +140,7 @@ def ajax_stock_list(request):
                             request, messages.WARNING,
                             f'Could not resolve {stock_symbol}. Listed as '
                             f'both "buy" and "sell"!',
-                            extra_tags='stock'
+                            extra_tags=' stock'
                         )
 
                 # Check if item name starts with "buy" and isn't repeat
@@ -186,14 +186,14 @@ def ajax_stock_list(request):
                                         request, messages.SUCCESS,
                                         f'Bought {valid_shares} {share_plural} '
                                         f'of {name} ({stock_symbol})!',
-                                        extra_tags='stock buy-success'
+                                        extra_tags=' stock buy-success'
                                         )
 
                                 except:
                                     messages.add_message(
                                         request, messages.WARNING,
                                         f'Failed {stock_symbol} purchase!',
-                                        extra_tags='stock'
+                                        extra_tags=' stock'
                                     )
 
                             else:
@@ -201,7 +201,7 @@ def ajax_stock_list(request):
                                     request, messages.WARNING,
                                     f'Failed to purchase{stock_symbol}, '
                                     f'not enough funds!',
-                                    extra_tags='stock'
+                                    extra_tags=' stock'
                                 )
 
                 # Check if item name starts with "sell"
@@ -249,13 +249,13 @@ def ajax_stock_list(request):
                                     request, messages.SUCCESS,
                                     f'Sold {valid_shares} {share_plural} '
                                     f'of {name} ({stock_symbol})!',
-                                    extra_tags='stock sale-success'
+                                    extra_tags=' stock sale-success'
                                 )
                             except:
                                 messages.add_message(
                                     request, messages.WARNING,
                                     f'Failed {stock_symbol} sale!',
-                                    extra_tags='stock'
+                                    extra_tags=' stock'
                                 )
 
             if transaction_made:
@@ -269,7 +269,7 @@ def ajax_stock_list(request):
                 messages.add_message(
                     request, messages.WARNING,
                     f'No purchases or sales indicated.',
-                    extra_tags='stock'
+                    extra_tags=' stock'
                 )
 
     # request.method isn't POST (probably GET)
@@ -371,7 +371,7 @@ def ajax_graph(request):
             messages.add_message(
                 request, messages.WARNING,
                 f'error building graph',
-                extra_tags='stock'
+                extra_tags=' stock'
             )
             graph_error = script
             script = None

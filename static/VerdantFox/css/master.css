@@ -203,8 +203,8 @@ text{
 
 .btn-green:hover{
     color: #fff;
-    background-color: #34892a;
-    border-color: #34892a;
+    background-color: #369b2b;
+    border-color: #369b2b;
 }
 
 /* Badges */
@@ -315,6 +315,9 @@ a:hover{
     color: #36a52c;
 }
 
+a.remove-underline{
+    text-decoration: none
+}
 
 
 

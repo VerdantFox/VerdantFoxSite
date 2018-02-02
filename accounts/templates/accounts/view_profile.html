@@ -26,6 +26,10 @@
 {% endblock %}
 
 {% block body_block %}
+
+  {% include '_messages.html' %}
+
+
   <h2>{{ user.get_full_name }}</h2>
   <ul class="profile-list">
     <li>Username: {{ user.username }}</li>

@@ -31,7 +31,6 @@
     <h1>Settings</h1><br>
 
     <h2>Social media connections</h2><br>
-
     <h3><i class="fab fa-facebook-square"></i> Facebook</h3>
     {% if facebook_login %}
       <h5>Connected as <a href="https://facebook.com/{{ facebook_login.extra_data.id }}/" target="_blank">{{ facebook_login.extra_data.id }}</a></h5>
@@ -91,7 +90,23 @@
     {% else %}
       <h5><a href="{% url 'social:begin' 'github' %}?next={% url 'accounts:settings' %}">Connect to GitHub</a></h5>
     {% endif %}
-    <br>
+    <br><br><br>
+
+    <h2>Delete account?</h2>
+    <p>Warning: data stored with all applications will be irreversibly lost.</p>
+
+    <div class="form-group">
+      <form method="post">
+        {% csrf_token %}
+          <div class="text-center">
+            <input type="submit" class="btn btn-danger btn-lg"
+                   onclick="return confirm('Are you sure you want to delete ' +
+                    'account? All data associated with account will be ' +
+                    'irreversibly lost.')"
+                   name="delete-account" value="Delete account">
+          </div>
+      </form>
+    </div>
 
   </div>
 
