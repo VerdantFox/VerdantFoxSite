@@ -386,7 +386,7 @@ def ajax_graph(request):
                    })
 
 
-class History(LoginRequiredMixin, ListView):
+class HistoryView(LoginRequiredMixin, ListView):
     """Display users purchase, sale, and money addition history"""
     template_name = 'Finance/history.html'
     model = Transaction
@@ -409,6 +409,12 @@ class History(LoginRequiredMixin, ListView):
         timezone.activate(user_timezone)
 
         return transactions
+
+    def get_context_data(self, **kwargs):
+        context = super(HistoryView, self).get_context_data(**kwargs)
+        context['user_timezone'] = self.request.user.userprofile.timezone
+        # Add any other variables to the context here
+        return context
 
 
 class AddFunds(LoginRequiredMixin, FormView, base.ContextMixin):

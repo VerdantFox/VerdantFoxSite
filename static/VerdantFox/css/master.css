@@ -207,6 +207,20 @@ text{
     border-color: #34892a;
 }
 
+/* Badges */
+.badge-green{
+    color: #fff;
+    background-color: #347A2A;
+    border-color: #347A2A;
+}
+
+.badge-green:hover{
+    color: #fff;
+    background-color: #359d2b;
+    border-color: #359d2b;
+    text-decoration: none;
+}
+
 .btn-outline-green {
     color: #347A2A;
     background-color: transparent;

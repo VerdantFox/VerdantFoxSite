@@ -22,6 +22,9 @@
   <h1 class="Table_headers text-center">Transaction History</h1>
   {% if transaction_list %}
     <br>
+    <h5>Your timezone: <a href="{% url 'accounts:edit_profile' %}">
+      {{ user_timezone }}</a></h5>
+    <br>
     <table class="table table-striped">
       <thead>
         <tr>
