@@ -22,7 +22,8 @@ class SignUpForm(UserCreationForm):
                                       'placeholder': 'Username'}))
     email = forms.EmailField(
         label=_('Email'), max_length=255, required=True,
-        help_text=_('Required. Type a valid email address.'),
+        help_text=_('Required. Type a valid email address. Used for password '
+                    'recovery.'),
         widget=forms.EmailInput(
             attrs={'placeholder': 'example@gmail.com',
                    'class': 'form-control'}))
@@ -148,3 +149,15 @@ class EditProfileForm(forms.ModelForm):
             'placeholder': 'mm/dd/yyyy',
             'class': 'form-control'}))
 
+
+class GetUsernameForm(forms.ModelForm):
+    class Meta:
+        model = UserModel
+        fields = ('email',)
+
+    email = forms.EmailField(
+        label=_('Email'), max_length=255, required=True,
+        help_text=_('Enter email associated with username'),
+        widget=forms.EmailInput(
+            attrs={'placeholder': 'example@gmail.com',
+                   'class': 'form-control'}))

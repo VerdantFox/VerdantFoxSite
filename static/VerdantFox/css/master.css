@@ -319,6 +319,10 @@ a.remove-underline{
     text-decoration: none
 }
 
+#breadcrumb {
+    position: relative;
+    z-index: 100;
+}
 
 
 /* Pagination CSS */

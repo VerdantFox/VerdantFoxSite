@@ -1,9 +1,9 @@
-from django.contrib.auth import login, logout, authenticate
-# from django.contrib.auth.views import logout
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.views.generic.edit import FormView
-from .forms import SignUpForm, LoginForm, EditUserForm, EditProfileForm
-from django.contrib import messages
+from django.views.generic import TemplateView
+from .forms import (SignUpForm, LoginForm, EditUserForm,
+                    EditProfileForm, GetUsernameForm)
 from django.urls import reverse_lazy
 from django.db import transaction
 from .models import UserProfile
@@ -13,6 +13,12 @@ from django.contrib.auth.forms import AdminPasswordChangeForm, PasswordChangeFor
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.signals import user_logged_out, user_logged_in
 from django.contrib import messages
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_protect
+from django.core.mail import send_mail, BadHeaderError
+from django.http import HttpResponse, HttpResponseRedirect
+
 
 
 # https://stackoverflow.com/questions/46542502/django-how-to-add-a-logout-successful-message-using-the-django-contrib-auth
@@ -149,3 +155,15 @@ def password(request):
     else:
         form = PasswordForm(request.user)
     return render(request, 'accounts/password.html', {'form': form})
+
+
+class CustomPasswordResetView(PasswordResetView):
+    email_template_name = 'accounts/reset/password_reset_email.html'
+    subject_template_name = 'accounts/reset/password_reset_subject.txt'
+    success_url = reverse_lazy('accounts:password_reset_done')
+    template_name = 'accounts/reset/password_reset_form.html'
+
+
+class CustomPasswordResetConfirmView(PasswordResetConfirmView):
+    success_url = reverse_lazy('accounts:password_reset_complete')
+    template_name = 'accounts/reset/password_reset_confirm.html'

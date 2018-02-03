@@ -154,15 +154,18 @@ LOGOUT_REDIRECT_URL = 'home'
 
 INTERNAL_IPS = ['127.0.0.1']
 
+#
+
 
 # Social API logins
 AUTHENTICATION_BACKENDS = (
     'social_core.backends.github.GithubOAuth2',
     'social_core.backends.twitter.TwitterOAuth',
     'social_core.backends.facebook.FacebookOAuth2',
-
     'django.contrib.auth.backends.ModelBackend',
 )
+# console.EmailBackend during development only
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Logins and keys (Python-decouple in production)
 # https://simpleisbetterthancomplex.com/2015/11/26/package-of-the-week-python-decouple.html
