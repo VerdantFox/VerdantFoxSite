@@ -10,7 +10,7 @@ class QuoteForm(forms.Form):
         max_length=5,
         widget=forms.TextInput(attrs={
             'name': 'stock symbol',
-            'placeholder': 'Stock symbol',
+            'placeholder': 'Stock symbol (eg GOOG, NFLX, AAPL, MSFT, AMZN, TWTR)',
             'class': 'form-control',
         }))
 
