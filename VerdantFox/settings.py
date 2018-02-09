@@ -26,7 +26,12 @@ SECRET_KEY = 'SECRET_KEY_GOES_HERE'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['165.227.12.1', 'verdantfox.com', 'www.verdantfox.com',] # '192.168.0.104', 'localhost:8000',
+# Development
+ALLOWED_HOSTS = []
+
+
+# production
+# ALLOWED_HOSTS = ['165.227.12.1', 'verdantfox.com', 'www.verdantfox.com',]
 
 
 # Application definition
@@ -97,10 +102,6 @@ DATABASES = {
     }
 }
 
-
-# Password validation
-# https://docs.djangoproject.com/en/2.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -141,7 +142,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'Finance/static'),
     os.path.join(BASE_DIR, 'games/static')
     ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+# Production
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # Media files (user uploaded files)
 # https://docs.djangoproject.com/en/2.0/ref/settings/#std:setting-MEDIA_ROOT

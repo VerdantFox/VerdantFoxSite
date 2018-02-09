@@ -9,6 +9,7 @@
 {% endblock %}
 {% block active3 %}active{% endblock %}
 {% block body_block %}
+  <br>
   <h1 class="text-center">Welcome to Change!</h1>
     <p class="text-justify">
       This mini-app acts as a virtual grocery-store cash register, instructing
@@ -18,7 +19,7 @@
 
   <form method="POST" action="{% url 'Simple:change_machine' %}">
     {% for error in change_form.non_field_errors %}
-      <h6 class="form-error">{{ error }}</h6>
+      <h6 class="form-error errorlist">{{ error }}</h6>
     {% endfor %}
     {% csrf_token %}
       <div class="row">

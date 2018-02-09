@@ -8,6 +8,7 @@
 {% endblock %}
 {% block body_block %}
   <div class="title-section">
+    <br>
     <h1 class="text-center">Simple Apps</h1>
     <p class="text-justify">
       Here you will find a series of mini-apps I created that perform some
@@ -27,7 +28,9 @@
   </div>
   <br>
   <div class="body-section">
-    <h3 class="text-center">Vigenère</h3>
+    <h3 class="text-center">
+      <a class="nav-link" href="{% url 'Simple:vigenere' %}">Vigenère</a>
+    </h3>
     <p class="text-justify">
       This mini-app uses the
       <a class="link-target" href="https://en.wikipedia.org/wiki/Vigenère_cipher"
@@ -36,7 +39,9 @@
       or phrase. It can then decrypt your word given the same key.
     </p>
 
-    <h3 class="text-center">FizzBuzz</h3>
+    <h3 class="text-center">
+      <a class="nav-link" href="{% url 'Simple:fizzbuzz' %}">FizzBuzz</a>
+    </h3>
     <p class="text-justify">
       This mini-app is a slight expansion on the classic kids game,
       <a class="link-target" href="https://en.wikipedia.org/wiki/Fizz_buzz"
@@ -44,7 +49,9 @@
       (ie. Fizz, Buzz, Foo, etc.) to replace numbers at certain multiples.
     </p>
 
-    <h3 class="text-center">Change</h3>
+    <h3 class="text-center">
+      <a class="nav-link" href="{% url 'Simple:change_machine' %}">Change</a>
+    </h3>
     <p class="text-justify">
       This mini-app acts as a virtual grocery-store cash register, instructing
       in the simplest exact change to be returned during a business transaction.

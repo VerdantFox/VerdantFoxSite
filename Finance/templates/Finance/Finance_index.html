@@ -20,7 +20,7 @@
 
   <div class="text-justify">
     <p>
-      In this app, once <a href="{% url 'accounts:login' %}">logged in</a>,
+      In this app, once <a href="{% url 'accounts:login' %}"><strong>logged in</strong></a>,
       you will be given virtual cash with which to "fake buy" stocks. These
       stocks, however, are representations of real stocks on the actual
       stock-market, updated in real time.
@@ -35,8 +35,9 @@
       fake cards are provided).
     </p>
     <p>
-      I hope you like this introduction to stock finance. <strong>Now, let's
-      trade some stocks!</strong>
+      I hope you like this introduction to stock finance.
+      <a href="{% url 'Finance:portfolio' %}">
+        <strong>Now, let's trade some stocks!</strong></a>.
     </p>
   </div>
 </section>
