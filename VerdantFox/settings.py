@@ -27,7 +27,7 @@ SECRET_KEY = 'SECRET_KEY_GOES_HERE'
 DEBUG = True
 
 # Development
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.0.104']
 
 
 # production

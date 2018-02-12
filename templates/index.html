@@ -12,7 +12,9 @@
   <section class="top_image" id="welcome-image"
            style="background-image: url('{% static 'VerdantFox/images/fox_backgrounds/fox-climb-2-crop.jpg' %}')">
     <section class="welcome">
-      <h1 class="text-center">Welcome to Verdant Fox!</h1>
+      <div class="spacer_image_text">
+        <h1 class="text-center">Welcome to Verdant Fox!</h1>
+      </div>
     </section>
   </section>
 
@@ -40,8 +42,10 @@
 
   <section class="spacer_image lazy"
            style="background-image: url('{% static 'VerdantFox/images/fox_backgrounds/fox-white.jpg' %}')">
-    <h1>Always striving for improvement.</h1>
-    <h3>Looking for opportunities wherever they lie.</h3>
+    <div class="spacer_image_text">
+      <h1>Always striving for improvement.</h1>
+      <h3>Looking for opportunities wherever they lie.</h3>
+    </div>
   </section>
 
 {% endblock %}
@@ -68,8 +72,10 @@
 
   <section class="spacer_image  lazy"
            style="background-image: url('{% static 'VerdantFox/images/fox_backgrounds/fox-sneak-5.jpg' %}')">
-    <h1>Face challenges head on.</h1>
-    <h3>Let's build something great together.</h3>
+    <div class="spacer_image_text">
+      <h1>Face challenges head on.</h1>
+      <h3>Let's build something great together.</h3>
+    </div>
   </section>
 
 
@@ -93,35 +99,37 @@
 {% endblock %}
 
 {% block footer_block %}
-
-  <p class="text-center">Thank you for visiting my portfolio! I hope you enjoyed it.</p>
-  <br>
-  <p class="text-center">Want to talk to me about a project?</p>
-  <p class="text-center">
-    Reach out to me by email, or on LinkedIn, GitHub or Twitter.
-  </p>
-  <br>
-  <p class="text-center">theodore.f.williams@gmail.com</p>
-    <div class="social-logins text-center">
-      <a class="remove-underline" title="Theodore's LinkedIn"
-         href="https://www.linkedin.com/in/theodore-f-williams"
-         target="_blank">
-        <i class="fab fa-linkedin fa-3x"></i>
-      </a>
-      <span>&nbsp; &nbsp;</span>
-      <a class="remove-underline" title="Theodore's GitHub"
-         href="https://github.com/VerdantFox"
-         target="_blank">
-        <i class="fab fa-github-square fa-3x"></i>
-      </a>
-      <span>&nbsp; &nbsp;</span>
-      <a class="remove-underline" title="Theodore's Twitter"
-         href="https://twitter.com/VerdantFox17"
-         target="_blank">
-        <i class="fab fa-twitter-square fa-3x"></i>
-      </a>
-      <br>
+  <div class="container">
+    <p class="text-center">Thank you for visiting my portfolio! I hope you enjoyed it.</p>
+    <br>
+    <p class="text-center">Want to talk to me about a project?</p>
+    <p class="text-center">
+      Reach out to me by email, or on LinkedIn, GitHub or Twitter.
+    </p>
+    <br>
+    <p class="text-center">theodore.f.williams@gmail.com</p>
+      <div class="social-logins text-center">
+        <a class="remove-underline" title="Theodore's LinkedIn"
+           href="https://www.linkedin.com/in/theodore-f-williams"
+           target="_blank">
+          <i class="fab fa-linkedin fa-3x"></i>
+        </a>
+        <span>&nbsp; &nbsp;</span>
+        <a class="remove-underline" title="Theodore's GitHub"
+           href="https://github.com/VerdantFox"
+           target="_blank">
+          <i class="fab fa-github-square fa-3x"></i>
+        </a>
+        <span>&nbsp; &nbsp;</span>
+        <a class="remove-underline" title="Theodore's Twitter"
+           href="https://twitter.com/VerdantFox17"
+           target="_blank">
+          <i class="fab fa-twitter-square fa-3x"></i>
+        </a>
+        <br>
+      </div>
     </div>
+
 
 
 {% endblock %}

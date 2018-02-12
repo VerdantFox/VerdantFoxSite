@@ -4,6 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <meta name=viewport content="width=device-width, initial-scale=1.0">
 
     <title>
       {# Title Extensions go inside the block#}
@@ -37,11 +38,11 @@
 
     <section class="header">
 
-      <div class="top-row bgc-1" id="header">
+      <div class="welcome-bar bgc-1" id="header">
 
         {# Fox walking image #}
         {# Image borrowed and edited from https://pngtree.com/free-animal-vectors/fox #}
-        <div class="position-absolute fox-top-row d-none d-sm-block">
+        <div id="fox-top" class="position-absolute d-none d-md-block">
           <img src="{% static 'VerdantFox/images/green_fox_night_cropped.png' %}"
                height="150" class=""
                alt="No image found">
@@ -50,21 +51,22 @@
         <nav class="navbar navbar-expand-lg navbar-light">
           <div class="container">
             {# Image borrowed and edited from https://pngtree.com/free-animal-vectors/fox #}
-            <a class="navbar-brand navbar-brand-size" href="{% url 'home' %}">
-              <img src="{% static 'VerdantFox/images/green_fox_logo1.png' %}"
-                   height="35" class="d-inline-block align-top rounded"
+            <a class="navbar-brand top-bar" href="{% url 'home' %}">
+              <img id="fox-icon"
+                   src="{% static 'VerdantFox/images/green_fox_logo1.png' %}"
+                   class="d-inline-block align-top rounded"
                    alt="No image found"> Verdant Fox
             </a>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav welcome-bar">
               {% if user.is_authenticated %}
               <li class="nav-item dropdown">
-                <a class="dropdown-toggle nav-link welcome-bar" href="#"
+                <a class="dropdown-toggle nav-link" href="#"
                    id="dropdownMenuLink" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
                   Welcome, {{ request.user.username }}
                   {% if request.user.userprofile.profile_picture %}
                     <img src="{{ request.user.userprofile.profile_picture.url }}"
-                         height="30"
+                         height="30rem"
                          alt="Image not found" class="rounded"
                          id="thumbnail-profile-img">
                   {% else %}
@@ -88,17 +90,17 @@
               </li>
               {% else %}
               <li class="nav-item">
-                <div class="user-info">
-                  <a class="nav-link mr-auto" href="{% url 'accounts:login' %}">
-                      <i class="fas fa-sign-in-alt"></i><span class="pad"></span>Login</a>
-                </div>
+                <a class="nav-link mr-auto" href="{% url 'accounts:login' %}">
+                    <i class="fas fa-sign-in-alt"></i><span class="pad"></span>Login</a>
               </li>
               {% endif %}
             </ul>
           </div>
         </nav>
 
-          <br><br>
+          <div id="top-row-breaks" class="d-none d-md-block">
+            <br><br>
+          </div>
 
           <nav id="breadcrumb" aria-label="breadcrumb" role="navigation">
             <div class="container">
@@ -112,7 +114,7 @@
     </section>
 
     {# Loses sticky-top functionality if in section #}
-    <nav id="main-navbar" class="navbar sticky-top navbar-expand-md navbar-light bgc-2">
+    <nav id="main-navbar" class="navbar sticky-top navbar-expand-lg navbar-light bgc-2">
 
       <div class="container">
 

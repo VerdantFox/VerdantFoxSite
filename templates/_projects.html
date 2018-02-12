@@ -4,7 +4,7 @@
 <section class="Finance">
   <div class="row">
       {# Makes this column show first in small screen #}
-      <div class="col-lg-7 order-lg-12">
+      <div class="col-xl-7 order-xl-12">
         <a href="{% url 'Finance:home' %}">
           <h4 class="text-center">Finance</h4>
         </a>
@@ -37,7 +37,7 @@
         </div>
     </div>
     {# Makes this column show second in small screen #}
-    <div class="col-lg-5 order-lg-1">
+    <div class="col order-xl-1">
       {# Finance Carousel #}
       {% include '_finance_carousel.html' %}
     </div>
@@ -50,12 +50,12 @@
 <div class="row">
 
   {# Makes this column show second in small screen #}
-  <div class="col-lg-5 order-2">
+  <div class="col order-2">
     {% include '_games_carousel.html' %}
   </div>
 
   {# Makes this column show first in small screen #}
-  <div class="col-lg-7 order-1">
+  <div class="col-xl-7 order-1">
     <a href="{% url 'games:index' %}">
       <h4 class="text-center">Games</h4>
     </a>
@@ -91,7 +91,7 @@
 {# Simple Carousel #}
 <div class="row">
     {# Makes this column show first in small screen #}
-    <div class="col-lg-7 order-lg-12">
+    <div class="col-xl-7 order-xl-12">
       <a href="{% url 'Simple:home' %}">
         <h4 class="text-center">Simple</h4>
       </a>
@@ -121,7 +121,7 @@
       </div>
   </div>
   {# Makes this column show second in small screen #}
-  <div class="col-lg-5 order-lg-1">
+  <div class="col order-xl-1">
     {% include '_simple_carousel.html' %}
   </div>
 </div>
