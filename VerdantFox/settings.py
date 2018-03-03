@@ -26,9 +26,11 @@ SECRET_KEY = 'SECRET_KEY_GOES_HERE'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# Development
+# Development local network
 ALLOWED_HOSTS = ['192.168.0.104']
 
+# Development local machine
+# ALLOWED_HOSTS = []
 
 # production
 # ALLOWED_HOSTS = ['165.227.12.1', 'verdantfox.com', 'www.verdantfox.com',]
@@ -137,11 +139,13 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
     os.path.join(BASE_DIR, 'Finance/static'),
     os.path.join(BASE_DIR, 'games/static')
     ]
+
 # Production
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
@@ -156,7 +160,7 @@ LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 
-INTERNAL_IPS = ['165.227.12.1']
+INTERNAL_IPS = ['127.0.0.1', '192.168.0.104']
 
 #
 
