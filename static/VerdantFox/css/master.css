@@ -113,6 +113,10 @@ html {
     z-index: 20;
 }
 
+#main-dropdown {
+    z-index: 10000;
+}
+
 
 .top-bar {
     font-size: 1.5em;
@@ -330,6 +334,10 @@ a.remove-underline{
     z-index: 100;
 }
 
+.position-absolute {
+    position: absolute;
+}
+
 
 /* Pagination CSS */
 /* https://www.jquery-az.com/bootstrap-4-pagination-9-demos-custom-default-css/ */
@@ -431,48 +439,9 @@ a.remove-underline{
     width: 12.5rem;
 }
 
-
-/*!*   MOBILE SECTION   *!*/
-/*@media only screen and (max-device-width: 480px) {*/
-
-        /*html {*/
-            /*font-size: 3rem;*/
-        /*}*/
-
-        /*.container {*/
-            /*max-width: unset;*/
-            /*width: 100%;*/
-            /*padding-right: 5%;*/
-            /*padding-left: 5%;*/
-            /*margin-right: auto;*/
-            /*margin-left: auto;*/
-        /*}*/
-
-        /*.skill-image {*/
-            /*width: 8rem;*/
-        /*}*/
-        /*.about {*/
-            /*font-size: 0.9rem;*/
-        /*}*/
-
-        /*.image_break {*/
-            /*font-size: 0.1rem;*/
-        /*}*/
-
-        /*.footer {*/
-            /*height: 70vh;*/
-            /*font-size: 0.9rem;*/
-        /*}*/
-
-    /*}*/
-
-/* Max width issues */
-
-/*iframe {*/
-    /*max-width: 100% !important;*/
-    /*width: auto !important;*/
-    /*height: auto !important;*/
-/*}*/
+.big-break {
+    font-size: 10px;
+}
 
 .mobile-only {
     display: none;
@@ -498,65 +467,70 @@ a.remove-underline{
     position:absolute;
 }
 
+/* Phone or tablet adjustments */
+@media only screen and (max-device-width: 720px) {
+    .mobile-no-display {
+        display: none;
+    }
+
+    .mobile-only {
+        display: inline;
+    }
+}
 
 /* phone size adjustments */
 @media only screen and (max-device-width: 480px) {
 
-        .skill-image {
-            width: 8rem;
-        }
+    .skill-image {
+        width: 8rem;
+    }
 
 
-        .footer {
-            height: 70vh;
-            font-size: 0.9rem;
-        }
+    .footer {
+        height: 70vh;
+        font-size: 0.9rem;
+    }
 
 
-        .top_image{
-            height: 30vh;
-        }
+    .top_image{
+        height: 30vh;
+    }
 
-        .top_image h1 {
-            font-size: 1.5rem;
-        }
+    .top_image h1 {
+        font-size: 1.5rem;
+    }
 
-        .spacer_image {
-            height: 35vh;
-        }
+    .spacer_image {
+        height: 35vh;
+    }
 
-        .spacer_image h1 {
-            text-align: center;
-            font-size: 1.5rem;
-        }
+    .spacer_image h1 {
+        text-align: center;
+        font-size: 1.5rem;
+    }
 
-        .spacer_image h3 {
-            text-align: center;
-            font-size: 1rem;
-        }
+    .spacer_image h3 {
+        text-align: center;
+        font-size: 1rem;
+    }
 
-        #main-navbar  .navbar-brand{
-            font-size: 1.25rem;
-        }
+    #main-navbar  .navbar-brand{
+        font-size: 1.25rem;
+    }
 
-        .welcome-bar{
-            font-size: 0.9rem;
-        }
+    .welcome-bar{
+        font-size: 0.9rem;
+    }
 
-        #fox-icon {
-            height: 1.6rem;
-        }
+    #fox-icon {
+        height: 1.6rem;
+    }
 
-        .mobile-no-display {
-            display: none;
-        }
 
-        .mobile-only {
-            display: inline;
-        }
 
-        /*h3 {*/
-            /*color: pink;*/
-        /*}*/
+
+    /*h3 {*/
+        /*color: pink;*/
+    /*}*/
 
     }
