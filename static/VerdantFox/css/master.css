@@ -34,7 +34,8 @@ html {
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    color: #EBE8BE;
+    /*color: #EBE8BE;*/
+    /*color: #202E24;*/
 }
 
 .top_image {
@@ -465,6 +466,40 @@ a.remove-underline{
 
     /*}*/
 
+/* Max width issues */
+
+/*iframe {*/
+    /*max-width: 100% !important;*/
+    /*width: auto !important;*/
+    /*height: auto !important;*/
+/*}*/
+
+.mobile-only {
+    display: none;
+}
+
+/*.youtube-display {*/
+    /*width: 560px;*/
+    /*height: 315px;*/
+/*}*/
+
+
+.video-responsive{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+.video-responsive iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+}
+
+
+/* phone size adjustments */
 @media only screen and (max-device-width: 480px) {
 
         .skill-image {
@@ -512,5 +547,16 @@ a.remove-underline{
             height: 1.6rem;
         }
 
+        .mobile-no-display {
+            display: none;
+        }
+
+        .mobile-only {
+            display: inline;
+        }
+
+        /*h3 {*/
+            /*color: pink;*/
+        /*}*/
 
     }

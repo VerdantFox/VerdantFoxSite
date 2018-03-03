@@ -66,8 +66,7 @@ class FizzBuzzForm(forms.Form):
         max_length=40,
         label="Second variable name: (not required)",
         widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": 'Buzz'})
+            "class": "form-control"})
     )
 
     var_2_multiple = forms.IntegerField(
@@ -75,8 +74,7 @@ class FizzBuzzForm(forms.Form):
         min_value=1, max_value=10,
         label="Inject second variable in multiples of: (10 max)",
         widget=forms.NumberInput(attrs={
-            "class": "form-control",
-            "placeholder": '5'})
+            "class": "form-control"})
     )
 
     var_3 = forms.CharField(
@@ -84,8 +82,7 @@ class FizzBuzzForm(forms.Form):
         max_length=40,
         label="Third variable name: (not required)",
         widget=forms.TextInput(attrs={
-            "class": "form-control",
-            "placeholder": 'Foo'})
+            "class": "form-control"})
     )
 
     var_3_multiple = forms.IntegerField(
@@ -93,8 +90,7 @@ class FizzBuzzForm(forms.Form):
         min_value=1, max_value=10,
         label="Inject third variable in multiples of: (10 max)",
         widget=forms.NumberInput(attrs={
-            "class": "form-control",
-            "placeholder": '7'})
+            "class": "form-control"})
     )
 
     def clean(self):

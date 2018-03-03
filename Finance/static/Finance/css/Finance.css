@@ -26,3 +26,29 @@ input[type=number]::-webkit-outer-spin-button {
     display: none;
     color: blue;
 }
+
+
+/* phone size adjustments */
+@media only screen and (max-device-width: 480px) {
+    .table-history {
+        font-size: 0.62em;
+    }
+
+    .table-stock-list {
+        font-size: 0.6em;
+        margin-right: 0;
+        padding-right: 0;
+    }
+
+    .table-stock-list button {
+        text-align: center;
+        font-size: 1.2em;
+    }
+
+    .form-box {
+        min-width: 37px;
+        max-width: 37px;
+        font-size: 1em;
+    }
+
+}
