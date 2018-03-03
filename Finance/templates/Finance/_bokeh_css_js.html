@@ -1,12 +1,30 @@
-  <link
-    href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.13.min.css"
-    rel="stylesheet" type="text/css">
-  <link
-    href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.13.min.css"
-    rel="stylesheet" type="text/css">
-  <link
-    href="http://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.13.min.css"
-    rel="stylesheet" type="text/css">
-  <script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.13.min.js"></script>
-  <script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.13.min.js"></script>
-  <script src="http://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.13.min.js"></script>
+{% load staticfiles %}
+
+{# Files by CDN #}
+{#<link#}
+{#  href="http://cdn.pydata.org/bokeh/release/bokeh-0.12.13.min.css"#}
+{#  rel="stylesheet" type="text/css">#}
+{#<link#}
+{#  href="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.13.min.css"#}
+{#  rel="stylesheet" type="text/css">#}
+{#<link#}
+{#  href="http://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.13.min.css"#}
+{#  rel="stylesheet" type="text/css">#}
+{#<script src="http://cdn.pydata.org/bokeh/release/bokeh-0.12.13.min.js"></script>#}
+{#<script src="http://cdn.pydata.org/bokeh/release/bokeh-widgets-0.12.13.min.js"></script>#}
+{#<script src="http://cdn.pydata.org/bokeh/release/bokeh-tables-0.12.13.min.js"></script>#}
+
+
+{# Files by local static #}
+<link
+  href="{% static 'Finance/css/bokeh_0.12.13.min.css' %}"
+  rel="stylesheet" type="text/css">
+<link
+  href="{% static 'Finance/css/bokeh_widgets_0.12.13.min.css' %}"
+  rel="stylesheet" type="text/css">
+<link
+  href="{% static 'Finance/css/bokeh_tables_0.12.13.min.css' %}"
+  rel="stylesheet" type="text/css">
+<script src="{% static 'Finance/js/bokeh_0.12.13.min.js' %}"></script>
+<script src="{% static 'Finance/js/bokeh_widgets_0.12.13.min.js' %}"></script>
+<script src="{% static 'Finance/js/bokeh_tables_0.12.13.min.js' %}"></script>
