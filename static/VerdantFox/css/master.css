@@ -7,10 +7,11 @@ html {
     font-size: 16px;
 }
 
-
-.user-info{
-    color: black;
+.dropdown-item:active {
+    background-color: #347A2A;
 }
+
+
 .border{
     border: 2px solid black;
 }
