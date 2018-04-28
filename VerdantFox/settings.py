@@ -27,10 +27,10 @@ SECRET_KEY = 'SECRET_KEY_GOES_HERE'
 DEBUG = True
 
 # Development local network
-# ALLOWED_HOSTS = ['192.168.0.104']
+ALLOWED_HOSTS = ['192.168.0.104']
 
 # Development local machine
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS = []
 
 # production
 # ALLOWED_HOSTS = ['165.227.12.1', 'verdantfox.com', 'www.verdantfox.com',]
