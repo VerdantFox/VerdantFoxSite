@@ -50,7 +50,12 @@ def change_function(cost, paid):
     if pennies != 0:
         change_list.append((int(pennies), "penn"))
 
-    return change_owed, bills_statement, coins_statement, change_list,
+    return (
+        change_owed,
+        bills_statement,
+        coins_statement,
+        change_list,
+    )
 
 
 if __name__ == "__main__":

@@ -2,9 +2,9 @@ def vigenere_decipher(cipher_key, plain_text):
     # Define ALPHABET LENGTH
     ALPHABETLENGTH = 26
     # Define lowercase unicode conversion
-    MOD_a = (ord("a") % ALPHABETLENGTH)
+    MOD_a = ord("a") % ALPHABETLENGTH
     # Define uppercase unicode conversion
-    MOD_A = (ord("A") % ALPHABETLENGTH)
+    MOD_A = ord("A") % ALPHABETLENGTH
 
     decrypted_character_list = []
     decrypted_text = ""
@@ -24,9 +24,24 @@ def vigenere_decipher(cipher_key, plain_text):
                     # index back up
                     # to lower case plaintext character.
                     decrypted_character_list.append(
-                        chr((((ord(plain_text[PlainTextLetter]) - MOD_a)
-                            - (ord(cipher_key[cipher_key_counter % len(cipher_key)])
-                            - MOD_a)) % ALPHABETLENGTH) + ord('a')))
+                        chr(
+                            (
+                                (
+                                    (ord(plain_text[PlainTextLetter]) - MOD_a)
+                                    - (
+                                        ord(
+                                            cipher_key[
+                                                cipher_key_counter % len(cipher_key)
+                                            ]
+                                        )
+                                        - MOD_a
+                                    )
+                                )
+                                % ALPHABETLENGTH
+                            )
+                            + ord("a")
+                        )
+                    )
                     # Move to next letter of Cipher Key.
                     cipher_key_counter += 1
                 # 3rd layer if statement ciphers upper case plain text letters.
@@ -35,9 +50,24 @@ def vigenere_decipher(cipher_key, plain_text):
                     # add the two together. Mod by alphabet length,
                     # index back up to upper case plaintext character.
                     decrypted_character_list.append(
-                        chr((((ord(plain_text[PlainTextLetter]) - MOD_A)
-                            - (ord(cipher_key[cipher_key_counter % len(cipher_key)])
-                            - MOD_a)) % ALPHABETLENGTH) + ord('A')))
+                        chr(
+                            (
+                                (
+                                    (ord(plain_text[PlainTextLetter]) - MOD_A)
+                                    - (
+                                        ord(
+                                            cipher_key[
+                                                cipher_key_counter % len(cipher_key)
+                                            ]
+                                        )
+                                        - MOD_a
+                                    )
+                                )
+                                % ALPHABETLENGTH
+                            )
+                            + ord("A")
+                        )
+                    )
                     # Move to next letter of Cipher Key.
                     cipher_key_counter += 1
             # 2nd layer else branch ciphers upper case key character.
@@ -48,9 +78,24 @@ def vigenere_decipher(cipher_key, plain_text):
                     # add the two together. Mod by alphabet length,
                     # index back up to lower case plaintext character.
                     decrypted_character_list.append(
-                        chr((((ord(plain_text[PlainTextLetter]) - MOD_a)
-                            - (ord(cipher_key[cipher_key_counter % len(cipher_key)])
-                            - MOD_A)) % ALPHABETLENGTH) + ord('a')))
+                        chr(
+                            (
+                                (
+                                    (ord(plain_text[PlainTextLetter]) - MOD_a)
+                                    - (
+                                        ord(
+                                            cipher_key[
+                                                cipher_key_counter % len(cipher_key)
+                                            ]
+                                        )
+                                        - MOD_A
+                                    )
+                                )
+                                % ALPHABETLENGTH
+                            )
+                            + ord("a")
+                        )
+                    )
                     # Move to next letter of Cipher Key.
                     cipher_key_counter += 1
                 # 3rd layer if statement ciphers upper case plain text letters.
@@ -59,9 +104,24 @@ def vigenere_decipher(cipher_key, plain_text):
                     # add the two together. Mod by alphabet length, index
                     # back up to upper case plaintext character.
                     decrypted_character_list.append(
-                        chr((((ord(plain_text[PlainTextLetter]) - MOD_A)
-                            - (ord(cipher_key[cipher_key_counter % len(cipher_key)])
-                            - MOD_A)) % ALPHABETLENGTH) + ord('A')))
+                        chr(
+                            (
+                                (
+                                    (ord(plain_text[PlainTextLetter]) - MOD_A)
+                                    - (
+                                        ord(
+                                            cipher_key[
+                                                cipher_key_counter % len(cipher_key)
+                                            ]
+                                        )
+                                        - MOD_A
+                                    )
+                                )
+                                % ALPHABETLENGTH
+                            )
+                            + ord("A")
+                        )
+                    )
                     # Move to next letter of Cipher Key.
                     cipher_key_counter += 1
         # If plain text character is not a letter.

@@ -14,19 +14,19 @@ import calendar
 
 def bokeh_graph(symbol, time_frame):
     # Assumes average month = 22 working days
-    if time_frame == '1 month':
+    if time_frame == "1 month":
         time_interval = "daily"
         max_points = 22
-    elif time_frame == '3 month':
+    elif time_frame == "3 month":
         time_interval = "daily"
         max_points = 22 * 3
-    elif time_frame == '1 year':
+    elif time_frame == "1 year":
         time_interval = "weekly"
         max_points = 53
-    elif time_frame == '5 year':
+    elif time_frame == "5 year":
         time_interval = "weekly"
         max_points = 52 * 5 + 2
-    elif time_frame == '20 year':
+    elif time_frame == "20 year":
         time_interval = "monthly"
         max_points = 12 * 20 + 1
     else:
@@ -42,7 +42,7 @@ def bokeh_graph(symbol, time_frame):
         volumes = []
         counter = 0
         for point in x:
-            date = point[0].split('-')
+            date = point[0].split("-")
             dates.append(datetime.date(int(date[0]), int(date[1]), int(date[2])))
             prices.append(point[1])
             volumes.append(point[2])
@@ -51,11 +51,9 @@ def bokeh_graph(symbol, time_frame):
                 break
 
         # Source data
-        source = ColumnDataSource(data=dict(
-            dates=dates,
-            prices=prices,
-            volumes=volumes
-        ))
+        source = ColumnDataSource(
+            data=dict(dates=dates, prices=prices, volumes=volumes)
+        )
 
         # output to static HTML file
         # output_file("stock_test.html")
@@ -64,19 +62,17 @@ def bokeh_graph(symbol, time_frame):
 
         hover = HoverTool(
             tooltips=[
-                ('date',   '@dates{%D}'),
-                ('price',  '$@prices{%0.2f}'),
-                ('volume', '@volumes{0.00 a}'),
+                ("date", "@dates{%D}"),
+                ("price", "$@prices{%0.2f}"),
+                ("volume", "@volumes{0.00 a}"),
             ],
-
             formatters={
-                'dates': 'datetime',  # use 'datetime' formatter for 'dates' field
-                'prices': 'printf',   # use 'printf' formatter for 'prices' field
-                                      # use default 'numeral' formatter for others
+                "dates": "datetime",  # use 'datetime' formatter for 'dates' field
+                "prices": "printf",  # use 'printf' formatter for 'prices' field
+                # use default 'numeral' formatter for others
             },
-
             # display a tooltip whenever the cursor is vertically in line with data
-            mode='vline',
+            mode="vline",
         )
 
         if time_interval == "daily":
@@ -87,30 +83,31 @@ def bokeh_graph(symbol, time_frame):
             time_title = "Monthly"
 
         # create a new plot with a title and axis labels
-        p = figure(title=f"{symbol} {time_title} Stock Prices",
-                   x_axis_label='Dates',
-                   y_axis_label='Price',
-                   x_axis_type="datetime",
-                   plot_width=800,
-                   plot_height=400,
-                   tools=[hover, TOOLS],
-                   active_drag=None,
-                   active_scroll=None,
-                   sizing_mode="scale_width",
-                   )
+        p = figure(
+            title=f"{symbol} {time_title} Stock Prices",
+            x_axis_label="Dates",
+            y_axis_label="Price",
+            x_axis_type="datetime",
+            plot_width=800,
+            plot_height=400,
+            tools=[hover, TOOLS],
+            active_drag=None,
+            active_scroll=None,
+            sizing_mode="scale_width",
+        )
 
         # Border commands
-        p.border_fill_color = '#EBE8BE'
+        p.border_fill_color = "#EBE8BE"
 
         # Outline commands
-        p.outline_line_color = '#083836'
+        p.outline_line_color = "#083836"
         p.outline_line_width = 1
 
         # Set background color
-        p.background_fill_color = '#B3C87A'
+        p.background_fill_color = "#B3C87A"
 
         # Set title controls
-        p.title.text_color = '#202E24'
+        p.title.text_color = "#202E24"
 
         # Axis line controls
         p.axis.axis_line_width = 3
@@ -121,37 +118,38 @@ def bokeh_graph(symbol, time_frame):
         p.axis.minor_tick_out = 6
         p.axis.axis_label_text_color = "#202E24"
         p.axis.axis_label_standoff = 10
-        p.axis.axis_label_text_font_style = 'bold'
+        p.axis.axis_label_text_font_style = "bold"
 
         # Grid controls
         p.grid.grid_line_alpha = 0.3
-        p.grid.grid_line_color = '#202E24'
+        p.grid.grid_line_color = "#202E24"
 
         # Create flexible date formatter
-        time_delta = (dates[0] - dates[len(dates)-1]).days
+        time_delta = (dates[0] - dates[len(dates) - 1]).days
 
-        years_format =  "%Y"
+        years_format = "%Y"
         months_format = "%m/%Y"
-        days_format =   "%m/%d/%Y"
+        days_format = "%m/%d/%Y"
 
         # Axis formatters
         p.xaxis.formatter = DatetimeTickFormatter(
-            days=days_format, months=months_format, years=years_format)
+            days=days_format, months=months_format, years=years_format
+        )
         p.yaxis.formatter = NumeralTickFormatter(format="$0.00")
-
 
         # add a line renderer with legend and line thickness
         p.line(  # dates, prices,
-               x='dates', y='prices',
-               legend=False,
-               line_width=2,
-               line_color='#202E24',
-               line_cap='round',
-               source=source)
+            x="dates",
+            y="prices",
+            legend=False,
+            line_width=2,
+            line_color="#202E24",
+            line_cap="round",
+            source=source,
+        )
 
         # # Legend (only usable after render data declared)
         # p.legend.visible = False
-
 
         # # show the results
         # show(p)
@@ -186,8 +184,9 @@ def search_json(symbol, time_interval):
                 # check against today's close
                 check_day = now
             # check against market close
-            check_datetime = check_day.replace(hour=21, minute=0, second=0,
-                                               microsecond=0)
+            check_datetime = check_day.replace(
+                hour=21, minute=0, second=0, microsecond=0
+            )
         elif time_interval == "weekly":
             update_datetime = stock.week_json_update_time
             json_points = stock.week_json
@@ -246,19 +245,24 @@ def update_json(stock, time_interval):
     print(f"{time_interval.upper()} api call time:", time.time() - start)
 
     if time_interval == "daily":
-        time_points = data['Time Series (Daily)']
+        time_points = data["Time Series (Daily)"]
     elif time_interval == "weekly":
-        time_points = data['Weekly Time Series']
+        time_points = data["Weekly Time Series"]
     elif time_interval == "monthly":
-        time_points = data['Monthly Time Series']
+        time_points = data["Monthly Time Series"]
     else:
         print("error updating_json_interval")
         return None
 
     total_data = []
     for point in time_points:
-        total_data.append((point, float(time_points[point]['4. close']),
-                           int(time_points[point]['5. volume'])))
+        total_data.append(
+            (
+                point,
+                float(time_points[point]["4. close"]),
+                int(time_points[point]["5. volume"]),
+            )
+        )
 
     # Get current time
     now = datetime.datetime.now(tz=datetime.timezone.utc)

@@ -117,15 +117,10 @@
     <nav id="main-navbar" class="navbar sticky-top navbar-expand-lg navbar-light bgc-2">
 
       <div class="container">
-
         {% block navbar_brand %}{% endblock %}
-
         {% include '_nav_collapse_button.html' %}
         <div class="collapse navbar-collapse" id="navbarNav">
-
-          {% block inner_navbar %}
-          {% endblock inner_navbar %}
-
+        {% block inner_navbar %}{% endblock inner_navbar %}
         </div>
       </div>
 

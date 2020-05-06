@@ -16,8 +16,9 @@ def fizz_buzz(count_to, multiplier, variables):
     return list_count
 
 
-def create_variables(var_1_name, var_1_mult, var_2_name, var_2_mult,
-                     var_3_name, var_3_mult):
+def create_variables(
+    var_1_name, var_1_mult, var_2_name, var_2_mult, var_3_name, var_3_mult
+):
 
     var_dict = {var_1_name: var_1_mult}
     if var_2_name:
@@ -28,20 +29,14 @@ def create_variables(var_1_name, var_1_mult, var_2_name, var_2_mult,
     return var_dict
 
 
-
-
-
-
 if __name__ == "__main__":
     while True:
         try:
-            variableCount = int(input(
-                "How many Variables would you like to input? "))
+            variableCount = int(input("How many Variables would you like to input? "))
             if 0 < variableCount < 6:
                 break
             else:
-                print(
-                    "Please input an integer between 1 and 5 for Variables. \n")
+                print("Please input an integer between 1 and 5 for Variables. \n")
         except ValueError:
             print("Please input an integer between 1 and 5 for Variables. \n")
 
@@ -49,21 +44,27 @@ if __name__ == "__main__":
     for i in range(variableCount):
         while True:
             tempVarName = input(
-                "Give me a variable name for variable {}: ".format(i + 1))
+                "Give me a variable name for variable {}: ".format(i + 1)
+            )
             try:
-                tempVarMultiple = int(input(
-                    "What multiple should {} appear on? (1-10) "
-                    .format(tempVarName)))
+                tempVarMultiple = int(
+                    input(
+                        "What multiple should {} appear on? (1-10) ".format(tempVarName)
+                    )
+                )
                 if 0 < tempVarMultiple < 11:
                     Variables[tempVarName] = tempVarMultiple
                     break
                 else:
                     print(
                         "Try again, this time with multiplier as integer "
-                        "between 1 and 10 \n")
+                        "between 1 and 10 \n"
+                    )
             except ValueError:
-                print("Try again, this time with multiplier as integer between"
-                      "1 and 10 \n")
+                print(
+                    "Try again, this time with multiplier as integer between"
+                    "1 and 10 \n"
+                )
 
     while True:
         try:
@@ -88,4 +89,3 @@ if __name__ == "__main__":
     print(variableCount, CountTo, Variables)
 
     fizzbuzz(CountTo, Multiplier, Variables)
-

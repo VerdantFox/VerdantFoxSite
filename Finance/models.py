@@ -15,7 +15,7 @@ class Transaction(models.Model):
     time_stamp = models.DateTimeField(auto_now=True)
 
     class Meta:
-        ordering = ('user',)
+        ordering = ("user",)
 
     def __str__(self):
         return f"{self.symbol}: {self.shares} shares"
@@ -44,7 +44,7 @@ class StockInfo(models.Model):
     month_json_update_time = models.DateTimeField(null=True, blank=True)
 
     class Meta:
-        ordering = ('symbol',)
+        ordering = ("symbol",)
 
     def __str__(self):
         return f"{self.symbol}, {self.name}"

@@ -2,8 +2,8 @@ import random
 
 
 def set_game():
-    p1 = Player('red', 'player 1', turn=True)
-    p2 = Player('blue', 'robot')
+    p1 = Player("red", "player 1", turn=True)
+    p2 = Player("blue", "robot")
     board = Grid(p1, p2)
     robot = AI(ai=p2, opponent=p1, grid=board, Grid=Grid)
     message = None
@@ -16,8 +16,22 @@ def set_game():
     p2_row = None
     p1_move_msg = None
     p2_move_msg = None
-    return (p1, p2, board, robot, message, error, deactivate, restart,
-            p1_col, p1_row, p2_col, p2_row, p1_move_msg, p2_move_msg)
+    return (
+        p1,
+        p2,
+        board,
+        robot,
+        message,
+        error,
+        deactivate,
+        restart,
+        p1_col,
+        p1_row,
+        p2_col,
+        p2_row,
+        p1_move_msg,
+        p2_move_msg,
+    )
 
 
 class Player:
@@ -105,7 +119,7 @@ class Grid:
 
         for row in grid:
             for j in range(7):
-                row.append('empty')
+                row.append("empty")
         self.grid = grid
         self.player1 = player1
         self.player2 = player2
@@ -114,7 +128,7 @@ class Grid:
         self.columns = [0, 1, 2, 3, 4, 5, 6]
 
     def show_grid(self):
-        print('[   0        1        2        3        4        5        6   ]')
+        print("[   0        1        2        3        4        5        6   ]")
         for row in self.grid:
             print(row)
 
@@ -140,19 +154,19 @@ class Grid:
             return self.grid[row][column]
         # Any out of range index counts as empty
         except IndexError:
-            return 'empty'
+            return "empty"
 
     # Check for bottom of column
     def check_bottom(self, column):
         for rev_row in range(7):
-            if self.grid[5-rev_row][column] == 'empty':
-                return 5-rev_row
+            if self.grid[5 - rev_row][column] == "empty":
+                return 5 - rev_row
         # Row is full
         return None
 
     # Check if 4 circles' colors' match
     def check_match4(self, color1, color2, color3, color4):
-        if color1 == color2 == color3 == color4 != 'empty':
+        if color1 == color2 == color3 == color4 != "empty":
             return True
         else:
             return False
@@ -179,12 +193,12 @@ class Grid:
         for row in range(6):
             for col in range(4):
                 if self.check_match4(
-                        self.report_color(row, col),
-                        self.report_color(row, col+1),
-                        self.report_color(row, col+2),
-                        self.report_color(row, col+3)
+                    self.report_color(row, col),
+                    self.report_color(row, col + 1),
+                    self.report_color(row, col + 2),
+                    self.report_color(row, col + 3),
                 ):
-                    return (row, col), (row, col+1), (row, col+2), (row, col+3)
+                    return (row, col), (row, col + 1), (row, col + 2), (row, col + 3)
                 else:
                     pass
 
@@ -192,11 +206,13 @@ class Grid:
     def vertical_win_check(self):
         for col in range(7):
             for row in range(3):
-                if self.check_match4(self.report_color(row, col),
-                                     self.report_color(row+1, col),
-                                     self.report_color(row+2, col),
-                                     self.report_color(row+3, col)):
-                    return (row, col), (row+1, col), (row+2, col), (row+3, col)
+                if self.check_match4(
+                    self.report_color(row, col),
+                    self.report_color(row + 1, col),
+                    self.report_color(row + 2, col),
+                    self.report_color(row + 3, col),
+                ):
+                    return (row, col), (row + 1, col), (row + 2, col), (row + 3, col)
                 else:
                     pass
 
@@ -204,31 +220,58 @@ class Grid:
     def diagonal_win_check(self):
         for row in range(3):
             for col in range(4):
-                if self.check_match4(self.report_color(row, col),
-                                     self.report_color(row+1, col+1),
-                                     self.report_color(row+2, col+2),
-                                     self.report_color(row+3, col+3)):
-                    return (row, col), (row+1, col+1), (row+2, col+2), (row+3, col+3)
+                if self.check_match4(
+                    self.report_color(row, col),
+                    self.report_color(row + 1, col + 1),
+                    self.report_color(row + 2, col + 2),
+                    self.report_color(row + 3, col + 3),
+                ):
+                    return (
+                        (row, col),
+                        (row + 1, col + 1),
+                        (row + 2, col + 2),
+                        (row + 3, col + 3),
+                    )
         for row in range(3, 6):
             for col in range(4):
-                if self.check_match4(self.report_color(row, col),
-                                     self.report_color(row-1, col+1),
-                                     self.report_color(row-2, col+2),
-                                     self.report_color(row-3, col+3)):
-                    return (row, col), (row-1, col+1), (row-2, col+2), (row-3, col+3)
+                if self.check_match4(
+                    self.report_color(row, col),
+                    self.report_color(row - 1, col + 1),
+                    self.report_color(row - 2, col + 2),
+                    self.report_color(row - 3, col + 3),
+                ):
+                    return (
+                        (row, col),
+                        (row - 1, col + 1),
+                        (row - 2, col + 2),
+                        (row - 3, col + 3),
+                    )
                 else:
                     pass
 
 
-if __name__ == '__main__':
-    (p1, p2, board, robot, message, error, deactivate, restart,
-     p1_col, p1_row, p2_col, p2_row, p1_move_msg, p2_move_msg) = set_game()
+if __name__ == "__main__":
+    (
+        p1,
+        p2,
+        board,
+        robot,
+        message,
+        error,
+        deactivate,
+        restart,
+        p1_col,
+        p1_row,
+        p2_col,
+        p2_row,
+        p1_move_msg,
+        p2_move_msg,
+    ) = set_game()
 
     board.show_grid()
 
     while True:
-        print(f"{board.current_player.name} ({board.current_player.color})'s "
-              f"turn.")
+        print(f"{board.current_player.name} ({board.current_player.color})'s " f"turn.")
         # Initialize row and column choices to None
         row_choice, column_choice = None, None
         # Get column choice from player
@@ -236,8 +279,11 @@ if __name__ == '__main__':
             if board.current_player == p1:
                 try:
                     column_choice = int(
-                        input(f'{board.current_player.color}, '
-                              f'please select a column_choice: '))
+                        input(
+                            f"{board.current_player.color}, "
+                            f"please select a column_choice: "
+                        )
+                    )
                     if 0 <= column_choice <= 6:
                         print(column_choice)
                         row_choice = board.check_bottom(column_choice)
@@ -246,8 +292,9 @@ if __name__ == '__main__':
                             print(f"column_choice {column_choice} is full")
                             column_choice = None
                     else:
-                        print("column_choice number must be an integer "
-                              "between 0 and 6")
+                        print(
+                            "column_choice number must be an integer " "between 0 and 6"
+                        )
                         column_choice = None
                 except ValueError:
                     print("Must input integer for column_choice number")
@@ -257,8 +304,7 @@ if __name__ == '__main__':
 
         print()
         print(f"{board.current_player.color} played in column {column_choice}")
-        board.change_color(row_choice, column_choice,
-                           board.current_player.color)
+        board.change_color(row_choice, column_choice, board.current_player.color)
         winner = board.check_winner()
         board.show_grid()
 

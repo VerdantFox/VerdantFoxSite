@@ -54,7 +54,7 @@ def multiple_lookup(symbols):
 
     Note: stocks that don't exist will be skipped without error.
     """
-    query = ''
+    query = ""
     stock_dict = dict()
     symbol_set = set()
 
@@ -70,15 +70,17 @@ def multiple_lookup(symbols):
         if not 0 < len(symbol) < 6:
             print(f"error with '{symbol}' symbol length during lookup")
         # Add symbol to the set
-        query += symbol.upper() + ','
+        query += symbol.upper() + ","
 
     # Query Alpha Vantage for quote
     # https://www.alphavantage.co/documentation/
     try:
         start_time = time.time()
         # GET JSON webpage
-        url = f"https://www.alphavantage.co/query?function=BATCH_STOCK_" \
-                  f"QUOTES&symbols={query}&apikey=1PSE4E7QME3PUPTU"
+        url = (
+            f"https://www.alphavantage.co/query?function=BATCH_STOCK_"
+            f"QUOTES&symbols={query}&apikey=1PSE4E7QME3PUPTU"
+        )
 
         # Convert JSON data from webpage into readable format
         # https://stackoverflow.com/questions/12965203/how-to-get-json-from-webpage-into-python-script
@@ -89,9 +91,9 @@ def multiple_lookup(symbols):
             return "Error: took too long to get stock data, try again."
         print(f"Time = {time.time() - start_time}")
         # Get the stock symbol and it's associated price
-        for stock_info in data['Stock Quotes']:
+        for stock_info in data["Stock Quotes"]:
             # Get symbol
-            stock_symbol = stock_info['1. symbol']
+            stock_symbol = stock_info["1. symbol"]
             # Get symbol and string format it to have 2 decimal places
             stock_price = f"{float(stock_info['2. price']):.2f}"
             # Convert string formatted stock to a float
@@ -117,8 +119,10 @@ def single_lookup(symbol):
     try:
         start_time = time.time()
         # GET JSON webpage
-        url = f"https://www.alphavantage.co/query?function=BATCH_STOCK_" \
-                  f"QUOTES&symbols={symbol}&apikey=1PSE4E7QME3PUPTU"
+        url = (
+            f"https://www.alphavantage.co/query?function=BATCH_STOCK_"
+            f"QUOTES&symbols={symbol}&apikey=1PSE4E7QME3PUPTU"
+        )
 
         # Convert JSON data from webpage into readable format
         # https://stackoverflow.com/questions/12965203/how-to-get-json-from-webpage-into-python-script
@@ -128,10 +132,10 @@ def single_lookup(symbol):
         data = json.loads(webpage.read().decode())
         # Get the stock symbol and it's associated price
 
-        if data['Stock Quotes'] == []:
+        if data["Stock Quotes"] == []:
             return "Error, stock not found."
         else:
-            for stock_info in data['Stock Quotes']:
+            for stock_info in data["Stock Quotes"]:
                 stock_price = f"{float(stock_info['2. price']):.2f}"
                 stock_price = float(stock_price)
                 return stock_price
@@ -144,7 +148,9 @@ def stock_index(user):
     """Given a user, return list of unique stocks and total shares"""
 
     # Query database for UNIQUE stock symbols in "portfolio" from current user
-    unique_stocks = Transaction.objects.values('symbol').distinct().filter(user__exact=user)
+    unique_stocks = (
+        Transaction.objects.values("symbol").distinct().filter(user__exact=user)
+    )
 
     # Return empty list if user has no stocks
     if not unique_stocks:
@@ -213,7 +219,7 @@ def stock_index(user):
         # Set "unique_stock_shares" variable to 0 for each unique stock
         unique_stock_shares = 0
         # Iterate over stocks portfolio of current user
-        stock_name = ''
+        stock_name = ""
         for stock in stock_portfolio:
             # Gives number of shares for each stock by adding each repeated
             # stock shares value to current unique stock
@@ -230,12 +236,14 @@ def stock_index(user):
         if stock_total > 0:
             # Append dictionary to stock list with all known info about stock
             stock_list.append(
-                {"symbol": unique_symbol,
-                 "name": stock_name,
-                 "shares": unique_stock_shares,
-                 "price": stock_price,
-                 "total": stock_total
-                 })
+                {
+                    "symbol": unique_symbol,
+                    "name": stock_name,
+                    "shares": unique_stock_shares,
+                    "price": stock_price,
+                    "total": stock_total,
+                }
+            )
 
     return stock_list
 
@@ -249,10 +257,8 @@ def check_price_updated(stock, update_datetime):
         # Time since stock updated
         time_delta = now - update_datetime
         # Stock market open and closing times
-        market_open = now.replace(hour=14, minute=30, second=0,
-                                  microsecond=0)
-        market_close = now.replace(hour=21, minute=0, second=0,
-                                   microsecond=0)
+        market_open = now.replace(hour=14, minute=30, second=0, microsecond=0)
+        market_close = now.replace(hour=21, minute=0, second=0, microsecond=0)
         # day stock updated
         update_date = update_datetime.date()
         # Today and yesterday as dates
@@ -274,8 +280,10 @@ def check_price_updated(stock, update_datetime):
             if update_date == today:
                 return True
             # if updated yesterday after market hours
-            elif update_date == yesterday and \
-                    update_datetime.time() > market_close.time():
+            elif (
+                update_date == yesterday
+                and update_datetime.time() > market_close.time()
+            ):
                 return True
             # Updated prior to yesterday's market close
             else:
@@ -300,10 +308,10 @@ def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
         # Invalidate any integer less than one or greater than 10000
         if not 0 < trans_shares < 1000:
             messages.add_message(
-                request, messages.WARNING,
-                f'Failed {stock_symbol} validation, '
-                f'shares out of range (1-1000)!',
-                extra_tags=' stock'
+                request,
+                messages.WARNING,
+                f"Failed {stock_symbol} validation, " f"shares out of range (1-1000)!",
+                extra_tags=" stock",
             )
             return False
         # If selling
@@ -311,10 +319,10 @@ def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
             # Invalidate instances where selling more shares than owned
             if trans_shares > owned_shares:
                 messages.add_message(
-                    request, messages.WARNING,
-                    f'Failed {stock_symbol} validation, '
-                    f'selling more than owned!',
-                    extra_tags=' stock'
+                    request,
+                    messages.WARNING,
+                    f"Failed {stock_symbol} validation, " f"selling more than owned!",
+                    extra_tags=" stock",
                 )
                 return False
             else:
@@ -326,16 +334,16 @@ def validate_shares(request, stock_symbol, trans_shares, owned_shares=None):
     # Catch non-integer or other weird, un-checked-for error
     except:
         messages.add_message(
-            request, messages.WARNING,
-            f'Failed {stock_symbol} validation, '
-            f'Given non-integer share count!',
-            extra_tags=' stock'
+            request,
+            messages.WARNING,
+            f"Failed {stock_symbol} validation, " f"Given non-integer share count!",
+            extra_tags=" stock",
         )
         return False
 
 
 def check_repeats(post):
-    repeat_symbol_check = ''
+    repeat_symbol_check = ""
     repeat_list = []
     for item in post:
         # Check if item name starts with "buy"
@@ -343,7 +351,7 @@ def check_repeats(post):
             # Check if item was bought bought
             if post[item]:
                 # Split item to get buy/sell:0 and stock symbol:1
-                split_item = item.split('-')
+                split_item = item.split("-")
                 # Get stock symbol
                 # and a copy for checking buying and selling at same time
                 repeat_symbol_check = split_item[1]
@@ -352,7 +360,7 @@ def check_repeats(post):
             # Check if item was sold
             if post[item]:
                 # Check for buying and selling at same time
-                split_item = item.split('-')
+                split_item = item.split("-")
                 stock_symbol = split_item[1]
                 if repeat_symbol_check == stock_symbol:
                     repeat_list.append(stock_symbol)

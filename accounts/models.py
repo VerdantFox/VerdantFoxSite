@@ -18,13 +18,11 @@ UserModel = get_user_model()
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    profile_picture = models.ImageField(
-        upload_to='profile_pics',
-        blank=True)
+    profile_picture = models.ImageField(upload_to="profile_pics", blank=True)
     bio = models.CharField(max_length=500, blank=True)
     birth_date = models.DateField(null=True, blank=True)
     location = models.CharField(max_length=30, blank=True)
-    timezone = models.CharField(max_length=50, default='UTC')
+    timezone = models.CharField(max_length=50, default="UTC")
 
     def __str__(self):
         return self.user.username
